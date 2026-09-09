@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { DashboardPage } from './DashboardPage';
 
@@ -14,18 +14,18 @@ describe('DashboardPage (Panel General)', () => {
     expect(screen.getByText('Estado de Entrega por Grupos')).toBeInTheDocument();
   });
 
-  it('permite enviar aviso a encargados y muestra confirmación', async () => {
+  it('abre el modal de recordatorios por WhatsApp al pulsar Aviso a Encargados', async () => {
     render(<DashboardPage />);
 
     const notifyButton = screen.getByRole('button', { name: /aviso a encargados/i });
     await userEvent.click(notifyButton);
 
-    const feedback = await screen.findByText(
-      /aviso recordatorio enviado a los 5 encargados de grupo/i,
-      {},
-      { timeout: 2000 }
-    );
-    expect(feedback).toBeInTheDocument();
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toBeInTheDocument();
+    expect(
+      within(dialog).getByRole('heading', { name: /centro de recordatorios por whatsapp/i })
+    ).toBeInTheDocument();
+    expect(within(dialog).getByText('Carlos Méndez')).toBeInTheDocument();
   });
 
   it('ejecuta onExportS21 al hacer click en Exportar S-21', async () => {

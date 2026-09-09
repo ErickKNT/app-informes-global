@@ -9,8 +9,12 @@ import {
   type GroupOverviewItem,
 } from '@/components/organisms/GroupsOverviewTable';
 import { PastoralAlertsCard } from '@/components/organisms/PastoralAlertsCard';
+import {
+  WhatsAppReminderModal,
+  type GroupReminderData,
+} from '@/components/organisms/WhatsAppReminderModal';
 import { Button } from '@/components/atoms/Button';
-import { Calendar, Download, CheckCircle2 } from 'lucide-react';
+import { Calendar, Download } from 'lucide-react';
 
 export interface DashboardPageProps {
   onNavigateToGroup?: (groupId: string) => void;
@@ -82,21 +86,59 @@ const DEFAULT_GROUPS: GroupOverviewItem[] = [
   },
 ];
 
+const DEFAULT_REMINDER_GROUPS: GroupReminderData[] = [
+  {
+    id: 'group-1',
+    groupNumber: 1,
+    name: 'Grupo 1 - Los Olivos',
+    overseerName: 'Carlos Méndez',
+    overseerPhone: '+34 612 889 012',
+    publishersCount: 19,
+    reportedCount: 16,
+  },
+  {
+    id: 'group-2',
+    groupNumber: 2,
+    name: 'Grupo 2 - Betel',
+    overseerName: 'Fernando Ruiz',
+    overseerPhone: '+34 600 111 222',
+    publishersCount: 18,
+    reportedCount: 18,
+  },
+  {
+    id: 'group-3',
+    groupNumber: 3,
+    name: 'Grupo 3 - Sinaí',
+    overseerName: 'Mateo Ramos',
+    overseerPhone: '+34 601 222 333',
+    publishersCount: 21,
+    reportedCount: 19,
+  },
+  {
+    id: 'group-4',
+    groupNumber: 4,
+    name: 'Grupo 4 - Hermón',
+    overseerName: 'Julián Castro',
+    overseerPhone: '+34 602 333 444',
+    publishersCount: 22,
+    reportedCount: 17,
+  },
+  {
+    id: 'group-5',
+    groupNumber: 5,
+    name: 'Grupo 5 - Galilea',
+    overseerName: 'Andrés Vega',
+    overseerPhone: '+34 603 444 555',
+    publishersCount: 18,
+    reportedCount: 14,
+  },
+];
+
 export const DashboardPage: React.FC<DashboardPageProps> = ({
   onNavigateToGroup,
   onExportS21,
 }) => {
-  const [isNotifying, setIsNotifying] = useState(false);
-  const [notificationSent, setNotificationSent] = useState(false);
-
-  const handleNotifyOverseers = async () => {
-    setIsNotifying(true);
-    // Simular envío de notificación a encargados
-    await new Promise((resolve) => setTimeout(resolve, 600));
-    setIsNotifying(false);
-    setNotificationSent(true);
-    setTimeout(() => setNotificationSent(false), 4000);
-  };
+  const [isReminderModalOpen, setIsReminderModalOpen] = useState(false);
 
   return (
     <div className="flex flex-col gap-6 w-full">
@@ -141,23 +183,12 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         </div>
       </div>
 
-      {/* Alerta de Notificación Enviada */}
-      {notificationSent && (
-        <div
-          role="status"
-          className="p-3.5 rounded-xl bg-secondary-container/60 text-on-secondary-container text-xs font-medium flex items-center gap-2 animate-in fade-in"
-        >
-          <CheckCircle2 className="w-4 h-4 text-secondary shrink-0" />
-          <span>¡Aviso recordatorio enviado a los 5 encargados de grupo!</span>
-        </div>
-      )}
-
       {/* Alerta de Cierre Mensual */}
       <AlertBanner
         daysRemaining={4}
         pendingCount={14}
-        isNotifying={isNotifying}
-        onNotifyOverseers={handleNotifyOverseers}
+        isNotifying={false}
+        onNotifyOverseers={() => setIsReminderModalOpen(true)}
       />
 
       {/* KPIs Maestros Congregacionales */}
@@ -176,6 +207,15 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           <PastoralAlertsCard />
         </div>
       </div>
+
+      {/* Modal de Recordatorios por WhatsApp */}
+      <WhatsAppReminderModal
+        isOpen={isReminderModalOpen}
+        onClose={() => setIsReminderModalOpen(false)}
+        groups={DEFAULT_REMINDER_GROUPS}
+        monthName="Octubre 2024"
+        deadlineDay={6}
+      />
     </div>
   );
 };
