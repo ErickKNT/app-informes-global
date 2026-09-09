@@ -218,25 +218,51 @@ VALUES ('Congregación El Olivar', 'Circuito 12', 'Año de Servicio 2024-2025', 
 ON CONFLICT DO NOTHING;
 
 -- Grupos de servicio iniciales
-INSERT INTO public.service_groups (id, group_number, name, meeting_location, meeting_schedule)
+INSERT INTO public.service_groups (group_number, name, meeting_location, meeting_schedule)
 VALUES 
-    ('11111111-1111-1111-1111-111111111111', 1, 'Grupo 1 - Los Olivos', 'Salón B · Zona Norte', 'Sábados 09:30 AM'),
-    ('22222222-2222-2222-2222-222222222222', 2, 'Grupo 2 - Betel', 'Av. Primavera 405 (Salón Auxiliar B)', 'Sábados 09:30 AM'),
-    ('33333333-3333-3333-3333-333333333333', 3, 'Grupo 3 - Sinaí', 'Calle Sinaí 8', 'Domingos 09:00 AM'),
-    ('44444444-4444-4444-4444-444444444444', 4, 'Grupo 4 - Hermón', 'Av. Las Torres 112', 'Sábados 09:00 AM'),
-    ('55555555-5555-5555-5555-555555555555', 5, 'Grupo 5 - Galilea', 'Calle Galilea 4', 'Sábados 09:30 AM')
-ON CONFLICT (group_number) DO NOTHING;
+    (1, 'Grupo 1 - Los Olivos', 'Salón B · Zona Norte', 'Sábados 09:30 AM'),
+    (2, 'Grupo 2 - Betel', 'Av. Primavera 405 (Salón Auxiliar B)', 'Sábados 09:30 AM'),
+    (3, 'Grupo 3 - Sinaí', 'Calle Sinaí 8', 'Domingos 09:00 AM'),
+    (4, 'Grupo 4 - Hermón', 'Av. Las Torres 112', 'Sábados 09:00 AM'),
+    (5, 'Grupo 5 - Galilea', 'Calle Galilea 4', 'Sábados 09:30 AM')
+ON CONFLICT (group_number) DO UPDATE
+SET name = EXCLUDED.name,
+    meeting_location = EXCLUDED.meeting_location,
+    meeting_schedule = EXCLUDED.meeting_schedule;
 
--- Perfiles clave
-INSERT INTO public.profiles (id, service_group_id, full_name, phone, role, privilege, is_active)
-VALUES
-    ('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '11111111-1111-1111-1111-111111111111', 'David Morales', '+52 55 1234 5678', 'secretario', 'precursor_regular', true),
-    ('bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb', '11111111-1111-1111-1111-111111111111', 'Carlos Méndez', '+34 612 889 012', 'anciano', 'precursor_regular', true),
-    ('cccccccc-cccc-cccc-cccc-cccccccccccc', '22222222-2222-2222-2222-222222222222', 'Mateo González', '+52 55 9876 5432', 'publicador', 'publicador', true)
-ON CONFLICT DO NOTHING;
+-- Perfiles clave iniciales (vinculados dinámicamente al ID real del grupo)
+INSERT INTO public.profiles (service_group_id, full_name, phone, role, privilege, is_active)
+SELECT 
+    (SELECT id FROM public.service_groups WHERE group_number = 1 LIMIT 1), 
+    'David Morales', 
+    '+52 55 1234 5678', 
+    'secretario', 
+    'precursor_regular', 
+    true
+WHERE NOT EXISTS (SELECT 1 FROM public.profiles WHERE full_name = 'David Morales');
+
+INSERT INTO public.profiles (service_group_id, full_name, phone, role, privilege, is_active)
+SELECT 
+    (SELECT id FROM public.service_groups WHERE group_number = 1 LIMIT 1), 
+    'Carlos Méndez', 
+    '+34 612 889 012', 
+    'anciano', 
+    'precursor_regular', 
+    true
+WHERE NOT EXISTS (SELECT 1 FROM public.profiles WHERE full_name = 'Carlos Méndez');
+
+INSERT INTO public.profiles (service_group_id, full_name, phone, role, privilege, is_active)
+SELECT 
+    (SELECT id FROM public.service_groups WHERE group_number = 2 LIMIT 1), 
+    'Mateo González', 
+    '+52 55 9876 5432', 
+    'publicador', 
+    'publicador', 
+    true
+WHERE NOT EXISTS (SELECT 1 FROM public.profiles WHERE full_name = 'Mateo González');
 
 -- Asignar supervisores a Grupo 1
 UPDATE public.service_groups 
-SET overseer_id = 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb' 
+SET overseer_id = (SELECT id FROM public.profiles WHERE full_name = 'Carlos Méndez' LIMIT 1) 
 WHERE group_number = 1;
 
