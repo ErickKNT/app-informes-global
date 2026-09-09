@@ -2,7 +2,7 @@ export type PublisherRole = 'secretario' | 'anciano' | 'siervo_ministerial' | 'p
 export type ServicePrivilege = 'publicador' | 'precursor_auxiliar' | 'precursor_regular';
 export type ReportStatus = 'borrador' | 'entregado' | 'confirmado';
 
-export interface CongregationConfig {
+export type CongregationConfig = {
   id: string;
   congregation_name: string;
   circuit: string | null;
@@ -11,9 +11,9 @@ export interface CongregationConfig {
   active_year: number;
   monthly_deadline_day: number;
   updated_at: string;
-}
+};
 
-export interface ServiceGroup {
+export type ServiceGroup = {
   id: string;
   group_number: number;
   name: string;
@@ -22,9 +22,9 @@ export interface ServiceGroup {
   overseer_id: string | null;
   assistant_id: string | null;
   created_at: string;
-}
+};
 
-export interface Profile {
+export type Profile = {
   id: string;
   service_group_id: string | null;
   full_name: string;
@@ -35,9 +35,9 @@ export interface Profile {
   avatar_url: string | null;
   created_at: string;
   updated_at: string;
-}
+};
 
-export interface MonthlyReport {
+export type MonthlyReport = {
   id: string;
   profile_id: string;
   service_group_id: string;
@@ -51,9 +51,9 @@ export interface MonthlyReport {
   submitted_by: string | null;
   submitted_at: string;
   confirmed_at: string | null;
-}
+};
 
-export interface Announcement {
+export type Announcement = {
   id: string;
   title: string;
   content: string;
@@ -62,38 +62,56 @@ export interface Announcement {
   date_note: string | null;
   created_by: string | null;
   created_at: string;
-}
+};
+
+export type GenericRelationship = {
+  foreignKeyName: string;
+  columns: string[];
+  isOneToOne?: boolean;
+  referencedRelation: string;
+  referencedColumns: string[];
+};
 
 /**
  * Esquema tipado para el cliente de Supabase
  */
-export interface Database {
+export type Database = {
   public: {
     Tables: {
       congregation_config: {
         Row: CongregationConfig;
         Insert: Partial<Omit<CongregationConfig, 'id' | 'updated_at'>> & { congregation_name: string };
         Update: Partial<CongregationConfig>;
+        Relationships: GenericRelationship[];
       };
       service_groups: {
         Row: ServiceGroup;
         Insert: Omit<ServiceGroup, 'id' | 'created_at'>;
         Update: Partial<ServiceGroup>;
+        Relationships: GenericRelationship[];
       };
       profiles: {
         Row: Profile;
         Insert: Omit<Profile, 'created_at' | 'updated_at'>;
         Update: Partial<Profile>;
+        Relationships: GenericRelationship[];
       };
       monthly_reports: {
         Row: MonthlyReport;
-        Insert: Omit<MonthlyReport, 'id' | 'submitted_at'>;
+        Insert: Omit<MonthlyReport, 'id' | 'submitted_at'> & {
+          submitted_at?: string;
+          submitted_by?: string | null;
+          confirmed_at?: string | null;
+          notes?: string | null;
+        };
         Update: Partial<MonthlyReport>;
+        Relationships: GenericRelationship[];
       };
       announcements: {
         Row: Announcement;
         Insert: Omit<Announcement, 'id' | 'created_at'>;
         Update: Partial<Announcement>;
+        Relationships: GenericRelationship[];
       };
     };
     Views: Record<string, never>;
@@ -112,6 +130,6 @@ export interface Database {
       service_privilege: ServicePrivilege;
       report_status: ReportStatus;
     };
+    CompositeTypes: Record<string, never>;
   };
-}
-
+};
