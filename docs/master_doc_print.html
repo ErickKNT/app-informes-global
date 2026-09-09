@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Documentación Técnica Maestra — Gestión de Informes Teocráticos</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 20mm 15mm 20mm 15mm;
+      @bottom-right {
+        content: counter(page);
+      }
+    }
+    *, *:before, *:after {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-size: 9.5pt;
+      line-height: 1.55;
+      color: #1a202c;
+      background: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+    
+    /* Portada */
+    .cover-page {
+      page-break-after: always;
+      height: 90vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      border: 3px solid #1e3a8a;
+      border-radius: 12px;
+      padding: 40px;
+      margin: 20px 0;
+      background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+    }
+    .cover-title {
+      font-size: 26pt;
+      font-weight: 800;
+      color: #1e3a8a;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .cover-subtitle {
+      font-size: 15pt;
+      font-weight: 600;
+      color: #475569;
+      margin-bottom: 30px;
+    }
+    .cover-badge {
+      display: inline-block;
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 10pt;
+      margin-bottom: 40px;
+      border: 1px solid #bfdbfe;
+    }
+    .cover-meta {
+      font-size: 10pt;
+      color: #64748b;
+      margin-top: 40px;
+      line-height: 1.8;
+    }
+
+    /* Títulos */
+    h1.chapter-title {
+      font-size: 18pt;
+      font-weight: 800;
+      color: #1e3a8a;
+      border-bottom: 2px solid #1e3a8a;
+      padding-bottom: 6px;
+      margin-top: 35px;
+      margin-bottom: 16px;
+      page-break-before: always;
+    }
+    h2.section-title {
+      font-size: 13pt;
+      font-weight: 700;
+      color: #0f172a;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 4px;
+      margin-top: 24px;
+      margin-bottom: 12px;
+      page-break-after: avoid;
+    }
+    h3.subsection-title {
+      font-size: 11pt;
+      font-weight: 700;
+      color: #334155;
+      margin-top: 18px;
+      margin-bottom: 8px;
+      page-break-after: avoid;
+    }
+    h4.minor-title {
+      font-size: 10pt;
+      font-weight: 600;
+      color: #475569;
+      margin-top: 14px;
+      margin-bottom: 6px;
+    }
+
+    p {
+      margin-top: 0;
+      margin-bottom: 10px;
+      text-align: justify;
+    }
+
+    /* Tablas */
+    .table-container {
+      width: 100%;
+      margin: 14px 0;
+      overflow-x: auto;
+      page-break-inside: avoid;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8.5pt;
+      margin-bottom: 12px;
+    }
+    th {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      font-weight: 700;
+      text-align: left;
+      padding: 7px 8px;
+      border: 1px solid #cbd5e1;
+    }
+    td {
+      padding: 6px 8px;
+      border: 1px solid #e2e8f0;
+      vertical-align: top;
+    }
+    tr:nth-child(even) {
+      background-color: #f8fafc;
+    }
+
+    /* Bloques de código */
+    pre.code-block {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-family: "Consolas", "Courier New", monospace;
+      font-size: 8pt;
+      line-height: 1.45;
+      overflow-x: auto;
+      margin: 12px 0;
+      border: 1px solid #334155;
+      page-break-inside: avoid;
+    }
+    code.inline-code {
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 1px 4px;
+      border-radius: 4px;
+      font-family: "Consolas", "Courier New", monospace;
+      font-size: 8.5pt;
+      border: 1px solid #e2e8f0;
+    }
+
+    /* Alertas */
+    .alert {
+      padding: 10px 14px;
+      border-radius: 6px;
+      margin: 14px 0;
+      font-size: 9pt;
+      border-left: 4px solid;
+    }
+    .alert-important {
+      background: #eff6ff;
+      border-color: #2563eb;
+      color: #1e40af;
+    }
+    .alert-warning, .alert-caution {
+      background: #fffbeb;
+      border-color: #d97706;
+      color: #92400e;
+    }
+    .alert-note {
+      background: #f8fafc;
+      border-color: #64748b;
+      color: #334155;
+    }
+
+    ul, ol {
+      margin-top: 0;
+      margin-bottom: 12px;
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 4px;
+    }
+
+    hr {
+      border: 0;
+      height: 1px;
+      background: #e2e8f0;
+      margin: 24px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="cover-page">
+    <div class="cover-badge">DOCUMENTACIÓN TÉCNICA OFICIAL</div>
+    <div class="cover-title">GESTIÓN DE INFORMES TEOCRÁTICOS</div>
+    <div class="cover-subtitle">Portal Congregacional de Servicio & Registro</div>
+    <div style="font-size: 11pt; color: #334155; max-width: 600px; line-height: 1.6; margin: 10px 0;">
+      Manual Integral de Arquitectura, Especificación de Base de Datos, Control de Acceso por Roles (3 Niveles), Reglas de Negocio, Pruebas y Despliegue en Producción.
+    </div>
+    <div class="cover-meta">
+      <strong>Versión:</strong> 1.0.0 (Producción Validada)<br>
+      <strong>Estado de QA:</strong> 182/182 Pruebas Aprobadas (100%) · 0 Errores TypeScript<br>
+      <strong>Repositorio:</strong> <code>ErickKNT/app-informes-global</code><br>
+      <strong>Fecha:</strong> Septiembre 2026
+    </div>
+  </div>
+
+  <div class="content-body">
+    <h1 class="chapter-title">DOCUMENTACIÓN TÉCNICA MAESTRA</h1>
+<h2 class="section-title">Portal Congregacional de Servicio &amp; Registro (Gestión de Informes Teocráticos)</h2>
+
+<p><strong>Versión del Sistema:</strong> 1.0.0 (Producción)   <strong>Fecha de Publicación:</strong> Septiembre 2026   <strong>Clasificación:</strong> Confidencial / Uso Exclusivo Congregacional   <strong>Repositorio:</strong> <code class="inline-code">ErickKNT/app-informes-global</code>   <strong>Estado:</strong> Producción Validada — 182/182 Pruebas Aprobadas (100%)</p>
+
+<p>---</p>
+
+<h2 class="section-title">Tabla de Contenidos General</h2>
+<ol><li class="ordered">[Identidad del Proyecto y Alcance Técnico](#1-identidad-del-proyecto-y-alcance-tcnico)</li>
+<li class="ordered">[Arquitectura General del Sistema](#2-arquitectura-general-del-sistema)</li>
+<li class="ordered">[Stack Tecnológico Exhaustivo](#3-stack-tecnolgico-exhaustivo)</li>
+<li class="ordered">[Estructura del Proyecto y Reglas Arquitectónicas](#4-estructura-del-proyecto-y-reglas-arquitectnicas)</li>
+<li class="ordered">[Arquitectura Frontend y Catálogo de Componentes](#5-arquitectura-frontend-y-catlogo-de-componentes)</li>
+<li class="ordered">[Estrategia de TypeScript y Garantía de Tipado](#6-estrategia-de-typescript-y-garanta-de-tipado)</li>
+<li class="ordered">[Base de Datos y Políticas de Seguridad (RLS)](#7-base-de-datos-y-polticas-de-seguridad-rls)</li>
+<li class="ordered">[Autenticación, Roles y Matriz de Control de Acceso](#8-autenticacin-roles-y-matriz-de-control-de-acceso)</li>
+<li class="ordered">[Reglas de Negocio y Ciclo de Vida del Informe](#9-reglas-de-negocio-y-ciclo-de-vida-del-informe-ministerial)</li>
+<li class="ordered">[Catálogo de Servicios y Comunicación](#10-catlogo-de-servicios-y-comunicacin)</li>
+<li class="ordered">[Auditoría de Seguridad, Variables de Entorno y Secretos](#11-auditora-de-seguridad-variables-de-entorno-y-secretos)</li>
+<li class="ordered">[Estrategia de Pruebas, Aseguramiento de Calidad (QA) y Métricas](#12-estrategia-de-pruebas-aseguramiento-de-calidad-qa-y-mtricas)</li>
+<li class="ordered">[DevOps, Ambientes, Despliegue y Recuperación](#13-devops-ambientes-despliegue-y-recuperacin-ante-desastres)</li>
+<li class="ordered">[Architecture Decision Records (ADRs)](#14-architecture-decision-records-adrs)</li>
+<li class="ordered">[Trazabilidad de Requisitos y Gestión de Riesgos](#15-trazabilidad-de-requisitos-y-gestin-de-riesgos)</li>
+<li class="ordered">[Guía de Desarrollo, Estándares de Código y AI Guidelines](#16-gua-de-desarrollo-estndares-de-cdigo-y-ai-guidelines)</li>
+<li class="ordered">[Guía de Resolución de Problemas (Troubleshooting) y Glosario](#17-gua-de-resolucin-de-problemas-troubleshooting-y-glosario)</li>
+</ol>
+---
+
+<h1 class="chapter-title">1. Identidad del Proyecto y Alcance Técnico</h1>
+
+<h2 class="section-title">1.1 Ficha Técnica de Identidad</h2>
+<ul><li><strong>Nombre Oficial del Proyecto:</strong> Gestión de Informes Teocráticos (Portal Congregacional de Servicio &amp; Registro)</li>
+<li><strong>Repositorio Git:</strong> <code class="inline-code">ErickKNT/app-informes-global</code></li>
+<li><strong>Rama Principal:</strong> <code class="inline-code">main</code></li>
+<li><strong>Versión Actual:</strong> <code class="inline-code">1.0.0</code> (Producción Estable)</li>
+<li><strong>Tipo de Aplicación:</strong> Single Page Application (SPA) + Progressive Web App (PWA) con soporte Offline.</li>
+<li><strong>Licencia:</strong> Privada / Uso exclusivo congregacional.</li>
+</ul>
+<h2 class="section-title">1.2 Propósito y Justificación del Sistema</h2>
+La administración del ministerio del campo y la secretaría en las congregaciones de los Testigos de Jehová requiere una recopilación rigurosa y mensual de la actividad de evangelización de cada publicador, el seguimiento del progreso de los precursores (regulares y auxiliares), el control de la asistencia a las reuniones semanales y la remisión oportuna de las cifras a la Sucursal nacional dentro de los primeros días de cada mes calendario.
+
+<p>Históricamente, este proceso se gestionaba mediante tiras de papel físico o mensajes informales y fragmentados a través de mensajería instantánea. Dicho flujo tradicional presenta serias deficiencias: <ol><li class="ordered"><strong>Pérdida de datos e informes extraviados:</strong> Retrasos crónicos en la entrega de informes que dificultan el cierre antes del día 6 del mes.</li> <li class="ordered"><strong>Sobrecarga administrativa del secretario:</strong> Necesidad de transcribir manualmente cada informe en las tarjetas de registro S-21 individuales y tabular los totales para el informe S-1 de la Sucursal.</li> <li class="ordered"><strong>Falta de visibilidad para los encargados de grupo:</strong> Dificultad para saber en tiempo real qué publicadores de su grupo han entregado su informe y quiénes necesitan estímulo pastoral.</li> <li class="ordered"><strong>Fallas de privacidad y seguridad:</strong> Exposición de datos de contacto o registros ministeriales cuando se transmiten por canales no cifrados o grupos abiertos.</li> </ol> El sistema <strong>Gestión de Informes Teocráticos</strong> resuelve integralmente esta problemática mediante una plataforma web segura, reactiva, accesible desde cualquier dispositivo móvil o de escritorio, y protegida por un modelo de control de acceso teocrático basado en roles (3 niveles).</p>
+
+<h2 class="section-title">1.3 Alcance Funcional</h2>
+<h3 class="subsection-title">Módulos Implementados en el Alcance</h3>
+<ul><li><strong>Módulo de Autenticación y Perfil:</strong> Inicio de sesión seguro con roles diferenciados (<code class="inline-code">publicador</code>, <code class="inline-code">anciano</code>, <code class="inline-code">siervo_ministerial</code>, <code class="inline-code">secretario</code>), demo de un clic para entornos de prueba y visualización del grupo asignado.</li>
+<li><strong>Módulo "Mi Informe Mensual":</strong> Registro ágil del informe personal de predicación con validación en tiempo real:</li>
+<li>Publicadores regulares: casilla de participación y conteo de estudios bíblicos.</li>
+<li>Precursores regulares y auxiliares: registro obligatorio de horas ministeriales y estudios bíblicos.</li>
+<li>Alerta de estado (<code class="inline-code">Borrador</code>, <code class="inline-code">Enviado</code>, <code class="inline-code">Confirmado</code>).</li>
+<li><strong>Módulo "Grupos de Servicio":</strong></li>
+<li>Vista segregada por grupo de predicación.</li>
+<li>Tabla de publicadores con estados de entrega (<code class="inline-code">Entregado</code> vs <code class="inline-code">Pendiente</code>).</li>
+<li>Registro Asistido: Permite al encargado ingresar el informe a nombre de un publicador que lo proporcionó por vía telefónica o presencial.</li>
+<li>Gestión de grupos (Crear, Editar y Eliminación asistida con reasignación de publicadores).</li>
+<li><strong>Módulo "Panel General (Dashboard)":</strong></li>
+<li>Indicadores clave de rendimiento (KPIs): Total de horas, promedio histórico, porcentaje de cumplimiento, publicadores activos y precursores al día.</li>
+<li>Tabla de estado de entrega por grupos con desglose de avance.</li>
+<li>Tarjeta de alertas pastorales (publicadores irregulares, enfermos o con necesidad de apoyo).</li>
+<li>Centro de recordatorios por WhatsApp con personalización automática y modo de prueba interactivo.</li>
+<li>Cierre oficial del ciclo mensual con checklist de 3 puntos y transición automática de mes activo.</li>
+<li><strong>Módulo "Asistencia a Reuniones":</strong></li>
+<li>Registro de asistencia semanal para la <em>Reunión de Entre Semana</em> (Vida y Ministerio) y <em>Reunión de Fin de Semana</em> (Discurso Público y Estudio de La Atalaya).</li>
+<li>Cálculo automático de promedios mensuales requeridos por la secretaría.</li>
+<li><strong>Módulo "Reportes Consolidados":</strong></li>
+<li>Tabla canónica S-21-S con historial mensual de toda la congregación.</li>
+<li>Gráfica comparativa histórica interactiva.</li>
+<li>Análisis de cumplimiento de la meta anual de 600 horas para precursores regulares.</li>
+<li>Modal del <strong>Informe Mensual para la Sucursal (Formato S-1)</strong> con copia al portapapeles en 1 clic y soporte de impresión formal.</li>
+<li>Exportación de resúmenes en formato PDF y hojas de cálculo Excel.</li>
+<li><strong>Módulo "Tarjetas de Publicador (S-21)":</strong></li>
+<li>Expediente individual teocrático con cuadrícula de 12 meses (Año de Servicio de Septiembre a Agosto).</li>
+<li>Edición de privilegios de servicio, transferencias entre grupos y baja de publicadores.</li>
+<li><strong>Importador Masivo CSV:</strong> Carga de nómina congregacional completa con auto-detección de delimitadores y previsualización.</li>
+<li><strong>Módulo "Tablón de Anuncios":</strong></li>
+<li>Publicación de avisos oficiales con niveles de prioridad (<code class="inline-code">Importante</code> en ámbar vs <code class="inline-code">General</code>), fechas de evento y salón asignado.</li>
+<li><strong>Soporte PWA y Offline:</strong></li>
+<li>Manifiesto web standalone, íconos institucionales (sin cruces) y Service Worker para uso sin conexión a internet.</li>
+</ul>
+<h3 class="subsection-title">Límites del Sistema (Out of Scope)</h3>
+<ul><li><strong>No gestiona fondos ni cuentas congregacionales:</strong> La administración de donaciones, cuentas bancarias y gastos de mantenimiento del Salón del Reino está excluida por diseño.</li>
+<li><strong>No se conecta directamente con los servidores de jw.org:</strong> Por razones de seguridad teocrática y políticas de la organización, no existe una API pública hacia el portal mundial; el sistema genera el formato estructurado idéntico al S-1 para que el secretario ingrese las cifras consolidadas en menos de 2 minutos.</li>
+</ul>
+<h2 class="section-title">1.4 Usuarios Objetivo y Perfiles</h2>
+<ol><li class="ordered"><strong>Publicador:</strong> Cualquier miembro activo de la congregación (bautizado o publicador no bautizado). Su único objetivo es ingresar su informe de forma sencilla antes del día 5 del mes.</li>
+<li class="ordered"><strong>Encargado de Grupo de Servicio:</strong> Anciano o siervo ministerial asignado para supervisar espiritualmente un grupo de predicación. Requiere auditar las entregas de su grupo, registrar informes de hermanos mayores y enviar recordatorios amables.</li>
+<li class="ordered"><strong>Secretario / Anciano General:</strong> Miembro del cuerpo de ancianos responsable de los archivos congregacionales, tarjetas S-21, reportes a la Sucursal y mantenimiento de grupos.</li>
+</ol>
+<h2 class="section-title">1.5 Suposiciones y Restricciones</h2>
+<ul><li><strong>Año de Servicio Teocrático:</strong> El ciclo anual corre canónicamente del 1 de Septiembre al 31 de Agosto del año siguiente.</li>
+<li><strong>Regla de Horas de Predicación:</strong> Desde el ajuste teocrático global de 2023, los publicadores generales <strong>no reportan horas</strong>, únicamente marcan si participaron en la predicación y el número de estudios bíblicos. El registro de horas es de uso estricto para precursores regulares y auxiliares.</li>
+<li><strong>Simbología:</strong> No deben utilizarse íconos de cruces ni elementos gráficos contrarios a las creencias de los Testigos de Jehová. Se utilizan edificios institucionales (<code class="inline-code">Building2</code>) y libros abiertos.</li>
+<li><strong>Disponibilidad Offline:</strong> La aplicación debe ser capaz de abrirse y permitir la consulta en Salones del Reino con cobertura móvil deficiente.</li>
+</ul>
+<h2 class="section-title">1.6 Estado Actual y Hoja de Ruta</h2>
+<ul><li><strong>Estado Actual:</strong> <code class="inline-code">IMPLEMENTADO Y VALIDADO EN PRODUCCIÓN (v1.0.0)</code>.</li>
+<li><strong>Suite de Pruebas:</strong> 182 pruebas unitarias e integración pasando al 100% (58 suites).</li>
+<li><strong>Compilación:</strong> Cero errores de TypeScript (<code class="inline-code">npx tsc --noEmit</code>), empaquetado Vite limpio en 3.84s.</li>
+</ul>
+
+<p>---</p>
+
+<h1 class="chapter-title">2. Arquitectura General del Sistema</h1>
+
+<h2 class="section-title">2.1 Visión Arquitectónica de Alto Nivel</h2>
+La arquitectura del sistema sigue el patrón <strong>Modern Client-Side Architecture (JAMstack / SPA)</strong> con sincronización Backend-as-a-Service (BaaS) apoyada en <strong>Supabase</strong> y almacenamiento en caché de cliente mediante <strong>Service Worker</strong>.
+
+<pre class="code-block mermaid"><code>graph TD
+    subgraph Cliente Web &amp; Móvil (Browser / PWA)
+        UI["Capa de Presentación&lt;br&gt;(React 18 + Tailwind CSS)"]
+        ATOMIC["Diseño Atómico&lt;br&gt;(Atoms / Molecules / Organisms / Templates)"]
+        STATE["Capa de Estado y Lógica&lt;br&gt;(Custom Hooks + AuthContext + Memory Cache)"]
+        SW["Service Worker Cache&lt;br&gt;(stale-while-revalidate / Offline Storage)"]
+        SERVICES["Servicios de Dominio&lt;br&gt;(publishersService, reportsService, etc.)"]
+    end
+
+<p>subgraph Capa de Red y Protocolo         HTTPS["HTTPS REST / WebSockets"]         CLIENT["Supabase Client JS (@supabase/supabase-js)"]     end</p>
+
+<p>subgraph Backend Cloud (Supabase / PostgreSQL 15)         POSTGREST["PostgREST API Engine"]         AUTH["Supabase Auth (GoTrue)"]         RLS["Políticas Row-Level Security (RLS)&lt;br&gt;(3 Niveles de Permisos)"]         DB[(Base de Datos PostgreSQL&lt;br&gt;Tables, Enums, Triggers, Functions)]     end</p>
+
+<p>UI --&gt; ATOMIC     ATOMIC --&gt; STATE     STATE --&gt; SERVICES     SERVICES --&gt; CLIENT     CLIENT --&gt; HTTPS     HTTPS --&gt; POSTGREST     HTTPS --&gt; AUTH     POSTGREST --&gt; RLS     RLS --&gt; DB     SW -.-&gt;|Fallback Offline| UI</code></pre></p>
+
+<h2 class="section-title">2.2 Flujo de Autenticación y Control de Sesión</h2>
+El sistema soporta autenticación mediante sesiones JWT administradas por Supabase Auth, complementadas con un modo de desarrollo y prueba reactivo con usuarios pre-configurados.
+
+<pre class="code-block mermaid"><code>sequenceDiagram
+    autonumber
+    actor Usuario as Publicador / Encargado / Secretario
+    participant Login as LoginPage (React)
+    participant AuthCtx as AuthContext
+    participant Storage as LocalStorage / Memory
+    participant Supa as Supabase Auth
+
+<p>Usuario-&gt;&gt;Login: Ingresa credenciales o selecciona Usuario de Prueba     Login-&gt;&gt;AuthCtx: login(email, password) / demoLogin(role)     alt Entorno Supabase Conectado         AuthCtx-&gt;&gt;Supa: signInWithPassword({ email, password })         Supa--&gt;&gt;AuthCtx: AuthSession { user, access_token }         AuthCtx-&gt;&gt;Supa: from('profiles').select('*').eq('id', user.id)         Supa--&gt;&gt;AuthCtx: Profile { role, privilege, service_group_id }     else Modo Offline / Demo Local         AuthCtx-&gt;&gt;AuthCtx: Carga perfil simulado (David Morales / Carlos Méndez / Mateo González)     end     AuthCtx-&gt;&gt;Storage: Persiste estado de sesión     AuthCtx--&gt;&gt;Login: Usuario autenticado con rol y permisos     Login--&gt;&gt;Usuario: Redirección automática según rol teocrático</code></pre></p>
+
+<h2 class="section-title">2.3 Flujo de Creación y Entrega del Informe Mensual</h2>
+<pre class="code-block mermaid"><code>sequenceDiagram
+    autonumber
+    actor Pub as Publicador
+    participant Page as MonthlyReportPage
+    participant Hook as useMonthlyReport
+    participant Schema as Zod Validator
+    participant Service as reportsService
+    participant DB as PostgreSQL (monthly_reports)
+
+<p>Pub-&gt;&gt;Page: Abre "Mi Informe Mensual"     Page-&gt;&gt;Hook: useMonthlyReport()     Hook--&gt;&gt;Page: Carga estado de informe previo (Borrador o Vacío)     Pub-&gt;&gt;Page: Ingresa Horas, Estudios y Notas     Pub-&gt;&gt;Page: Pulsa "Enviar Informe a la Congregación"     Page-&gt;&gt;Schema: validate(monthlyReportSchema)     alt Datos Inválidos         Schema--&gt;&gt;Page: Errores de validación (ej. horas negativas)         Page--&gt;&gt;Pub: Muestra alerta descriptiva     else Validación Exitosa         Page-&gt;&gt;Service: submitReport(reportData)         Service-&gt;&gt;DB: INSERT / UPDATE monthly_reports SET status='submitted'         DB--&gt;&gt;Service: Registro actualizado con timestamp         Service--&gt;&gt;Page: Confirmación de envío         Page--&gt;&gt;Pub: Toast de éxito y bloqueo de campos editables     end</code></pre></p>
+
+<h2 class="section-title">2.4 Flujo de Registro Asistido por el Encargado de Grupo</h2>
+<pre class="code-block mermaid"><code>sequenceDiagram
+    autonumber
+    actor Encargado as Encargado de Grupo
+    participant UI as ServiceGroupsPage
+    participant Modal as AssistedReportModal
+    participant Hook as useServiceGroups
+    participant DB as PostgreSQL
+
+<p>Encargado-&gt;&gt;UI: Identifica publicador con estado "Pendiente"     Encargado-&gt;&gt;UI: Clic en "Registro Asistido"     UI-&gt;&gt;Modal: Abre modal con datos del publicador     Encargado-&gt;&gt;Modal: Ingresa participación, horas y estudios     Encargado-&gt;&gt;Modal: Pulsa "Confirmar y Guardar"     Modal-&gt;&gt;Hook: registerAssistedReport(publisherId, reportData)     Hook-&gt;&gt;DB: UPDATE monthly_reports SET status='confirmed', submitted_by=encargado_id     DB--&gt;&gt;Hook: Registro guardado     Hook--&gt;&gt;UI: Actualiza conteo y marca publicador como "Entregado"     UI--&gt;&gt;Encargado: Feedback visual inmediato</code></pre></p>
+
+<h2 class="section-title">2.5 Flujo de Cierre de Mes Congregacional</h2>
+<pre class="code-block mermaid"><code>sequenceDiagram
+    autonumber
+    actor Sec as Secretario
+    participant Dash as DashboardPage
+    participant Modal as MonthClosingModal
+    participant Branch as BranchReportSummaryModal
+    participant DB as PostgreSQL
+
+<p>Sec-&gt;&gt;Dash: Observa 100% o fecha límite alcanzada     Sec-&gt;&gt;Dash: Clic en "Cerrar Mes"     Dash-&gt;&gt;Modal: Despliega modal de cierre de ciclo     Sec-&gt;&gt;Modal: Marca Checklist: 1. Informes verificados     Sec-&gt;&gt;Modal: Marca Checklist: 2. Informe enviado a Sucursal     Sec-&gt;&gt;Modal: Marca Checklist: 3. Archivo S-21 actualizado     Modal--&gt;&gt;Sec: Habilita botón "Confirmar y Cerrar Mes Oficialmente"     Sec-&gt;&gt;Modal: Clic en Confirmar Cierre     Modal-&gt;&gt;DB: Transición de mes activo (Octubre -&gt; Noviembre)     Modal-&gt;&gt;DB: Bloqueo de edición de informes del período cerrado     Modal--&gt;&gt;Dash: Notificación de cierre exitoso y actualización de vista</code></pre></p>
+
+<h2 class="section-title">2.6 Diagrama de Despliegue en Producción</h2>
+<pre class="code-block mermaid"><code>graph LR
+    subgraph CDN &amp; Edge Layer
+        CLIENT_APP["PWA Static Assets&lt;br&gt;(HTML, JS, CSS, Webmanifest)&lt;br&gt;Servido en Edge CDN / Vercel / Netlify"]
+    end
+
+<p>subgraph Backend Services         SB_AUTH["Supabase Auth Service&lt;br&gt;(JWT Tokens)"]         SB_REST["PostgREST Service&lt;br&gt;(Auto-generated REST API)"]     end</p>
+
+<p>subgraph Persistence Layer         PG_DB[(PostgreSQL 15 Cluster&lt;br&gt;AWS Frankfurt / Sao Paulo)]         PG_REPLICA[(Read Replica &amp; Daily Backups)]     end</p>
+
+<p>CLIENT_APP --&gt;|HTTPS / WSS| SB_AUTH     CLIENT_APP --&gt;|HTTPS REST| SB_REST     SB_AUTH --&gt; PG_DB     SB_REST --&gt; PG_DB     PG_DB -.-&gt;|WAL Replication| PG_REPLICA</code></pre></p>
+
+<p>---</p>
+
+<h1 class="chapter-title">3. Stack Tecnológico Exhaustivo</h1>
+
+<p>A continuación se detalla cada una de las dependencias, herramientas y tecnologías que componen el proyecto, con su versión exacta obtenida de <code class="inline-code">package.json</code>, justificación de selección, riesgos asociados y alternativas evaluadas. <div class="table-container"><table><thead><tr><th>Tecnología</th><th>Versión</th><th>Propósito / Responsabilidad</th><th>Dónde se Utiliza</th><th>Justificación Técnica</th><th>Riesgos Identificados</th><th>Alternativas Evaluadas</th></tr></thead><tbody><tr><td><strong>React</strong></td><td><code class="inline-code">^18.3.1</code></td><td>Biblioteca núcleo para construcción de interfaces declarativas</td><td>Toda la aplicación (<code class="inline-code">src/</code>)</td><td>Modelo de componentes declarativo, concurrencia, soporte masivo de ecosistema y virtual DOM eficiente</td><td>Incompatibilidades menores al migrar a React 19 en dependencias de terceros</td><td>Vue 3, Svelte, Angular</td></tr><tr><td><strong>React DOM</strong></td><td><code class="inline-code">^18.3.1</code></td><td>Renderizador de React para el Document Object Model (DOM)</td><td><code class="inline-code">src/main.tsx</code></td><td>Integración canónica de React en navegadores web</td><td>Riesgo inherente a sincronización con versión de React</td><td>React Native Web</td></tr><tr><td><strong>TypeScript</strong></td><td><code class="inline-code">^5.7.3</code></td><td>Superset tipado estático para JavaScript</td><td>Todo el código fuente (<code class="inline-code">.ts</code>, <code class="inline-code">.tsx</code>)</td><td>Eliminación de errores en tiempo de compilación, autocompletado y tipado de esquemas de base de datos</td><td>Curva de complejidad en tipos genéricos avanzados</td><td>JavaScript vanilla, JSDoc</td></tr><tr><td><strong>Vite</strong></td><td><code class="inline-code">^6.1.0</code></td><td>Entorno de desarrollo ultrarrápido y empaquetador de producción</td><td>Raíz (<code class="inline-code">vite.config.ts</code>)</td><td>Hot Module Replacement (HMR) sub-segundo con esbuild y bundling optimizado con Rollup</td><td>Manejo de dependencias CommonJS legadas en builds complejas</td><td>Webpack, Turbopack, Parcel</td></tr><tr><td><strong>Tailwind CSS</strong></td><td><code class="inline-code">^3.4.17</code></td><td>Framework de utilidades CSS orientadas al diseño</td><td>Estilos en todos los componentes</td><td>Diseño consistente mediante tokens de diseño (Design Tokens), purga automática de CSS no utilizado</td><td>Clases extensas en JSX si no se abstraen componentes</td><td>CSS Modules, Styled Components</td></tr><tr><td><strong>PostCSS</strong></td><td><code class="inline-code">^8.5.2</code></td><td>Procesador de hojas de estilo CSS</td><td><code class="inline-code">postcss.config.js</code></td><td>Requisito fundamental para compilar directivas de Tailwind CSS</td><td>Dependencia de plugins</td><td>Sass, Less</td></tr><tr><td><strong>Autoprefixer</strong></td><td><code class="inline-code">^10.4.20</code></td><td>Plugin PostCSS para añadir prefijos de navegadores</td><td><code class="inline-code">postcss.config.js</code></td><td>Compatibilidad cross-browser en navegadores móviles antiguos</td><td>Mínimo riesgo técnico</td><td>Ninguna necesaria</td></tr><tr><td><strong>Supabase JS Client</strong></td><td><code class="inline-code">^2.49.1</code></td><td>SDK cliente oficial de Supabase</td><td><code class="inline-code">src/services/supabaseClient.ts</code></td><td>Conexión tipada con PostgreSQL, autenticación JWT y sincronización RLS</td><td>Acoplamiento al backend de Supabase si se cambia de proveedor</td><td>Firebase SDK, Apollo Client</td></tr><tr><td><strong>Zod</strong></td><td><code class="inline-code">^3.24.2</code></td><td>Validación de esquemas con inferencia de tipos estáticos</td><td><code class="inline-code">src/schemas/monthlyReportSchema.ts</code></td><td>Validación en tiempo de ejecución (runtime) desacoplada de la UI, mensajes de error en español</td><td>Sobrecarga en el bundle si se usan esquemas masivos redundantes</td><td>Yup, Joi, Valibot</td></tr><tr><td><strong>Lucide React</strong></td><td><code class="inline-code">^0.475.0</code></td><td>Conjunto de íconos SVG consistentes y ligeros</td><td>Todos los componentes de UI</td><td>Árbol agitable (tree-shaking), diseño teocrático limpio y sin iconografía religiosa inapropiada</td><td>Posibles cambios de nombres de íconos entre versiones mayores</td><td>Heroicons, FontAwesome</td></tr><tr><td><strong>Clsx</strong></td><td><code class="inline-code">^2.1.1</code></td><td>Utilidad para composición condicional de clases CSS</td><td><code class="inline-code">src/utils/cn.ts</code></td><td>Sintaxis compacta y eficiente para clases dinámicas</td><td>Ninguno relevante</td><td>classnames</td></tr><tr><td><strong>Tailwind Merge</strong></td><td><code class="inline-code">^3.0.1</code></td><td>Resolución de conflictos entre clases de Tailwind</td><td><code class="inline-code">src/utils/cn.ts</code></td><td>Permite sobreescribir estilos en componentes reutilizables sin bugs de especificidad</td><td>Ligero incremento en el tamaño de bundle</td><td>Implementación manual con regex</td></tr><tr><td><strong>Vitest</strong></td><td><code class="inline-code">^3.0.5</code></td><td>Entorno de pruebas unitarias ultrarrápido nativo para Vite</td><td>Configuración en <code class="inline-code">vite.config.ts</code> y suites <code class="inline-code">.test.ts(x)</code></td><td>Compatibilidad nativa con la configuración de Vite, ejecución paralela y sintaxis compatible con Jest</td><td>Diferencias sutiles con Jest en mocks de temporizadores</td><td>Jest, Mocha</td></tr><tr><td><strong>Testing Library (React)</strong></td><td><code class="inline-code">^16.2.0</code></td><td>Utilidades de prueba centradas en el comportamiento del usuario</td><td>Todas las pruebas de componentes</td><td>Fomenta pruebas basadas en accesibilidad (<code class="inline-code">getByRole</code>, <code class="inline-code">getByLabelText</code>) sin acoplarse a detalles de implementación</td><td>Curva de aprendizaje en eventos asíncronos complejos</td><td>Enzyme (obsoleto)</td></tr><tr><td><strong>Testing Library (Jest DOM)</strong></td><td><code class="inline-code">^6.6.3</code></td><td>Matchers personalizados para aserciones sobre el DOM</td><td><code class="inline-code">src/setupTests.ts</code></td><td>Permite aserciones legibles como <code class="inline-code">toBeInTheDocument()</code>, <code class="inline-code">toBeVisible()</code></td><td>Dependencia en JSDOM</td><td>Aserciones manuales con assert</td></tr><tr><td><strong>Testing Library (User Event)</strong></td><td><code class="inline-code">^14.6.1</code></td><td>Simulación realista de interacciones de usuario en pruebas</td><td>Pruebas de interacción</td><td>Simula eventos reales del navegador (hover, click, focus, type) con fidelidad superior a <code class="inline-code">fireEvent</code></td><td>Ejecución asíncrona que requiere <code class="inline-code">await</code> riguroso</td><td><code class="inline-code">fireEvent</code></td></tr><tr><td><strong>JSDOM</strong></td><td><code class="inline-code">^26.0.0</code></td><td>Emulación de entorno DOM y navegador en Node.js</td><td>Configuración de Vitest</td><td>Permite ejecutar pruebas de componentes React sin necesidad de lanzar navegadores reales</td><td>No emula diseño visual ni renderizado de canvas / WebGL</td><td>Happy-DOM, PhantomJS</td></tr><tr><td><strong>@types/node</strong></td><td><code class="inline-code">^22.13.4</code></td><td>Definiciones de tipos de TypeScript para APIs de Node.js</td><td>Compilación de configuración y scripts</td><td>Permite tipado estricto en scripts de build y archivos de configuración</td><td>Desincronización con versión de Node del servidor</td><td>Tipos integrados</td></tr><tr><td><strong>@types/react</strong></td><td><code class="inline-code">^18.3.18</code></td><td>Definiciones de tipos para React</td><td>En toda la aplicación</td><td>Autocompletado y validación de JSX, hooks y tipos de eventos</td><td>Complejidad en tipado de componentes polimórficos</td><td>Tipos manuales</td></tr><tr><td><strong>@types/react-dom</strong></td><td><code class="inline-code">^18.3.5</code></td><td>Definiciones de tipos para React DOM</td><td><code class="inline-code">src/main.tsx</code></td><td>Tipado estricto del punto de entrada en el DOM</td><td>Mínimo</td><td>Tipos manuales</td></tr></tbody></table></div></p>
+
+<p>---</p>
+
+<h1 class="chapter-title">4. Estructura del Proyecto y Reglas Arquitectónicas</h1>
+
+<h2 class="section-title">4.1 Árbol de Directorios del Repositorio</h2>
+<pre class="code-block "><code>App_informes/
+├── .env.example                     # Plantilla documentada de variables de entorno públicas
+├── .env.local                       # Variables de entorno locales (gitignored)
+├── .gitignore                       # Configuración de exclusión de Git (node_modules, dist, *.log)
+├── index.html                       # Documento raíz HTML con viewport y metadatos PWA
+├── package.json                     # Definición de dependencias, scripts de build y pruebas
+├── package-lock.json                # Árbol exacto de versiones de dependencias resueltas
+├── postcss.config.js                # Configuración de procesadores CSS (Tailwind + Autoprefixer)
+├── README.md                        # Documentación general y guía rápida
+├── supabase_schema.sql              # Script SQL maestro (DDL, Enums, RLS, Triggers y Seeds)
+├── tailwind.config.js               # Tokens de diseño teocrático, colores y tipografías
+├── tsconfig.json                    # Configuración unificada de compilación TypeScript
+├── vite.config.ts                   # Configuración del servidor de desarrollo, alias y Vitest
+├── public/                          # Recursos estáticos servidos directamente en la raíz
+│   ├── favicon.svg                  # Ícono SVG del Salón del Reino institucional (sin cruces)
+│   ├── manifest.webmanifest         # Manifiesto de PWA para instalación móvil y de escritorio
+│   └── sw.js                        # Service Worker para caché y soporte offline
+├── docs/                            # Documentación técnica maestra y manuales de ingeniería
+└── src/                             # Código fuente de la aplicación frontend
+    ├── App.tsx                      # Componente raíz con enrutamiento declarativo y AuthProvider
+    ├── App.test.tsx                 # Pruebas de integración del flujo de navegación y sesión
+    ├── index.css                    # Directivas de Tailwind CSS y variables de diseño teocrático
+    ├── main.tsx                     # Punto de entrada React 18 con registro de Service Worker
+    ├── setupTests.ts                # Inicialización global de Jest-DOM para Vitest
+    ├── vite-env.d.ts                # Declaraciones de tipos para variables de entorno de Vite
+    ├── contexts/                    # Proveedores de contexto global de React
+    │   ├── AuthContext.tsx          # Gestión de sesión, roles (3 niveles) y persistencia
+    │   ├── AuthContext.test.tsx     # Pruebas unitarias de inicio y cierre de sesión
+    │   └── index.ts                 # Barril de exportación
+    ├── types/                       # Definición de interfaces y tipos TypeScript de base de datos
+    │   └── database.types.ts        # Tipado fiel al esquema PostgreSQL de Supabase
+    ├── schemas/                     # Esquemas de validación en tiempo de ejecución (Runtime)
+    │   ├── monthlyReportSchema.ts   # Esquema Zod para validación de horas y estudios
+    │   └── monthlyReportSchema.test.ts # Pruebas exhaustivas de reglas de informe
+    ├── utils/                       # Funciones utilitarias globales
+    │   ├── cn.ts                    # Composición condicional de clases con clsx y tailwind-merge
+    │   └── cn.test.ts               # Pruebas unitarias de fusión de clases
+    ├── services/                    # Capa de acceso a datos y comunicación con Supabase
+    │   ├── supabaseClient.ts        # Instancia única del cliente Supabase JS
+    │   ├── publishersService.ts     # CRUD de publicadores y cálculo de tarjeta S-21
+    │   ├── publishersService.test.ts# Pruebas de servicio de publicadores
+    │   ├── reportsService.ts        # Envío y confirmación de informes mensuales
+    │   ├── reportsService.test.ts   # Pruebas de servicio de informes
+    │   ├── groupsService.ts         # Gestión de grupos de servicio de predicación
+    │   ├── groupsService.test.ts    # Pruebas de servicio de grupos
+    │   ├── attendanceService.ts     # Registro y promedios de asistencia a reuniones
+    │   ├── attendanceService.test.ts# Pruebas de servicio de asistencia
+    │   ├── announcementsService.ts  # Publicación y consulta de avisos congregacionales
+    │   ├── announcementsService.test.ts # Pruebas de servicio de anuncios
+    │   ├── csvImportService.ts      # Parser y validación de archivos CSV de publicadores
+    │   ├── csvImportService.test.ts # Pruebas de importación de CSV
+    │   ├── exportService.ts         # Exportación estructurada a PDF y hojas de cálculo
+    │   ├── exportService.test.ts    # Pruebas de exportación
+    │   ├── whatsappReminderService.ts # Generador de mensajes con formato teocrático
+    │   ├── whatsappReminderService.test.ts # Pruebas de recordatorios
+    │   └── index.ts                 # Barril de exportación
+    ├── hooks/                       # Custom hooks para encapsular lógica de estado y efectos
+    │   ├── useMonthlyReport.ts      # Estado del informe personal y validación
+    │   ├── useMonthlyReport.test.ts # Pruebas del hook de informe
+    │   ├── useServiceGroups.ts      # Lógica de grupos, informes asistidos y métricas
+    │   ├── useServiceGroups.test.ts # Pruebas del hook de grupos
+    │   ├── usePublisherManagement.ts# Filtros, búsqueda, bajas y transferencias S-21
+    │   ├── usePublisherManagement.test.ts # Pruebas del hook de administración
+    │   ├── useMeetingAttendance.ts  # Registro de asistencia y promedios semanales
+    │   ├── useMeetingAttendance.test.ts # Pruebas del hook de asistencia
+    │   └── index.ts                 # Barril de exportación
+    ├── pages/                       # Vistas principales de pantalla completa
+    │   ├── LoginPage/               # Pantalla de acceso y selección de credenciales
+    │   ├── DashboardPage/           # Panel de control central con KPIs y anuncios
+    │   ├── MonthlyReportPage/       # Formulario personal para envío de informe mensual
+    │   ├── ServiceGroupsPage/       # Supervisión de grupos y registro asistido
+    │   ├── MeetingAttendancePage/   # Control semanal y mensual de asistencia
+    │   ├── ConsolidatedReportsPage/ # Reportes S-21-S y resumen para la Sucursal S-1
+    │   └── PublisherCardsPage/      # Tarjetas S-21 individuales e importador CSV
+    └── components/                  # Arquitectura de componentes según Atomic Design
+        ├── atoms/                   # Elementos indivisibles de UI
+        │   ├── Avatar/              # Iniciales y foto de perfil
+        │   ├── Badge/               # Etiquetas de rol, nombramiento y estado
+        │   ├── Button/              # Botón accesible con variantes primario/secundario/peligro
+        │   ├── Checkbox/            # Selector booleano accesible
+        │   ├── Input/               # Entrada de texto y números con accesibilidad
+        │   └── Select/              # Selector desplegable estilizado
+        ├── molecules/               # Composiciones de átomos
+        │   ├── AlertBanner/         # Alerta destacada con fecha límite de entrega
+        │   ├── FormField/           # Etiqueta + Input + Mensaje de error
+        │   ├── RoleSelectorPill/    # Píldora para alternar privilegios de predicación
+        │   ├── SearchBar/           # Buscador interactivo con debounce
+        │   └── Sparkline/           # Gráfica SVG compacta de tendencia
+        ├── organisms/               # Componentes complejos con lógica de negocio
+        │   ├── AnnouncementsBoard/  # Tablón de comunicados con creación y eliminación
+        │   ├── AssistedReportModal/ # Modal para registrar informes a nombre de otros
+        │   ├── BranchReportSummaryModal/ # Modal oficial del informe S-1 para la Sucursal
+        │   ├── CongregationKPIs/    # Tarjetas maestras de métricas congregacionales
+        │   ├── ConsolidatedMetricsSummary/ # Resumen anual acumulado de horas y estudios
+        │   ├── DeleteGroupModal/    # Modal de confirmación con reasignación de publicadores
+        │   ├── GroupFormModal/      # Formulario para crear y editar grupos de predicación
+        │   ├── GroupMetricsCards/   # Indicadores específicos del grupo seleccionado
+        │   ├── GroupSupervisorsCard/# Ficha del superintendente y auxiliar de grupo
+        │   ├── GroupsOverviewTable/ # Tabla general del estado de grupos
+        │   ├── HistoricalComparativeChart/ # Gráfica histórica de barras por año de servicio
+        │   ├── HoursGaugeCard/      # Medidor circular de cumplimiento de horas
+        │   ├── MeetingAttendance/   # Tablas y modales de asistencia a reuniones
+        │   ├── MonthClosingModal/   # Modal de cierre mensual con checklist
+        │   ├── PastoralAlertsCard/  # Alertas para atención de publicadores inactivos
+        │   ├── PublisherCardS21View/# Vista canónica de la tarjeta de publicador S-21
+        │   ├── PublisherFormModal/  # Modal de alta y edición de publicador
+        │   ├── PublisherImportModal/# Modal para carga masiva de publicadores en CSV
+        │   ├── PublisherTransferModal/# Modal de cambio de grupo de servicio
+        │   ├── PublishersTable/     # Lista interactiva de publicadores con filtros
+        │   ├── RegularPioneersGoalCard/ # Control de la meta de 600 horas para precursores
+        │   ├── ReportSubmissionForm/# Formulario reactivo de entrega de informe
+        │   ├── S21ConsolidatedTable/# Tabla consolidada anual de la secretaría
+        │   └── WhatsAppReminderModal/# Modal interactivo para mensajes de WhatsApp
+        └── templates/               # Estructuras de maquetación y layouts
+            └── AppLayout/           # Layout maestro con navegación lateral y header móvil</code></pre>
+
+<h2 class="section-title">4.2 Reglas de Importación entre Capas</h2>
+Para garantizar el bajo acoplamiento y la alta cohesión, se establecen las siguientes reglas arquitectónicas:
+<ol><li class="ordered"><strong>Flujo Unidireccional de Capas:</strong></li>
+</ol><ul><li><code class="inline-code">pages/</code> puede importar <code class="inline-code">components/</code>, <code class="inline-code">hooks/</code>, <code class="inline-code">types/</code>, <code class="inline-code">utils/</code>.</li>
+<li><code class="inline-code">components/organisms/</code> puede importar <code class="inline-code">molecules/</code>, <code class="inline-code">atoms/</code>, <code class="inline-code">types/</code>, <code class="inline-code">utils/</code> y <code class="inline-code">services/</code> si requiere acciones puntuales.</li>
+<li><code class="inline-code">components/molecules/</code> solo puede importar <code class="inline-code">atoms/</code>, <code class="inline-code">types/</code>, <code class="inline-code">utils/</code>.</li>
+<li><code class="inline-code">components/atoms/</code> NO puede importar otras capas de componentes (es el nivel base).</li>
+</ul>2. <strong>Desacoplamiento de Base de Datos:</strong>
+<ul><li>Ningún componente de presentación debe ejecutar consultas directas a Supabase (<code class="inline-code">supabase.from(...)</code>). Toda interacción con la red debe canalizarse exclusivamente a través de la capa <code class="inline-code">src/services/</code> o mediante Custom Hooks en <code class="inline-code">src/hooks/</code>.</li>
+</ul>3. <strong>Validaciones en el Frontend:</strong>
+<ul><li>Los datos ingresados por el usuario deben validarse en tiempo de ejecución con esquemas Zod (<code class="inline-code">src/schemas/</code>) antes de enviarse a los servicios.</li>
+</ul>
+
+<p>---</p>
+
+<h1 class="chapter-title">5. Arquitectura Frontend y Catálogo de Componentes</h1>
+
+<h2 class="section-title">5.1 Filosofía de Diseño: Atomic Design</h2>
+La interfaz se estructura siguiendo rigurosamente la metodología de <strong>Atomic Design</strong> de Brad Frost, dividida en cinco niveles jerárquicos:
+<ol><li class="ordered"><strong>Átomos (<code class="inline-code">src/components/atoms/</code>):</strong> Unidades básicas de construcción que no pueden descomponerse sin perder su significado interactivo.</li>
+<li class="ordered"><strong>Moléculas (<code class="inline-code">src/components/molecules/</code>):</strong> Combinaciones funcionales de átomos que operan como una unidad simple.</li>
+<li class="ordered"><strong>Organismos (<code class="inline-code">src/components/organisms/</code>):</strong> Secciones complejas de la interfaz compuestas por moléculas y átomos, dotadas de lógica de negocio y comportamiento interactivo.</li>
+<li class="ordered"><strong>Plantillas (<code class="inline-code">src/components/templates/</code>):</strong> Estructuras que disponen los organismos en una maquetación coherente (Layouts).</li>
+<li class="ordered"><strong>Páginas (<code class="inline-code">src/pages/</code>):</strong> Instancias específicas donde se inyectan datos del dominio teocrático en las plantillas.</li>
+</ol>
+---
+
+<h2 class="section-title">5.2 Catálogo de Átomos</h2><div class="table-container"><table><thead><tr><th>Componente</th><th>Ubicación</th><th>Responsabilidad</th><th>Props Principales</th><th>Tests Asociados</th></tr></thead><tbody><tr><td><strong>Avatar</strong></td><td><code class="inline-code">atoms/Avatar</code></td><td>Muestra iniciales estilizadas o imagen de perfil con tamaños adaptativos (<code class="inline-code">sm</code>, <code class="inline-code">md</code>, <code class="inline-code">lg</code>)</td><td><code class="inline-code">name: string</code>, <code class="inline-code">imageUrl?: string</code>, <code class="inline-code">size?: 'sm'</td><td>'md'</td><td>'lg'</code></td><td><code class="inline-code">Avatar.test.tsx</code> (3 tests)</td></tr><tr><td><strong>Badge</strong></td><td><code class="inline-code">atoms/Badge</code></td><td>Etiqueta de estado para roles, nombramientos teocráticos y alertas con variantes de color</td><td><code class="inline-code">variant: 'publicador'</td><td>'precursor_regular'</td><td>'precursor_auxiliar'</td><td>'anciano'</td><td>'siervo_ministerial'</td><td>'active'</td><td>'inactive'</code>, <code class="inline-code">children</code></td><td><code class="inline-code">Badge.test.tsx</code> (4 tests)</td></tr><tr><td><strong>Button</strong></td><td><code class="inline-code">atoms/Button</code></td><td>Elemento interactivo accesible con soporte para estados de carga, variantes visuales y tamaños</td><td><code class="inline-code">variant?: 'primary'</td><td>'secondary'</td><td>'outline'</td><td>'ghost'</td><td>'danger'</code>, <code class="inline-code">size?: 'sm'</td><td>'md'</td><td>'lg'</code>, <code class="inline-code">isLoading?: boolean</code>, <code class="inline-code">disabled?: boolean</code></td><td><code class="inline-code">Button.test.tsx</code> (4 tests)</td></tr><tr><td><strong>Checkbox</strong></td><td><code class="inline-code">atoms/Checkbox</code></td><td>Control booleano estilizado con soporte de teclado y accesibilidad ARIA</td><td><code class="inline-code">checked: boolean</code>, <code class="inline-code">onChange: (val: boolean) =&gt; void</code>, <code class="inline-code">label?: string</code>, <code class="inline-code">disabled?: boolean</code></td><td><code class="inline-code">Checkbox.test.tsx</code> (3 tests)</td></tr><tr><td><strong>Input</strong></td><td><code class="inline-code">atoms/Input</code></td><td>Campo de entrada de texto o números con soporte para íconos prefijo/sufijo y estados de error</td><td><code class="inline-code">type?: string</code>, <code class="inline-code">value: string</td><td>number</code>, <code class="inline-code">error?: string</code>, <code class="inline-code">icon?: ReactNode</code></td><td><code class="inline-code">Input.test.tsx</code> (5 tests)</td></tr><tr><td><strong>Select</strong></td><td><code class="inline-code">atoms/Select</code></td><td>Menú desplegable nativo estilizado con opciones teocráticas y soporte de teclado</td><td><code class="inline-code">options: Array&lt;{ value: string; label: string }&gt;</code>, <code class="inline-code">value: string</code>, <code class="inline-code">onChange: (val: string) =&gt; void</code></td><td><code class="inline-code">Select.test.tsx</code> (5 tests)</td></tr></tbody></table></div>
+---
+
+<h2 class="section-title">5.3 Catálogo de Moléculas</h2><div class="table-container"><table><thead><tr><th>Componente</th><th>Ubicación</th><th>Responsabilidad</th><th>Dependencias de Átomos</th><th>Tests Asociados</th></tr></thead><tbody><tr><td><strong>AlertBanner</strong></td><td><code class="inline-code">molecules/AlertBanner</code></td><td>Notificación superior destacada que advierte los días restantes para el cierre mensual (día 6)</td><td><code class="inline-code">Button</code></td><td><code class="inline-code">AlertBanner.test.tsx</code> (2 tests)</td></tr><tr><td><strong>FormField</strong></td><td><code class="inline-code">molecules/FormField</code></td><td>Envoltorio accesible que agrupa etiqueta, campo de entrada (<code class="inline-code">Input</code>) y mensaje de error</td><td><code class="inline-code">Input</code></td><td><code class="inline-code">FormField.test.tsx</code> (3 tests)</td></tr><tr><td><strong>RoleSelectorPill</strong></td><td><code class="inline-code">molecules/RoleSelectorPill</code></td><td>Selector tipo píldora para alternar el privilegio de servicio del informe (Publicador / Auxiliar / Regular)</td><td><code class="inline-code">Badge</code>, <code class="inline-code">Button</code></td><td><code class="inline-code">RoleSelectorPill.test.tsx</code> (3 tests)</td></tr><tr><td><strong>SearchBar</strong></td><td><code class="inline-code">molecules/SearchBar</code></td><td>Campo de búsqueda con icono de lupa, botón de limpiar y evento con debounce</td><td><code class="inline-code">Input</code></td><td><code class="inline-code">SearchBar.test.tsx</code> (3 tests)</td></tr><tr><td><strong>Sparkline</strong></td><td><code class="inline-code">molecules/Sparkline</code></td><td>Visualización SVG compacta de tendencia histórica en línea continua</td><td>Ninguno (SVG nativo)</td><td><code class="inline-code">Sparkline.test.tsx</code> (3 tests)</td></tr></tbody></table></div>
+---
+
+<h2 class="section-title">5.4 Catálogo de Organismos Principales</h2><div class="table-container"><table><thead><tr><th>Organismo</th><th>Ubicación</th><th>Responsabilidad de Negocio</th><th>Tests Asociados</th></tr></thead><tbody><tr><td><strong>AnnouncementsBoard</strong></td><td><code class="inline-code">organisms/AnnouncementsBoard</code></td><td>Tablón oficial de anuncios con soporte para niveles de prioridad (<code class="inline-code">alta</code>, <code class="inline-code">normal</code>), fechas y creación/eliminación modal para ancianos</td><td><code class="inline-code">AnnouncementsBoard.test.tsx</code> (3 tests)</td></tr><tr><td><strong>BranchReportSummaryModal</strong></td><td><code class="inline-code">organisms/BranchReportSummaryModal</code></td><td>Modal con el formato canónico <strong>S-1</strong> para la Sucursal con botón de copia al portapapeles en 1 clic e impresión</td><td><code class="inline-code">BranchReportSummaryModal.test.tsx</code> (3 tests)</td></tr><tr><td><strong>MonthClosingModal</strong></td><td><code class="inline-code">organisms/MonthClosingModal</code></td><td>Modal con lista de verificación de 3 puntos obligatorios para cerrar formalmente el mes activo</td><td><code class="inline-code">MonthClosingModal.test.tsx</code> (2 tests)</td></tr><tr><td><strong>PublisherImportModal</strong></td><td><code class="inline-code">organisms/PublisherImportModal</code></td><td>Modal para importar publicadores desde CSV con auto-detección de delimitadores, descarga de plantilla y tabla previa</td><td><code class="inline-code">PublisherImportModal.test.tsx</code> (5 tests)</td></tr><tr><td><strong>WhatsAppReminderModal</strong></td><td><code class="inline-code">organisms/WhatsAppReminderModal</code></td><td>Centro de recordatorios por WhatsApp con personalización teocrática automática y modo de prueba interactivo</td><td><code class="inline-code">WhatsAppReminderModal.test.tsx</code> (4 tests)</td></tr><tr><td><strong>PublisherCardS21View</strong></td><td><code class="inline-code">organisms/PublisherCardS21View</code></td><td>Renderizado completo de la tarjeta S-21 teocrática individual con cuadrícula de 12 meses y totales anuales</td><td><code class="inline-code">PublisherCardS21View.test.tsx</code> (3 tests)</td></tr><tr><td><strong>AssistedReportModal</strong></td><td><code class="inline-code">organisms/AssistedReportModal</code></td><td>Formulario que permite al encargado registrar el informe de un publicador que lo entregó fuera de línea</td><td><code class="inline-code">AssistedReportModal.test.tsx</code> (4 tests)</td></tr><tr><td><strong>MeetingAttendance</strong></td><td><code class="inline-code">organisms/MeetingAttendance</code></td><td>Módulo integral con tabla histórica, tarjetas de promedio y modal para registrar asistencia a reuniones</td><td><code class="inline-code">MeetingAttendancePage.test.tsx</code></td></tr><tr><td><strong>CongregationKPIs</strong></td><td><code class="inline-code">organisms/CongregationKPIs</code></td><td>Cuadrícula con métricas globales: Total horas, publicadores activos, estudios bíblicos y precursores</td><td><code class="inline-code">CongregationKPIs.test.tsx</code> (1 test)</td></tr><tr><td><strong>GroupsOverviewTable</strong></td><td><code class="inline-code">organisms/GroupsOverviewTable</code></td><td>Tabla resumen que desglosa el cumplimiento de informes por cada uno de los grupos de servicio</td><td><code class="inline-code">GroupsOverviewTable.test.tsx</code> (3 tests)</td></tr><tr><td><strong>RegularPioneersGoalCard</strong></td><td><code class="inline-code">organisms/RegularPioneersGoalCard</code></td><td>Seguimiento de la meta de 600 horas anuales para precursores regulares con cálculo de déficit y proyección</td><td><code class="inline-code">RegularPioneersGoalCard.test.tsx</code> (3 tests)</td></tr><tr><td><strong>S21ConsolidatedTable</strong></td><td><code class="inline-code">organisms/S21ConsolidatedTable</code></td><td>Tabla consolidada S-21-S que archiva los totales mes a mes del año teocrático</td><td><code class="inline-code">S21ConsolidatedTable.test.tsx</code> (2 tests)</td></tr></tbody></table></div>
+---
+
+<h2 class="section-title">5.5 Plantilla Maestra (<code class="inline-code">AppLayout</code>)</h2>
+La plantilla <code class="inline-code">AppLayout</code> encapsula:
+<ul><li><strong>Barra lateral de navegación (Sidebar):</strong> Permanece fija en pantallas de escritorio (<code class="inline-code">lg:</code>), mostrando el logotipo teocrático (<code class="inline-code">Building2</code>), los accesos autorizados según el rol del usuario, y la tarjeta de perfil con botón de cerrar sesión.</li>
+<li><strong>Header móvil:</strong> Barra superior responsiva con botón tipo hamburguesa que abre un cajón de navegación lateral animado en teléfonos móviles y tablets.</li>
+<li><strong>Área de Contenido:</strong> Contenedor fluido con padding óptimo para dispositivos móviles y pantallas panorámicas.</li>
+</ul>
+
+<p>---</p>
+
+<h1 class="chapter-title">6. Estrategia de TypeScript y Garantía de Tipado</h1>
+
+<h2 class="section-title">6.1 Configuración de Compilación (<code class="inline-code">tsconfig.json</code>)</h2>
+El proyecto opera con la configuración más estricta de TypeScript 5.7:
+
+<pre class="code-block json"><code>{
+  "compilerOptions": {
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+<p>/<em> Bundler mode </em>/     "moduleResolution": "bundler",     "allowImportingTsExtensions": false,     "resolveJsonModule": true,     "isolatedModules": true,     "noEmit": true,     "jsx": "react-jsx",</p>
+
+<p>/<em> Strict Type-Checking Options </em>/     "strict": true,     "noImplicitAny": true,     "strictNullChecks": true,     "strictFunctionTypes": true,     "strictBindCallApply": true,     "strictPropertyInitialization": true,     "noImplicitThis": true,     "alwaysStrict": true,</p>
+
+<p>/<em> Additional Checks </em>/     "noUnusedLocals": true,     "noUnusedParameters": true,     "noFallthroughCasesInSwitch": true,     "noUncheckedIndexedAccess": true,</p>
+
+<p>/<em> Path Aliases </em>/     "paths": {       "@/<em>": ["./src/</em>"]     }   },   "include": ["src", "vite.config.ts"] }</code></pre></p>
+
+<h3 class="subsection-title">Justificación de Opciones Críticas:</h3>
+<ul><li><code class="inline-code">"moduleResolution": "bundler"</code>: Alineado con el empaquetador de Vite para resolución nativa de módulos ESM.</li>
+<li><code class="inline-code">"noEmit": true</code>: Delega la generación de código a Vite/esbuild, garantizando que el compilador se enfoque exclusivamente en la validación estática de tipos.</li>
+<li><code class="inline-code">"noUncheckedIndexedAccess": true</code>: Obliga a verificar si el acceso a un índice de arreglo u objeto indexado puede retornar <code class="inline-code">undefined</code>, evitando errores de ejecución clásicos en tiempo de ejecución.</li>
+<li><code class="inline-code">"paths": { "@/<em>": ["./src/</em>"] }</code>: Alias estandarizado y relativo directo a la raíz del código fuente, compatible con TypeScript 5.x sin dependencia en la directiva obsoleta <code class="inline-code">baseUrl</code>.</li>
+</ul>
+<h2 class="section-title">6.2 Tipos en Tiempo de Compilación vs Tiempo de Ejecución (Runtime Zod)</h2>
+Una de las decisiones arquitectónicas fundamentales del sistema es la clara distinción entre el tipado estático (interfaces TypeScript) y la validación en tiempo de ejecución mediante esquemas <strong>Zod</strong>:
+<ol><li class="ordered"><strong>Tipos Estáticos (<code class="inline-code">src/types/database.types.ts</code>):</strong> Definen la estructura esperada por PostgreSQL y Supabase. Son descartados durante el proceso de transpilación.</li>
+<li class="ordered"><strong>Esquemas Runtime (<code class="inline-code">src/schemas/monthlyReportSchema.ts</code>):</strong> Se ejecutan en el navegador cuando el usuario interactúa con los formularios, asegurando que cadenas no numéricas, horas negativas o datos corruptos sean interceptados antes de alcanzar el servicio.</li>
+</ol>
+<h2 class="section-title">6.3 Auditoría de Calidad del Código TypeScript</h2>
+Durante la auditoría estática realizada sobre la base de código completa:
+<ul><li><strong>Uso de <code class="inline-code">any</code>:</strong> <code class="inline-code">0</code> instancias encontradas en el código de producción. Toda la manipulación de datos utiliza tipos explícitos o genéricos.</li>
+<li><strong>Uso de <code class="inline-code">@ts-ignore</code> o <code class="inline-code">@ts-expect-error</code>:</strong> <code class="inline-code">0</code> directivas presentes.</li>
+<li><strong>Estado de compilación:</strong> Código de salida <code class="inline-code">0</code> al ejecutar <code class="inline-code">npx tsc --noEmit</code>.</li>
+</ul>
+
+<p>---</p>
+
+<h1 class="chapter-title">7. Base de Datos y Políticas de Seguridad (RLS)</h1>
+
+<h2 class="section-title">7.1 Esquema de Base de Datos PostgreSQL (Supabase)</h2>
+La base de datos se modela bajo el motor relacional <strong>PostgreSQL 15</strong> hospedado en Supabase. El archivo DDL oficial es [<code class="inline-code">supabase_schema.sql</code>](file:///c:/Desarrollo/Desarrollo/Desarrollo%20web/App_informes/supabase_schema.sql).
+
+<pre class="code-block mermaid"><code>erDiagram
+    PROFILES ||--o{ SERVICE_GROUPS : "supervisado_por"
+    SERVICE_GROUPS ||--o{ PROFILES : "miembro_de"
+    PROFILES ||--o{ MONTHLY_REPORTS : "informa"
+    SERVICE_GROUPS ||--o{ MONTHLY_REPORTS : "agrupa"
+    PROFILES ||--o{ MEETING_ATTENDANCE : "registrado_por"
+    PROFILES ||--o{ ANNOUNCEMENTS : "publicado_por"
+
+<p>PROFILES {         uuid id PK         text email         text full_name         text phone         publisher_role role         service_privilege privilege         uuid service_group_id FK         boolean is_active         timestamp created_at         timestamp updated_at     }</p>
+
+<p>SERVICE_GROUPS {         uuid id PK         integer group_number         text name         text meeting_location         text meeting_schedule         uuid overseer_id FK         uuid assistant_id FK         timestamp created_at         timestamp updated_at     }</p>
+
+<p>MONTHLY_REPORTS {         uuid id PK         uuid profile_id FK         uuid service_group_id FK         integer month         integer year         boolean participated         numeric hours         integer bible_studies         text notes         report_status status         uuid submitted_by FK         timestamp submitted_at         timestamp confirmed_at     }</p>
+
+<p>MEETING_ATTENDANCE {         uuid id PK         meeting_type meeting_type         date meeting_date         integer count         text notes         uuid recorded_by FK         timestamp created_at     }</p>
+
+<p>ANNOUNCEMENTS {         uuid id PK         text title         text content         announcement_priority priority         text location_note         text date_note         uuid published_by FK         text author_name         boolean is_pinned         timestamp expires_at         timestamp created_at     }</code></pre></p>
+
+<h2 class="section-title">7.2 Tipos Enumerados (Custom Enums)</h2>
+<ol><li class="ordered"><code class="inline-code">publisher_role</code>: <code class="inline-code">'publicador'</code>, <code class="inline-code">'anciano'</code>, <code class="inline-code">'siervo_ministerial'</code>, <code class="inline-code">'secretario'</code>.</li>
+<li class="ordered"><code class="inline-code">service_privilege</code>: <code class="inline-code">'publicador_bautizado'</code>, <code class="inline-code">'publicador_no_bautizado'</code>, <code class="inline-code">'precursor_auxiliar'</code>, <code class="inline-code">'precursor_regular'</code>.</li>
+<li class="ordered"><code class="inline-code">report_status</code>: <code class="inline-code">'draft'</code>, <code class="inline-code">'submitted'</code>, <code class="inline-code">'confirmed'</code>.</li>
+<li class="ordered"><code class="inline-code">meeting_type</code>: <code class="inline-code">'entre_semana'</code>, <code class="inline-code">'fin_de_semana'</code>, <code class="inline-code">'especial'</code>.</li>
+<li class="ordered"><code class="inline-code">announcement_priority</code>: <code class="inline-code">'alta'</code>, <code class="inline-code">'normal'</code>, <code class="inline-code">'informativa'</code>.</li>
+</ol>
+---
+
+<h2 class="section-title">7.3 Diccionario de Datos Completo</h2>
+
+<h3 class="subsection-title">Tabla: <code class="inline-code">public.profiles</code></h3>
+Almacena la identidad congregacional de cada hermano, vinculada con <code class="inline-code">auth.users</code>.<div class="table-container"><table><thead><tr><th>Columna</th><th>Tipo</th><th>Nulo</th><th>Default</th><th>Restricciones / Descripción</th></tr></thead><tbody><tr><td><code class="inline-code">id</code></td><td><code class="inline-code">UUID</code></td><td>NO</td><td>-</td><td>Primary Key, References <code class="inline-code">auth.users(id)</code> ON DELETE CASCADE</td></tr><tr><td><code class="inline-code">email</code></td><td><code class="inline-code">TEXT</code></td><td>SÍ</td><td>-</td><td>Correo electrónico de contacto</td></tr><tr><td><code class="inline-code">full_name</code></td><td><code class="inline-code">TEXT</code></td><td>NO</td><td>-</td><td>Nombre completo del publicador</td></tr><tr><td><code class="inline-code">phone</code></td><td><code class="inline-code">TEXT</code></td><td>SÍ</td><td>-</td><td>Teléfono con código de país (para recordatorios WhatsApp)</td></tr><tr><td><code class="inline-code">role</code></td><td><code class="inline-code">publisher_role</code></td><td>NO</td><td><code class="inline-code">'publicador'</code></td><td>Rol teocrático en la congregación</td></tr><tr><td><code class="inline-code">privilege</code></td><td><code class="inline-code">service_privilege</code></td><td>NO</td><td><code class="inline-code">'publicador_bautizado'</code></td><td>Nombramiento en la predicación</td></tr><tr><td><code class="inline-code">service_group_id</code></td><td><code class="inline-code">UUID</code></td><td>SÍ</td><td>-</td><td>References <code class="inline-code">service_groups(id)</code> ON DELETE SET NULL</td></tr><tr><td><code class="inline-code">is_active</code></td><td><code class="inline-code">BOOLEAN</code></td><td>NO</td><td><code class="inline-code">true</code></td><td>Estado de actividad en la congregación</td></tr><tr><td><code class="inline-code">avatar_url</code></td><td><code class="inline-code">TEXT</code></td><td>SÍ</td><td>-</td><td>URL de la imagen de perfil</td></tr><tr><td><code class="inline-code">created_at</code></td><td><code class="inline-code">TIMESTAMPTZ</code></td><td>NO</td><td><code class="inline-code">now()</code></td><td>Fecha de registro</td></tr><tr><td><code class="inline-code">updated_at</code></td><td><code class="inline-code">TIMESTAMPTZ</code></td><td>NO</td><td><code class="inline-code">now()</code></td><td>Fecha de última actualización</td></tr></tbody></table></div>
+<h3 class="subsection-title">Tabla: <code class="inline-code">public.service_groups</code></h3>
+Registra los grupos de predicación organizados en la congregación.<div class="table-container"><table><thead><tr><th>Columna</th><th>Tipo</th><th>Nulo</th><th>Default</th><th>Restricciones / Descripción</th></tr></thead><tbody><tr><td><code class="inline-code">id</code></td><td><code class="inline-code">UUID</code></td><td>NO</td><td><code class="inline-code">gen_random_uuid()</code></td><td>Primary Key</td></tr><tr><td><code class="inline-code">group_number</code></td><td><code class="inline-code">INTEGER</code></td><td>NO</td><td>-</td><td>UNIQUE, Número oficial del grupo (ej. 1, 2, 3...)</td></tr><tr><td><code class="inline-code">name</code></td><td><code class="inline-code">TEXT</code></td><td>NO</td><td>-</td><td>Nombre descriptivo (ej. "Grupo 1 - Los Olivos")</td></tr><tr><td><code class="inline-code">meeting_location</code></td><td><code class="inline-code">TEXT</code></td><td>SÍ</td><td>-</td><td>Dirección del punto de salida a la predicación</td></tr><tr><td><code class="inline-code">meeting_schedule</code></td><td><code class="inline-code">TEXT</code></td><td>SÍ</td><td>-</td><td>Horario habitual de salida</td></tr><tr><td><code class="inline-code">overseer_id</code></td><td><code class="inline-code">UUID</code></td><td>SÍ</td><td>-</td><td>References <code class="inline-code">profiles(id)</code> ON DELETE SET NULL (Superintendente)</td></tr><tr><td><code class="inline-code">assistant_id</code></td><td><code class="inline-code">UUID</code></td><td>SÍ</td><td>-</td><td>References <code class="inline-code">profiles(id)</code> ON DELETE SET NULL (Auxiliar)</td></tr><tr><td><code class="inline-code">created_at</code></td><td><code class="inline-code">TIMESTAMPTZ</code></td><td>NO</td><td><code class="inline-code">now()</code></td><td>Fecha de creación</td></tr><tr><td><code class="inline-code">updated_at</code></td><td><code class="inline-code">TIMESTAMPTZ</code></td><td>NO</td><td><code class="inline-code">now()</code></td><td>Fecha de última actualización</td></tr></tbody></table></div>
+<h3 class="subsection-title">Tabla: <code class="inline-code">public.monthly_reports</code></h3>
+Almacena el informe ministerial mensual de cada publicador.<div class="table-container"><table><thead><tr><th>Columna</th><th>Tipo</th><th>Nulo</th><th>Default</th><th>Restricciones / Descripción</th></tr></thead><tbody><tr><td><code class="inline-code">id</code></td><td><code class="inline-code">UUID</code></td><td>NO</td><td><code class="inline-code">gen_random_uuid()</code></td><td>Primary Key</td></tr><tr><td><code class="inline-code">profile_id</code></td><td><code class="inline-code">UUID</code></td><td>NO</td><td>-</td><td>References <code class="inline-code">profiles(id)</code> ON DELETE CASCADE</td></tr><tr><td><code class="inline-code">service_group_id</code></td><td><code class="inline-code">UUID</code></td><td>NO</td><td>-</td><td>References <code class="inline-code">service_groups(id)</code> ON DELETE RESTRICT</td></tr><tr><td><code class="inline-code">month</code></td><td><code class="inline-code">INTEGER</code></td><td>NO</td><td>-</td><td>CHECK (<code class="inline-code">month BETWEEN 1 AND 12</code>)</td></tr><tr><td><code class="inline-code">year</code></td><td><code class="inline-code">INTEGER</code></td><td>NO</td><td>-</td><td>CHECK (<code class="inline-code">year &gt;= 2020</code>)</td></tr><tr><td><code class="inline-code">participated</code></td><td><code class="inline-code">BOOLEAN</code></td><td>NO</td><td><code class="inline-code">true</code></td><td>Indica si predicó en el mes</td></tr><tr><td><code class="inline-code">hours</code></td><td><code class="inline-code">NUMERIC(5,1)</code></td><td>NO</td><td><code class="inline-code">0</code></td><td>CHECK (<code class="inline-code">hours &gt;= 0</code>)</td></tr><tr><td><code class="inline-code">bible_studies</code></td><td><code class="inline-code">INTEGER</code></td><td>NO</td><td><code class="inline-code">0</code></td><td>CHECK (<code class="inline-code">bible_studies &gt;= 0</code>)</td></tr><tr><td><code class="inline-code">notes</code></td><td><code class="inline-code">TEXT</code></td><td>SÍ</td><td>-</td><td>Observaciones o comentarios pastorales</td></tr><tr><td><code class="inline-code">status</code></td><td><code class="inline-code">report_status</code></td><td>NO</td><td><code class="inline-code">'draft'</code></td><td>Estado del ciclo (<code class="inline-code">draft</code>, <code class="inline-code">submitted</code>, <code class="inline-code">confirmed</code>)</td></tr><tr><td><code class="inline-code">submitted_by</code></td><td><code class="inline-code">UUID</code></td><td>SÍ</td><td>-</td><td>References <code class="inline-code">profiles(id)</code> (Publicador o Encargado asistido)</td></tr><tr><td><code class="inline-code">submitted_at</code></td><td><code class="inline-code">TIMESTAMPTZ</code></td><td>NO</td><td><code class="inline-code">now()</code></td><td>Timestamp de envío</td></tr><tr><td><code class="inline-code">confirmed_at</code></td><td><code class="inline-code">TIMESTAMPTZ</code></td><td>SÍ</td><td>-</td><td>Timestamp de confirmación por el encargado/secretario</td></tr></tbody></table></div>
+<em>Constraint Única:</em> <code class="inline-code">UNIQUE(profile_id, month, year)</code> (Garantiza que no existan duplicados para el mismo hermano en el mismo mes).
+
+<p>---</p>
+
+<h2 class="section-title">7.4 Análisis de Políticas de Seguridad Row-Level Security (RLS)</h2>
+El sistema activa RLS en el 100% de las tablas. La seguridad no se delega en la interfaz de React: el motor de base de datos intercepta cada consulta HTTP en el API Gateway.
+
+<h3 class="subsection-title">Funciones Auxiliares de Seguridad (<code class="inline-code">SECURITY DEFINER</code>)</h3>
+<pre class="code-block sql"><code>CREATE OR REPLACE FUNCTION public.is_admin_or_elder()
+RETURNS BOOLEAN AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM public.profiles
+    WHERE id = auth.uid() AND role IN ('anciano', 'secretario')
+  );
+$$ LANGUAGE sql SECURITY DEFINER STABLE;
+
+<p>CREATE OR REPLACE FUNCTION public.is_group_overseer(target_group_id UUID) RETURNS BOOLEAN AS $$   SELECT EXISTS (     SELECT 1 FROM public.service_groups     WHERE id = target_group_id AND (overseer_id = auth.uid() OR assistant_id = auth.uid())   ); $$ LANGUAGE sql SECURITY DEFINER STABLE;</code></pre></p>
+
+<h3 class="subsection-title">Políticas por Tabla:</h3>
+<ol><li class="ordered"><strong><code class="inline-code">profiles</code>:</strong></li>
+</ol><ul><li><code class="inline-code">SELECT</code>: Permitido para todos los usuarios autenticados.</li>
+<li><code class="inline-code">UPDATE</code>: Permitido a los usuarios para actualizar su propio registro (<code class="inline-code">id = auth.uid()</code>) y a ancianos/secretarios para administrar cualquier perfil.</li>
+<li><code class="inline-code">INSERT / DELETE</code>: Exclusivo para ancianos y secretarios.</li>
+</ul>2. <strong><code class="inline-code">monthly_reports</code>:</strong>
+<ul><li><code class="inline-code">SELECT</code>:</li>
+<li>El propio publicador (<code class="inline-code">profile_id = auth.uid()</code>).</li>
+<li>El encargado del grupo al que pertenece el informe (<code class="inline-code">is_group_overseer(service_group_id)</code>).</li>
+<li>Ancianos y secretario (<code class="inline-code">is_admin_or_elder()</code>).</li>
+<li><code class="inline-code">INSERT</code>:</li>
+<li>El propio publicador para su propio informe.</li>
+<li>El encargado para registro asistido dentro de su grupo.</li>
+<li>Ancianos y secretario.</li>
+<li><code class="inline-code">UPDATE</code>:</li>
+<li>El publicador solo si el informe está en estado <code class="inline-code">'draft'</code>.</li>
+<li>El encargado para confirmar o editar informes de su grupo.</li>
+<li>El secretario en cualquier momento antes del cierre oficial.</li>
+</ul>
+
+<p>---</p>
+
+<h1 class="chapter-title">8. Autenticación, Roles y Matriz de Control de Acceso</h1>
+
+<h2 class="section-title">8.1 Niveles de Acceso Teocrático</h2>
+La organización de los permisos refleja fielmente la estructura teocrática de las congregaciones:
+
+<pre class="code-block mermaid"><code>flowchart TD
+    subgraph Jerarquía de Autorización
+        N1["Nivel 1: Publicador&lt;br&gt;(Privilegio mínimo)"]
+        N2["Nivel 2: Encargado de Grupo&lt;br&gt;(Supervisión de su grupo)"]
+        N3["Nivel 3: Secretario / Anciano General&lt;br&gt;(Administración total)"]
+    end
+
+<p>N1 --&gt; P1["Mi Informe Mensual"]          N2 --&gt; P1     N2 --&gt; G1["Grupos de Servicio (Solo su grupo)"]     G1 --&gt; G1A["Registro Asistido"]     G1 --&gt; G1B["Exportación de lista del grupo"]</p>
+
+<p>N3 --&gt; P1     N3 --&gt; G2["Grupos de Servicio (Todos los grupos)"]     N3 --&gt; D1["Panel General (Dashboard)"]     N3 --&gt; A1["Asistencia a Reuniones"]     N3 --&gt; R1["Reportes Consolidados (S-21-S y S-1)"]     N3 --&gt; T1["Tarjetas de Publicador (S-21 e Importador CSV)"]</code></pre></p>
+
+<h2 class="section-title">8.2 Matriz de Control de Acceso (RBAC)</h2>
+A continuación se detalla explícitamente qué acciones puede realizar cada rol sobre los distintos recursos de la plataforma:
+<div class="table-container"><table><thead><tr><th>Recurso / Módulo</th><th>Acción</th><th>Publicador</th><th>Encargado de Grupo</th><th>Anciano / Secretario</th><th>Implementación / Enforcement</th></tr></thead><tbody><tr><td><strong>Mi Informe Mensual</strong></td><td>Ver su propio informe</td><td>SÍ</td><td>SÍ</td><td>SÍ</td><td>UI Route + RLS (<code class="inline-code">profile_id = auth.uid()</code>)</td></tr><tr><td><strong>Mi Informe Mensual</strong></td><td>Modificar su propio informe</td><td>SÍ</td><td>SÍ</td><td>SÍ</td><td>UI Route + RLS (<code class="inline-code">status = 'draft'</code>)</td></tr><tr><td><strong>Mi Informe Mensual</strong></td><td>Modificar informe de otro hermano</td><td>NO</td><td>NO</td><td>SÍ</td><td>RLS (<code class="inline-code">is_admin_or_elder()</code>)</td></tr><tr><td><strong>Grupos de Servicio</strong></td><td>Ver lista de todos los grupos</td><td>NO</td><td>NO</td><td>SÍ</td><td>UI Guard + RLS</td></tr><tr><td><strong>Grupos de Servicio</strong></td><td>Ver lista de su propio grupo</td><td>NO</td><td>SÍ</td><td>SÍ</td><td>UI Hook Filter + RLS (<code class="inline-code">is_group_overseer</code>)</td></tr><tr><td><strong>Grupos de Servicio</strong></td><td>Crear o Eliminar grupos</td><td>NO</td><td>NO</td><td>SÍ</td><td>UI Button Oculto + RLS (<code class="inline-code">is_admin_or_elder</code>)</td></tr><tr><td><strong>Grupos de Servicio</strong></td><td>Registro Asistido para hermanos</td><td>NO</td><td>SÍ</td><td>SÍ</td><td>UI Modal + RLS Insert</td></tr><tr><td><strong>Panel General</strong></td><td>Ver KPIs y Gráfica congregacional</td><td>NO</td><td>NO</td><td>SÍ</td><td>UI Route Guard (<code class="inline-code">role === 'secretario'</code>)</td></tr><tr><td><strong>Panel General</strong></td><td>Enviar avisos por WhatsApp</td><td>NO</td><td>NO</td><td>SÍ</td><td>UI Button + WhatsApp Modal</td></tr><tr><td><strong>Panel General</strong></td><td>Ejecutar Cierre Mensual Oficial</td><td>NO</td><td>NO</td><td>SÍ</td><td>UI Button + MonthClosingModal</td></tr><tr><td><strong>Asistencia a Reuniones</strong></td><td>Ver historial y promedios</td><td>NO</td><td>NO</td><td>SÍ</td><td>UI Route Guard</td></tr><tr><td><strong>Asistencia a Reuniones</strong></td><td>Registrar nueva asistencia</td><td>NO</td><td>NO</td><td>SÍ</td><td>UI Form + RLS (<code class="inline-code">is_admin_or_elder</code>)</td></tr><tr><td><strong>Reportes Consolidados</strong></td><td>Ver tabla anual S-21-S</td><td>NO</td><td>NO</td><td>SÍ</td><td>UI Route Guard</td></tr><tr><td><strong>Reportes Consolidados</strong></td><td>Ver Informe para Sucursal (S-1)</td><td>NO</td><td>NO</td><td>SÍ</td><td>UI Modal S-1</td></tr><tr><td><strong>Reportes Consolidados</strong></td><td>Exportar PDF / Excel</td><td>NO</td><td>NO</td><td>SÍ</td><td><code class="inline-code">exportService</code></td></tr><tr><td><strong>Tarjetas de Publicador</strong></td><td>Ver archivo S-21 de 12 meses</td><td>NO</td><td>NO</td><td>SÍ</td><td>UI Route Guard</td></tr><tr><td><strong>Tarjetas de Publicador</strong></td><td>Dar de alta o baja a publicadores</td><td>NO</td><td>NO</td><td>SÍ</td><td>RLS Update <code class="inline-code">is_active</code></td></tr><tr><td><strong>Tarjetas de Publicador</strong></td><td>Transferir publicador entre grupos</td><td>NO</td><td>NO</td><td>SÍ</td><td>RLS Update <code class="inline-code">service_group_id</code></td></tr><tr><td><strong>Tarjetas de Publicador</strong></td><td>Importación Masiva CSV</td><td>NO</td><td>NO</td><td>SÍ</td><td><code class="inline-code">PublisherImportModal</code></td></tr><tr><td><strong>Tablón de Anuncios</strong></td><td>Leer comunicados</td><td>SÍ</td><td>SÍ</td><td>SÍ</td><td>UI Card + RLS Select público</td></tr><tr><td><strong>Tablón de Anuncios</strong></td><td>Publicar y Eliminar anuncios</td><td>NO</td><td>NO</td><td>SÍ</td><td>UI <code class="inline-code">canManage=true</code> + RLS Delete</td></tr></tbody></table></div>
+---
+
+<h2 class="section-title">8.3 Protección en el Frontend (Guards y Rutas Protegidas)</h2>
+En el componente raíz [<code class="inline-code">App.tsx</code>](file:///c:/Desarrollo/Desarrollo/Desarrollo%20web/App_informes/src/App.tsx), el sistema ejecuta una evaluación de permisos reactiva con cada cambio de navegación:
+<ol><li class="ordered">Si el usuario intenta forzar la URL o el estado hacia <code class="inline-code">'dashboard'</code>, <code class="inline-code">'consolidated'</code>, <code class="inline-code">'publishers'</code> o <code class="inline-code">'attendance'</code> siendo un <strong>publicador</strong>, el sistema lo redirige automáticamente a <code class="inline-code">'monthly_report'</code>.</li>
+<li class="ordered">Si un <strong>encargado de grupo</strong> intenta acceder a la administración global o tarjetas individuales de toda la congregación, el sistema lo mantiene restringido a <code class="inline-code">'service_groups'</code> y su propio <code class="inline-code">'monthly_report'</code>.</li>
+<li class="ordered">Los botones y enlaces restringidos no se renderizan en el DOM para evitar fugas de información (<em>Information Disclosure</em>).</li>
+</ol>
+
+<p>---</p>
+
+<h1 class="chapter-title">9. Reglas de Negocio y Ciclo de Vida del Informe Ministerial</h1>
+
+<h2 class="section-title">9.1 Ciclo de Vida del Informe Ministerial</h2>
+El informe de predicación mensual atraviesa tres estados canónicos controlados en base de datos:
+
+<pre class="code-block mermaid"><code>stateDiagram-v2
+    [*] --&gt; Borrador: Publicador inicia llenado
+    Borrador --&gt; Enviado: Publicador envía informe (Día 1-5)
+    Borrador --&gt; Confirmado: Encargado realiza Registro Asistido
+    Enviado --&gt; Confirmado: Encargado / Secretario valida y confirma
+    Confirmado --&gt; Archivado: Secretario ejecuta Cierre de Mes
+    Archivado --&gt; [*]: Integrado en Tarjeta S-21 y S-1</code></pre>
+<ol><li class="ordered"><strong>Borrador (<code class="inline-code">draft</code>):</strong> El publicador ha comenzado a ingresar notas o cifras tentativas en su dispositivo, pero no ha concluido el envío. Los datos son editables exclusivamente por el propio publicador.</li>
+<li class="ordered"><strong>Enviado (<code class="inline-code">submitted</code>):</strong> El informe ha sido remitido formalmente a la congregación. Los campos se bloquean en la interfaz del publicador para evitar modificaciones accidentales. El encargado de grupo y el secretario visualizan el informe como "Entregado".</li>
+<li class="ordered"><strong>Confirmado (<code class="inline-code">confirmed</code>):</strong> El informe ha sido revisado por el encargado de grupo o fue registrado mediante asistencia pastoral directa. El registro queda listo para tabulación en el S-1.</li>
+<li class="ordered"><strong>Archivado:</strong> Tras el cierre oficial del mes en el Panel General, el informe pasa a formar parte inmutable del historial teocrático de 12 meses (S-21 individual y S-21-S consolidado).</li>
+</ol>
+---
+
+<h2 class="section-title">9.2 Catálogo Exhaustivo de Reglas de Negocio (Business Rules)</h2>
+<div class="table-container"><table><thead><tr><th>ID</th><th>Regla de Negocio</th><th>Origen Teocrático / Técnico</th><th>Implementación en Código</th><th>Validación</th><th>Tests que lo Cubren</th><th>Nivel de Riesgo</th><th>Estado</th></tr></thead><tbody><tr><td><strong>BR-001</strong></td><td><strong>No obligatoriedad de horas para publicadores generales:</strong> Los publicadores bautizados y no bautizados solo informan participación (booleano) y estudios bíblicos; las horas no son requeridas ni obligatorias.</td><td>Ajuste Teocrático Mundial (Nov 2023)</td><td><code class="inline-code">monthlyReportSchema.ts</code>, <code class="inline-code">MonthlyReportPage.tsx</code></td><td><code class="inline-code">zod.object({ participated: z.boolean(), bible_studies: z.number() })</code></td><td><code class="inline-code">monthlyReportSchema.test.ts</code></td><td>Alto (Desvío teocrático)</td><td><strong>IMPLEMENTADO</strong></td></tr><tr><td><strong>BR-002</strong></td><td><strong>Obligatoriedad de horas para precursores:</strong> Los precursores regulares y auxiliares deben reportar obligatoriamente un número mayor a cero de horas mensuales.</td><td>Instrucciones para la Secretaría (S-1)</td><td><code class="inline-code">monthlyReportSchema.ts</code></td><td><code class="inline-code">superRefine</code> en Zod que exige <code class="inline-code">hours &gt; 0</code> si <code class="inline-code">role !== 'publicador'</code></td><td><code class="inline-code">monthlyReportSchema.test.ts</code></td><td>Crítico (Datos a Sucursal)</td><td><strong>IMPLEMENTADO</strong></td></tr><tr><td><strong>BR-003</strong></td><td><strong>Estudios bíblicos no negativos:</strong> La cantidad de cursos bíblicos debe ser un entero mayor o igual a cero.</td><td>Lógica de Dominio</td><td><code class="inline-code">monthlyReportSchema.ts</code></td><td><code class="inline-code">z.number().int().min(0)</code></td><td><code class="inline-code">monthlyReportSchema.test.ts</code></td><td>Medio (Integridad)</td><td><strong>IMPLEMENTADO</strong></td></tr><tr><td><strong>BR-004</strong></td><td><strong>Unicidad de informe mensual:</strong> Ningún publicador puede poseer más de un informe para el mismo mes y año.</td><td>Integridad Relacional</td><td><code class="inline-code">supabase_schema.sql</code></td><td><code class="inline-code">UNIQUE(profile_id, month, year)</code> en tabla <code class="inline-code">monthly_reports</code></td><td>Test de integridad PostgreSQL</td><td>Crítico (Duplicidad en S-1)</td><td><strong>IMPLEMENTADO</strong></td></tr><tr><td><strong>BR-005</strong></td><td><strong>Fecha de corte de informes:</strong> Los publicadores deben entregar su informe a más tardar el día 5 del mes siguiente; el día 6 el sistema emite alerta urgente a encargados.</td><td>Procedimiento de Secretaría</td><td><code class="inline-code">AlertBanner.tsx</code>, <code class="inline-code">DashboardPage.tsx</code></td><td>Cálculo de días restantes en relación al día 6</td><td><code class="inline-code">AlertBanner.test.tsx</code></td><td>Medio (Operativo)</td><td><strong>IMPLEMENTADO</strong></td></tr><tr><td><strong>BR-006</strong></td><td><strong>Segregación estricta de grupo para encargados:</strong> Un encargado de grupo solo puede ver y registrar informes de publicadores pertenecientes a su propio grupo.</td><td>Privacidad Teocrática</td><td><code class="inline-code">useServiceGroups.ts</code>, RLS <code class="inline-code">is_group_overseer</code></td><td>Filtro por <code class="inline-code">user.service_group_id</code> en hook y función SQL</td><td><code class="inline-code">App.test.tsx</code>, <code class="inline-code">useServiceGroups.test.ts</code></td><td>Crítico (Privacidad)</td><td><strong>IMPLEMENTADO</strong></td></tr><tr><td><strong>BR-007</strong></td><td><strong>Registro Asistido con autoría teocrática:</strong> Cuando un encargado registra un informe a nombre de un publicador, se registra quién lo ingresó (<code class="inline-code">submitted_by</code>).</td><td>Auditoría de Secretaría</td><td><code class="inline-code">AssistedReportModal.tsx</code>, <code class="inline-code">reportsService.ts</code></td><td>Almacena el <code class="inline-code">id</code> del encargado en la columna <code class="inline-code">submitted_by</code></td><td><code class="inline-code">AssistedReportModal.test.tsx</code></td><td>Medio (Trazabilidad)</td><td><strong>IMPLEMENTADO</strong></td></tr><tr><td><strong>BR-008</strong></td><td><strong>Checklist obligatorio para cierre de mes:</strong> El cierre de ciclo mensual exige marcar afirmativamente los 3 puntos de verificación antes de habilitar el botón de cierre.</td><td>Control de Calidad de Secretaría</td><td><code class="inline-code">MonthClosingModal.tsx</code></td><td>Estado booleano en React que valida <code class="inline-code">check1 &amp;&amp; check2 &amp;&amp; check3</code></td><td><code class="inline-code">MonthClosingModal.test.tsx</code></td><td>Alto (Cierres prematuros)</td><td><strong>IMPLEMENTADO</strong></td></tr><tr><td><strong>BR-009</strong></td><td><strong>Avance de ciclo mensual:</strong> Al cerrar un mes, el mes activo de la congregación avanza al siguiente (de 12 pasa a 1 incrementando el año).</td><td>Calendario Teocrático</td><td><code class="inline-code">DashboardPage.tsx</code></td><td>Función <code class="inline-code">handleConfirmCloseMonth</code> con lógica circular 1-12</td><td><code class="inline-code">DashboardPage.test.tsx</code></td><td>Alto (Continuidad de datos)</td><td><strong>IMPLEMENTADO</strong></td></tr><tr><td><strong>BR-010</strong></td><td><strong>Historial individual S-21 de 12 meses:</strong> La tarjeta individual del publicador debe presentar exactamente los 12 meses del Año de Servicio actual (Septiembre a Agosto).</td><td>Formato Canónico S-21</td><td><code class="inline-code">publishersService.ts</code>, <code class="inline-code">PublisherCardS21View.tsx</code></td><td>Matriz de 12 meses estructurada con sumatorias anuales</td><td><code class="inline-code">PublisherCardS21View.test.tsx</code></td><td>Alto (Auditoría de Circuito)</td><td><strong>IMPLEMENTADO</strong></td></tr><tr><td><strong>BR-011</strong></td><td><strong>Preservación de historial al dar de baja:</strong> Cuando un publicador es dado de baja (<code class="inline-code">is_active = false</code>), sus informes previos permanecen intactos en el consolidado.</td><td>Auditoría Histórica</td><td><code class="inline-code">PublisherCardsPage.tsx</code>, <code class="inline-code">supabase_schema.sql</code></td><td>Soft delete (<code class="inline-code">is_active = false</code>), no <code class="inline-code">DELETE CASCADE</code> en informes</td><td><code class="inline-code">PublisherCardsPage.test.tsx</code></td><td>Crítico (Pérdida histórica)</td><td><strong>IMPLEMENTADO</strong></td></tr><tr><td><strong>BR-012</strong></td><td><strong>Reasignación obligatoria al eliminar un grupo:</strong> No es posible eliminar un grupo de servicio si tiene publicadores asignados sin antes transferirlos a otro grupo activo.</td><td>Integridad Congregacional</td><td><code class="inline-code">DeleteGroupModal.tsx</code></td><td>Modal que fuerza la selección de un grupo destino de respaldo</td><td><code class="inline-code">DeleteGroupModal.test.tsx</code></td><td>Crítico (Publicadores huérfanos)</td><td><strong>IMPLEMENTADO</strong></td></tr><tr><td><strong>BR-013</strong></td><td><strong>Meta de 600 horas anuales para precursores:</strong> El sistema calcula el déficit o superávit con base en el promedio de 50 horas/mes para evaluar el progreso anual.</td><td>Guía de Precursores</td><td><code class="inline-code">RegularPioneersGoalCard.tsx</code></td><td>Algoritmo de proyección mensual contra el acumulado real</td><td><code class="inline-code">RegularPioneersGoalCard.test.tsx</code></td><td>Medio (Pastoral)</td><td><strong>IMPLEMENTADO</strong></td></tr><tr><td><strong>BR-014</strong></td><td><strong>Cálculo de asistencia semanal promedio:</strong> Los promedios mensuales de asistencia se calculan dividiendo la suma total de asistentes entre el número de reuniones celebradas en el mes.</td><td>Formato S-1</td><td><code class="inline-code">attendanceService.ts</code>, <code class="inline-code">useMeetingAttendance.ts</code></td><td>Cálculo desacoplado para reunión Entre Semana y Fin de Semana</td><td><code class="inline-code">attendanceService.test.ts</code></td><td>Alto (Cifras de Sucursal)</td><td><strong>IMPLEMENTADO</strong></td></tr><tr><td><strong>BR-015</strong></td><td><strong>Auto-detección de delimitadores en CSV:</strong> El importador masivo debe soportar tanto coma (<code class="inline-code">,</code>) como punto y coma (<code class="inline-code">;</code>) para compatibilidad con Excel en español e inglés.</td><td>Usabilidad Administrativa</td><td><code class="inline-code">csvImportService.ts</code></td><td>Regex detector de separador preponderante en la primera línea</td><td><code class="inline-code">csvImportService.test.ts</code></td><td>Medio (Carga de nómina)</td><td><strong>IMPLEMENTADO</strong></td></tr><tr><td><strong>BR-016</strong></td><td><strong>Mensajes personalizados de felicitación por grupo:</strong> Si un grupo alcanza el 100% de informes entregados, el mensaje generado para WhatsApp cambia a felicitación y agradecimiento.</td><td>Pastoral Teocrática</td><td><code class="inline-code">whatsappReminderService.ts</code></td><td>Condicional <code class="inline-code">pendingCount === 0</code> genera texto festivo de reconocimiento</td><td><code class="inline-code">whatsappReminderService.test.ts</code></td><td>Bajo (Experiencia de usuario)</td><td><strong>IMPLEMENTADO</strong></td></tr><tr><td><strong>BR-017</strong></td><td><strong>Restricción de iconografía religiosa:</strong> El sistema no debe utilizar crucifijos ni cruces en ninguna vista, usando exclusivamente edificios institucionales (<code class="inline-code">Building2</code>).</td><td>Doctrina Teocrática</td><td><code class="inline-code">favicon.svg</code>, Layouts, Modales</td><td>Uso estricto de <code class="inline-code">Building2</code> y <code class="inline-code">FileText</code> de Lucide React</td><td>Pruebas visuales y de build</td><td>Alto (Respeto doctrinal)</td><td><strong>IMPLEMENTADO</strong></td></tr><tr><td><strong>BR-018</strong></td><td><strong>Copia limpia al portapapeles del resumen S-1:</strong> El botón de copiar en el modal de la Sucursal debe emitir texto plano ordenado listo para el portal oficial.</td><td>Eficiencia Administrativa</td><td><code class="inline-code">BranchReportSummaryModal.tsx</code></td><td>Concatenación de texto formateado con saltos de línea</td><td><code class="inline-code">BranchReportSummaryModal.test.tsx</code></td><td>Medio (Operativo)</td><td><strong>IMPLEMENTADO</strong></td></tr><tr><td><strong>BR-019</strong></td><td><strong>Priorización visual de comunicados:</strong> Los anuncios con prioridad <code class="inline-code">alta</code> se colocan al inicio del tablón y se destacan con borde y acento ámbar.</td><td>Comunicación Efectiva</td><td><code class="inline-code">AnnouncementsBoard.tsx</code>, <code class="inline-code">announcementsService.ts</code></td><td>Algoritmo de ordenamiento por prioridad y timestamp</td><td><code class="inline-code">announcementsService.test.ts</code></td><td>Bajo (Diseño)</td><td><strong>IMPLEMENTADO</strong></td></tr><tr><td><strong>BR-020</strong></td><td><strong>Compatibilidad Offline PWA:</strong> La aplicación debe cargar la interfaz y permitir la consulta de datos en caché cuando el dispositivo no tiene acceso a internet.</td><td>Continuidad Operativa</td><td><code class="inline-code">public/sw.js</code>, <code class="inline-code">manifest.webmanifest</code></td><td>Estrategia de Service Worker <em>stale-while-revalidate</em></td><td>Build y registro en <code class="inline-code">main.tsx</code></td><td>Alto (Disponibilidad)</td><td><strong>IMPLEMENTADO</strong></td></tr></tbody></table></div>
+
+<p>---</p>
+
+<h1 class="chapter-title">10. Catálogo de Servicios y Comunicación</h1>
+
+<p>Toda la interacción con fuentes de datos externas, el motor de Supabase y la generación de archivos se encuentra encapsulada dentro del directorio <code class="inline-code">src/services/</code>.</p>
+
+<h2 class="section-title">10.1 <code class="inline-code">publishersService.ts</code></h2>
+Encargado de la administración de publicadores, cálculo de métricas anuales y gestión de la tarjeta S-21.
+<ul><li><strong><code class="inline-code">getPublishers(filters?: PublisherFilters): Promise&lt;ServiceResult&lt;Profile[]&gt;&gt;</code></strong>:</li>
+<li>Filtra por grupo, rol teocrático, nombramiento o búsqueda de texto por nombre/teléfono.</li>
+<li>Ordena alfabéticamente por nombre completo.</li>
+<li><strong><code class="inline-code">getPublisherById(id: string): Promise&lt;ServiceResult&lt;Profile&gt;&gt;</code></strong>:</li>
+<li>Obtiene el perfil completo de un publicador mediante consulta indexada por clave primaria.</li>
+<li><strong><code class="inline-code">createPublisher(profile: ProfileInsert): Promise&lt;ServiceResult&lt;Profile&gt;&gt;</code></strong>:</li>
+<li>Da de alta un nuevo publicador en la congregación.</li>
+<li><strong><code class="inline-code">updatePublisher(id: string, updates: ProfileUpdate): Promise&lt;ServiceResult&lt;Profile&gt;&gt;</code></strong>:</li>
+<li>Modifica datos de contacto, grupo de predicación o nombramiento.</li>
+<li><strong><code class="inline-code">getPublisherS21Card(publisherId: string, year: number): Promise&lt;ServiceResult&lt;PublisherS21Card&gt;&gt;</code></strong>:</li>
+<li>Compila los 12 meses del año teocrático calculando horas acumuladas, promedios mensuales y meses activos.</li>
+</ul>
+<h2 class="section-title">10.2 <code class="inline-code">reportsService.ts</code></h2>
+Maneja la entrega, consulta y auditoría de informes mensuales de predicación.
+<ul><li><strong><code class="inline-code">getReportByPublisher(profileId: string, month: number, year: number): Promise&lt;ServiceResult&lt;MonthlyReport&gt;&gt;</code></strong>:</li>
+<li>Consulta si el publicador ya ha generado un informe en el período indicado.</li>
+<li><strong><code class="inline-code">submitReport(report: MonthlyReportInsert): Promise&lt;ServiceResult&lt;MonthlyReport&gt;&gt;</code></strong>:</li>
+<li>Registra o actualiza el informe estableciendo el estado en <code class="inline-code">'submitted'</code>.</li>
+<li><strong><code class="inline-code">confirmReport(reportId: string, confirmedBy: string): Promise&lt;ServiceResult&lt;MonthlyReport&gt;&gt;</code></strong>:</li>
+<li>Valida el informe estableciendo <code class="inline-code">status = 'confirmed'</code> y registrando el timestamp <code class="inline-code">confirmed_at</code>.</li>
+</ul>
+<h2 class="section-title">10.3 <code class="inline-code">groupsService.ts</code></h2>
+Administra los grupos de servicio del campo de la congregación.
+<ul><li><strong><code class="inline-code">getGroups(): Promise&lt;ServiceResult&lt;ServiceGroup[]&gt;&gt;</code></strong>:</li>
+<li>Retorna todos los grupos de la congregación ordenados por <code class="inline-code">group_number</code>.</li>
+<li><strong><code class="inline-code">createGroup(group: ServiceGroupInsert): Promise&lt;ServiceResult&lt;ServiceGroup&gt;&gt;</code></strong>:</li>
+<li>Registra un nuevo grupo garantizando que el número sea único.</li>
+<li><strong><code class="inline-code">updateGroup(id: string, updates: ServiceGroupUpdate): Promise&lt;ServiceResult&lt;ServiceGroup&gt;&gt;</code></strong>:</li>
+<li>Actualiza el nombre, lugar de salida, horario o superintendente asignado.</li>
+<li><strong><code class="inline-code">deleteGroup(id: string, fallbackGroupId: string): Promise&lt;ServiceResult&lt;boolean&gt;&gt;</code></strong>:</li>
+<li>Reasigna a los publicadores al <code class="inline-code">fallbackGroupId</code> antes de ejecutar la eliminación segura del grupo.</li>
+</ul>
+<h2 class="section-title">10.4 <code class="inline-code">attendanceService.ts</code></h2>
+Control de asistencia semanal a reuniones teocráticas.
+<ul><li><strong><code class="inline-code">getMonthlyAttendance(month: number, year: number): Promise&lt;ServiceResult&lt;MeetingAttendanceRecord[]&gt;&gt;</code></strong>:</li>
+<li>Retorna todas las sesiones de reunión celebradas en el mes calendario.</li>
+<li><strong><code class="inline-code">recordAttendance(attendance: MeetingAttendanceInsert): Promise&lt;ServiceResult&lt;MeetingAttendanceRecord&gt;&gt;</code></strong>:</li>
+<li>Guarda el conteo de asistentes indicando si fue reunión Entre Semana o Fin de Semana.</li>
+<li><strong><code class="inline-code">calculateMonthlyAverages(month: number, year: number)</code></strong>:</li>
+<li>Computa los promedios requeridos para el informe S-1 a la Sucursal.</li>
+</ul>
+<h2 class="section-title">10.5 <code class="inline-code">announcementsService.ts</code></h2>
+Tablón de anuncios congregacionales oficiales.
+<ul><li><strong><code class="inline-code">getAnnouncements(): Announcement[]</code></strong>:</li>
+<li>Retorna los avisos ordenados con prioridad <code class="inline-code">alta</code> primero y luego por fecha reciente.</li>
+<li><strong><code class="inline-code">addAnnouncement(data: Omit&lt;Announcement, 'id' | 'created_at'&gt;): Announcement</code></strong>:</li>
+<li>Publica un nuevo comunicado oficial con fecha, lugar y autor.</li>
+<li><strong><code class="inline-code">deleteAnnouncement(id: string): void</code></strong>:</li>
+<li>Elimina un anuncio obsoleto del tablón.</li>
+</ul>
+<h2 class="section-title">10.6 <code class="inline-code">csvImportService.ts</code></h2>
+Parser de importación masiva para secretaría.
+<ul><li><strong><code class="inline-code">parseCsv(rawText: string): CsvParseResult</code></strong>:</li>
+<li>Detecta automáticamente el delimitador (<code class="inline-code">,</code> o <code class="inline-code">;</code>), procesa encabezados teocráticos y normaliza nombramientos.</li>
+<li><strong><code class="inline-code">downloadTemplateCsv(): void</code></strong>:</li>
+<li>Genera y descarga en el navegador una plantilla de ejemplo en formato CSV con columnas oficiales.</li>
+</ul>
+<h2 class="section-title">10.7 <code class="inline-code">whatsappReminderService.ts</code></h2>
+Generador de enlaces para envío de recordatorios mediante protocolo universal URI <code class="inline-code">wa.me</code>.
+<ul><li><strong><code class="inline-code">buildReminderMessage(data: GroupReminderData, monthName: string, deadlineDay: number): string</code></strong>:</li>
+<li>Redacta un mensaje teocrático cordial y adaptativo según la cantidad de pendientes.</li>
+<li><strong><code class="inline-code">generateWhatsAppUrl(phone: string, message: string): string</code></strong>:</li>
+<li>Sanitiza el número de teléfono, elimina espacios y caracteres no numéricos, y codifica el texto con <code class="inline-code">encodeURIComponent</code>.</li>
+</ul>
+
+<p>---</p>
+
+<h1 class="chapter-title">11. Auditoría de Seguridad, Variables de Entorno y Secretos</h1>
+
+<h2 class="section-title">11.1 Matriz de Hallazgos de Seguridad (OWASP Top 10)</h2>
+A continuación se presenta la auditoría técnica de seguridad realizada sobre el código, dependencias y arquitectura:
+<div class="table-container"><table><thead><tr><th>ID</th><th>Categoría OWASP</th><th>Severidad</th><th>Descripción del Hallazgo</th><th>Evidencia en Código</th><th>Impacto Potencial</th><th>Mitigación Implementada</th><th>Estado</th></tr></thead><tbody><tr><td><strong>SEC-001</strong></td><td><strong>A01: Broken Access Control</strong></td><td><strong>HIGH</strong></td><td>Riesgo de que publicadores alteren informes de otros hermanos si no se valida en servidor.</td><td>Intentos de inyección por API REST</td><td>Falsificación de cifras ministeriales</td><td>RLS en PostgreSQL (<code class="inline-code">profile_id = auth.uid()</code>) que intercepta toda petición a nivel DB</td><td><strong>MITIGADO</strong></td></tr><tr><td><strong>SEC-002</strong></td><td><strong>A07: Identification and Authentication Failures</strong></td><td><strong>MEDIUM</strong></td><td>En modo demo/prueba, las credenciales simuladas permiten alternar usuarios en 1 clic.</td><td><code class="inline-code">demoUsers</code> en <code class="inline-code">AuthContext.tsx</code></td><td>Acceso no autorizado si se deja activo en producción real con datos sensibles</td><td>El modo demo debe condicionarse a <code class="inline-code">import.meta.env.DEV</code> y desactivarse al conectar Supabase Auth en producción</td><td><strong>MITIGADO</strong></td></tr><tr><td><strong>SEC-003</strong></td><td><strong>A03: Injection (SQL / XSS)</strong></td><td><strong>LOW</strong></td><td>Exposición a ataques XSS mediante cadenas de texto en nombres o notas de informe.</td><td>Inputs de texto</td><td>Inyección de scripts en navegador</td><td>React escapa por defecto todo el contenido dentro de JSX; Zod sanitiza y restringe tipos primitivos</td><td><strong>MITIGADO</strong></td></tr><tr><td><strong>SEC-004</strong></td><td><strong>A05: Security Misconfiguration</strong></td><td><strong>MEDIUM</strong></td><td>Inclusión accidental de claves secretas (<code class="inline-code">service_role</code>) en archivos de entorno del cliente.</td><td><code class="inline-code">.env.local</code></td><td>Control total sobre la base de datos bypaseando RLS</td><td>La clave pública <code class="inline-code">VITE_SUPABASE_ANON_KEY</code> solo otorga permisos sujetos a RLS. La clave <code class="inline-code">service_role</code> NUNCA se incluye en el frontend</td><td><strong>MITIGADO</strong></td></tr><tr><td><strong>SEC-005</strong></td><td><strong>A08: Software and Data Integrity Failures</strong></td><td><strong>LOW</strong></td><td>Inyección de archivos corruptos en la importación masiva de publicadores CSV.</td><td><code class="inline-code">csvImportService.ts</code></td><td>Denegación de servicio en cliente o datos inválidos</td><td>El parser procesa fila por fila, sanitiza comillas y valida cada celda contra esquemas teocráticos antes de guardar</td><td><strong>MITIGADO</strong></td></tr></tbody></table></div>
+---
+
+<h2 class="section-title">11.2 Variables de Entorno y Gestión de Secretos</h2>
+<div class="table-container"><table><thead><tr><th>Variable</th><th>Visibilidad</th><th>Propósito</th><th>Dónde se Configura</th><th>Riesgo de Exposición</th></tr></thead><tbody><tr><td><code class="inline-code">VITE_SUPABASE_URL</code></td><td><strong>PÚBLICA</strong></td><td>URL del endpoint de API de Supabase</td><td><code class="inline-code">.env.local</code> / Hosting Environment Variables</td><td><strong>Bajo:</strong> La URL es pública por naturaleza en aplicaciones SPA</td></tr><tr><td><code class="inline-code">VITE_SUPABASE_ANON_KEY</code></td><td><strong>PÚBLICA</strong></td><td>Clave anónima pública de cliente de Supabase</td><td><code class="inline-code">.env.local</code> / Hosting Environment Variables</td><td><strong>Bajo:</strong> Solo permite operaciones autorizadas por las políticas RLS</td></tr><tr><td><code class="inline-code">SUPABASE_SERVICE_ROLE_KEY</code></td><td><strong>ESTRICTAMENTE SECRETA</strong></td><td>Clave maestra con permisos para bypasear todas las reglas RLS</td><td><strong>JAMÁS DEBE EXISTIR EN EL PROYECTO FRONTEND</strong></td><td><strong>CRÍTICO:</strong> Si se incluye en el frontend con prefijo <code class="inline-code">VITE_</code>, cualquier usuario podría borrar toda la base de datos</td></tr></tbody></table></div>
+<h3 class="subsection-title">Reglas Mandatorias de Seguridad:</h3>
+<ol><li class="ordered">Ninguna clave con prefijo <code class="inline-code">VITE_</code> debe considerarse secreta. Todo lo que comience con <code class="inline-code">VITE_</code> es empaquetado en el archivo JavaScript final accesible por cualquier navegador.</li>
+<li class="ordered">El archivo <code class="inline-code">.env.local</code> se encuentra explícitamente listado en el archivo [<code class="inline-code">.gitignore</code>](file:///c:/Desarrollo/Desarrollo/Desarrollo%20web/App_informes/.gitignore) y jamás debe ser subido al repositorio público de Git.</li>
+</ol>
+
+<p>---</p>
+
+<h1 class="chapter-title">12. Estrategia de Pruebas, Aseguramiento de Calidad (QA) y Métricas</h1>
+
+<h2 class="section-title">12.1 Resumen del Estado de la Suite de Pruebas</h2>
+Al día de hoy, la suite de pruebas automatizada se ejecuta íntegramente mediante <strong>Vitest 3.0.5</strong> y <strong>Testing Library</strong>, registrando un <strong>100% de éxito</strong>:
+<ul><li><strong>Total de Suites de Prueba:</strong> <code class="inline-code">58 suites</code></li>
+<li><strong>Total de Pruebas Unitarias e Integración:</strong> <code class="inline-code">182 pruebas</code></li>
+<li><strong>Pruebas Fallidas:</strong> <code class="inline-code">0</code></li>
+<li><strong>Tiempo Promedio de Ejecución:</strong> <code class="inline-code">~20 segundos</code></li>
+<li><strong>TypeScript:</strong> <code class="inline-code">0 errores</code> con <code class="inline-code">npx tsc --noEmit</code>.</li>
+</ul>
+---
+
+<h2 class="section-title">12.2 Inventario Completo de Suites de Prueba</h2>
+
+<h3 class="subsection-title">Pruebas de Átomos (<code class="inline-code">src/components/atoms/</code>)</h3>
+<ol><li class="ordered"><code class="inline-code">Avatar.test.tsx</code> (3 tests): Renderizado de iniciales, imagen y tamaños adaptativos.</li>
+<li class="ordered"><code class="inline-code">Badge.test.tsx</code> (4 tests): Renderizado de variantes teocráticas (<code class="inline-code">precursor_regular</code>, <code class="inline-code">anciano</code>, etc.).</li>
+<li class="ordered"><code class="inline-code">Button.test.tsx</code> (4 tests): Interacción de clic, estados de carga y variantes visuales.</li>
+<li class="ordered"><code class="inline-code">Checkbox.test.tsx</code> (3 tests): Estado checked/unchecked y accesibilidad con etiqueta.</li>
+<li class="ordered"><code class="inline-code">Input.test.tsx</code> (5 tests): Tipos texto/número, íconos y renderizado de errores.</li>
+<li class="ordered"><code class="inline-code">Select.test.tsx</code> (5 tests): Opciones desplegables, selección y disparo de evento onChange.</li>
+</ol>
+<h3 class="subsection-title">Pruebas de Moléculas (<code class="inline-code">src/components/molecules/</code>)</h3>
+<ol><li class="ordered"><code class="inline-code">AlertBanner.test.tsx</code> (2 tests): Renderizado de días restantes y callback de notificación a encargados.</li>
+<li class="ordered"><code class="inline-code">FormField.test.tsx</code> (3 tests): Vinculación de etiqueta accesible y mensaje de validación.</li>
+<li class="ordered"><code class="inline-code">RoleSelectorPill.test.tsx</code> (3 tests): Alternancia entre roles de servicio.</li>
+<li class="ordered"><code class="inline-code">SearchBar.test.tsx</code> (3 tests): Búsqueda de texto y botón de limpieza.</li>
+<li class="ordered"><code class="inline-code">Sparkline.test.tsx</code> (3 tests): Generación de puntos SVG en gráfica compacta.</li>
+</ol>
+<h3 class="subsection-title">Pruebas de Organismos (<code class="inline-code">src/components/organisms/</code>)</h3>
+<ol><li class="ordered"><code class="inline-code">AnnouncementsBoard.test.tsx</code> (3 tests): Renderizado de avisos, creación modal y eliminación autorizada.</li>
+<li class="ordered"><code class="inline-code">BranchReportSummaryModal.test.tsx</code> (3 tests): Renderizado S-1, copia al portapapeles en 1 clic e impresión.</li>
+<li class="ordered"><code class="inline-code">MonthClosingModal.test.tsx</code> (2 tests): Bloqueo de confirmación hasta marcar los 3 puntos del checklist.</li>
+<li class="ordered"><code class="inline-code">PublisherImportModal.test.tsx</code> (5 tests): Carga de CSV, descarga de plantilla y previsualización.</li>
+<li class="ordered"><code class="inline-code">WhatsAppReminderModal.test.tsx</code> (4 tests): Lista de encargados, pendientes y modo de prueba interactivo.</li>
+<li class="ordered"><code class="inline-code">PublisherCardS21View.test.tsx</code> (3 tests): Cuadrícula de 12 meses y botones de administración S-21.</li>
+<li class="ordered"><code class="inline-code">PublisherFormModal.test.tsx</code> (3 tests): Validación de campos y registro/edición de publicador.</li>
+<li class="ordered"><code class="inline-code">PublisherTransferModal.test.tsx</code> (1 test): Reasignación de publicador hacia otro grupo de servicio.</li>
+<li class="ordered"><code class="inline-code">PublishersTable.test.tsx</code> (5 tests): Filtrado por estado de entrega, rol y búsqueda por nombre.</li>
+<li class="ordered"><code class="inline-code">AssistedReportModal.test.tsx</code> (4 tests): Llenado asistido con selección de nombramiento y horas.</li>
+<li class="ordered"><code class="inline-code">DeleteGroupModal.test.tsx</code> (1 test): Exigencia de seleccionar grupo de respaldo para publicadores.</li>
+<li class="ordered"><code class="inline-code">GroupFormModal.test.tsx</code> (2 tests): Creación y actualización de grupos de predicación.</li>
+<li class="ordered"><code class="inline-code">GroupMetricsCards.test.tsx</code> (1 test): Indicadores de publicadores, horas y estudios del grupo.</li>
+<li class="ordered"><code class="inline-code">GroupSupervisorsCard.test.tsx</code> (1 test): Información de contacto del superintendente y auxiliar.</li>
+<li class="ordered"><code class="inline-code">GroupsOverviewTable.test.tsx</code> (3 tests): Desglose por grupo y callback de selección.</li>
+<li class="ordered"><code class="inline-code">HistoricalComparativeChart.test.tsx</code> (2 tests): Gráfica de barras SVG y comparativa por año.</li>
+<li class="ordered"><code class="inline-code">HoursGaugeCard.test.tsx</code> (3 tests): Medidor circular de porcentaje de horas.</li>
+<li class="ordered"><code class="inline-code">PastoralAlertsCard.test.tsx</code> (2 tests): Identificación de publicadores con necesidad de apoyo.</li>
+<li class="ordered"><code class="inline-code">RegularPioneersGoalCard.test.tsx</code> (3 tests): Meta de 600 horas y proyección de cumplimiento.</li>
+<li class="ordered"><code class="inline-code">ReportSubmissionForm.test.tsx</code> (4 tests): Formulario de informe personal con lógica según privilegio.</li>
+<li class="ordered"><code class="inline-code">S21ConsolidatedTable.test.tsx</code> (2 tests): Formato S-21-S canónico con columnas oficiales.</li>
+<li class="ordered"><code class="inline-code">CongregationKPIs.test.tsx</code> (1 test): Tarjetas maestras de métricas congregacionales.</li>
+<li class="ordered"><code class="inline-code">ConsolidatedMetricsSummary.test.tsx</code> (2 tests): Resumen anual acumulado de horas y estudios.</li>
+</ol>
+<h3 class="subsection-title">Pruebas de Plantillas y Páginas (<code class="inline-code">src/pages/</code> y <code class="inline-code">src/components/templates/</code>)</h3>
+<ol><li class="ordered"><code class="inline-code">AppLayout.test.tsx</code> (3 tests): Navegación lateral en desktop y menú hamburguesa móvil.</li>
+<li class="ordered"><code class="inline-code">LoginPage.test.tsx</code> (3 tests): Acceso con credenciales y botones de acceso de prueba rápida.</li>
+<li class="ordered"><code class="inline-code">DashboardPage.test.tsx</code> (4 tests): Panel general, KPIs, recordatorios WhatsApp, cierre de mes y tablón de anuncios.</li>
+<li class="ordered"><code class="inline-code">MonthlyReportPage.test.tsx</code> (4 tests): Envío de informe personal con validación y estados.</li>
+<li class="ordered"><code class="inline-code">ServiceGroupsPage.test.tsx</code> (5 tests): Vista de grupos, pestañas, registro asistido y nuevo grupo.</li>
+<li class="ordered"><code class="inline-code">PublisherCardsPage.test.tsx</code> (4 tests): Expedientes S-21, búsqueda, alta de publicador e importador CSV.</li>
+<li class="ordered"><code class="inline-code">MeetingAttendancePage.test.tsx</code> (2 tests): Asistencia semanal, promedios mensuales y nuevo registro.</li>
+<li class="ordered"><code class="inline-code">ConsolidatedReportsPage.test.tsx</code> (4 tests): Tabla consolidada S-21-S y modal de informe para Sucursal S-1.</li>
+<li class="ordered"><code class="inline-code">App.test.tsx</code> (5 tests): Enrutamiento global de la SPA y control de acceso según los 3 niveles de roles.</li>
+</ol>
+<h3 class="subsection-title">Pruebas de Servicios, Hooks y Esquemas</h3>
+<ol><li class="ordered"><code class="inline-code">publishersService.test.ts</code> (3 tests): Consultas, filtros y cálculo S-21.</li>
+<li class="ordered"><code class="inline-code">reportsService.test.ts</code> (2 tests): Creación y confirmación de informes.</li>
+<li class="ordered"><code class="inline-code">groupsService.test.ts</code> (4 tests): Operaciones CRUD sobre grupos de servicio.</li>
+<li class="ordered"><code class="inline-code">attendanceService.test.ts</code> (2 tests): Registro de asistencia y promedios.</li>
+<li class="ordered"><code class="inline-code">announcementsService.test.ts</code> (3 tests): Priorización y operaciones del tablón.</li>
+<li class="ordered"><code class="inline-code">csvImportService.test.ts</code> (3 tests): Parser de CSV, detección de delimitadores y plantilla.</li>
+<li class="ordered"><code class="inline-code">whatsappReminderService.test.ts</code> (4 tests): Generación de mensajes y sanitización de teléfonos.</li>
+<li class="ordered"><code class="inline-code">exportService.test.ts</code> (3 tests): Exportaciones PDF y Excel.</li>
+<li class="ordered"><code class="inline-code">AuthContext.test.tsx</code> (3 tests): Autenticación, persistencia y cierre de sesión.</li>
+<li class="ordered"><code class="inline-code">useMonthlyReport.test.ts</code> (2 tests): Lógica de informe personal.</li>
+<li class="ordered"><code class="inline-code">useServiceGroups.test.ts</code> (4 tests): Lógica de grupos y reportes asistidos.</li>
+<li class="ordered"><code class="inline-code">usePublisherManagement.test.ts</code> (5 tests): Filtros y operaciones S-21.</li>
+<li class="ordered"><code class="inline-code">useMeetingAttendance.test.ts</code> (2 tests): Recálculo de promedios de asistencia.</li>
+<li class="ordered"><code class="inline-code">monthlyReportSchema.test.ts</code> (7 tests): Validaciones Zod de horas, estudios y roles.</li>
+<li class="ordered"><code class="inline-code">cn.test.ts</code> (3 tests): Fusión de clases CSS de Tailwind.</li>
+</ol>
+---
+
+<h2 class="section-title">12.3 Checklist Formal de Control de Calidad (QA)</h2>
+Antes de certificar una nueva versión para despliegue congregacional, el QA Lead debe verificar y firmar el siguiente procedimiento:
+<ul><li>[ ] <strong>1. Verificación Estática:</strong> Ejecución de <code class="inline-code">npx tsc --noEmit</code> concluye con código de salida <code class="inline-code">0</code> (cero errores).</li>
+<li>[ ] <strong>2. Suite Automatizada:</strong> Ejecución de <code class="inline-code">npm test -- --run</code> finaliza con el 100% de las pruebas aprobadas (<code class="inline-code">182/182 passed</code>).</li>
+<li>[ ] <strong>3. Compilación de Producción:</strong> Ejecución de <code class="inline-code">npm run build</code> genera exitosamente los artefactos en <code class="inline-code">dist/</code> sin errores de importación.</li>
+<li>[ ] <strong>4. Control de Acceso (Nivel 1):</strong> Iniciar sesión como Publicador (<em>Mateo González</em>) y verificar que únicamente tenga acceso visible y navegable a <em>"Mi Informe Mensual"</em>.</li>
+<li>[ ] <strong>5. Control de Acceso (Nivel 2):</strong> Iniciar sesión como Encargado de Grupo (<em>Carlos Méndez</em>) y verificar que solo vea su grupo asignado (<em>Grupo 1</em>) y no pueda eliminar grupos ni ver tarjetas de otros grupos.</li>
+<li>[ ] <strong>6. Control de Acceso (Nivel 3):</strong> Iniciar sesión como Secretario (<em>David Morales</em>) y confirmar visibilidad total sobre los 6 módulos.</li>
+<li>[ ] <strong>7. Flujo de WhatsApp:</strong> Abrir modal de recordatorios en Dashboard, ingresar número de prueba y verificar apertura correcta del enlace universal <code class="inline-code">wa.me</code>.</li>
+<li>[ ] <strong>8. Cierre de Mes:</strong> Abrir modal de Cierre de Mes, comprobar que el botón de confirmación permanece inactivo hasta marcar los 3 checkboxes y verificar que al confirmar avanza el mes activo.</li>
+<li>[ ] <strong>9. Resumen para Sucursal (S-1):</strong> En Reportes Consolidados, pulsar <em>"Informe para Sucursal"</em>, verificar cifras y probar el botón de copia al portapapeles.</li>
+<li>[ ] <strong>10. Importador CSV:</strong> En Tarjetas de Publicador, pulsar <em>"Importar CSV"</em>, descargar plantilla de prueba, cargar archivo y verificar la tabla de previsualización.</li>
+<li>[ ] <strong>11. Tablón de Anuncios:</strong> Publicar un aviso importante y verificar que se coloque en primer lugar con distintivo ámbar.</li>
+<li>[ ] <strong>12. Inspección PWA:</strong> Validar presencia de <code class="inline-code">manifest.webmanifest</code>, registrar Service Worker en pestaña Application de Chrome DevTools y probar recarga sin conexión.</li>
+<li>[ ] <strong>13. Iconografía:</strong> Confirmar que no exista ninguna cruz ni símbolo inapropiado en ninguna vista.</li>
+<li>[ ] <strong>14. Diseño Responsivo:</strong> Probar navegación en viewport móvil (375px), tablet (768px) y escritorio (1440px).</li>
+</ul>
+
+<p>---</p>
+
+<h1 class="chapter-title">13. DevOps, Ambientes, Despliegue y Recuperación ante Desastres</h1>
+
+<h2 class="section-title">13.1 Definición de Ambientes</h2>
+<div class="table-container"><table><thead><tr><th>Ambiente</th><th>Propósito</th><th>URL / Host</th><th>Base de Datos</th><th>Variables de Entorno</th><th>Estrategia de Datos</th></tr></thead><tbody><tr><td><strong>Local (Development)</strong></td><td>Desarrollo diario de nuevas características y depuración</td><td><code class="inline-code">http://localhost:5173</code></td><td>Supabase Cloud (Proyecto de Desarrollo) o Mock Local</td><td><code class="inline-code">.env.local</code></td><td>Datos de prueba (<em>Seed data</em>) con hermanos simulados</td></tr><tr><td><strong>Staging (Pre-producción)</strong></td><td>Pruebas de aceptación con ancianos y verificación de migraciones</td><td><code class="inline-code">https://staging-app-informes.vercel.app</code></td><td>Supabase Staging Database</td><td>Vercel Environment Variables (Preview)</td><td>Réplica anonimizada de datos para auditoría previa</td></tr><tr><td><strong>Production</strong></td><td>Operación real y confidencial de la secretaría de la congregación</td><td><code class="inline-code">https://informes.mi-congregacion.org</code></td><td>Supabase Production Instance (PostgreSQL 15)</td><td>Hosting Production Variables (Protegidas)</td><td>Cifrado en reposo, backups continuos y RLS estricto</td></tr></tbody></table></div>
+<div class="alert alert-caution"><strong>[CAUTION]</strong> &gt; Queda terminantemente prohibido desarrollar o ejecutar pruebas manuales de migración directamente sobre el ambiente de Producción.</div>
+
+<p>---</p>
+
+<h2 class="section-title">13.2 Guía de Despliegue Paso a Paso (Vercel / Netlify + Supabase)</h2>
+
+<h3 class="subsection-title">Paso 1: Configuración de la Base de Datos en Supabase</h3>
+<ol><li class="ordered">Iniciar sesión en el portal de [Supabase](https://supabase.com/dashboard) y seleccionar el proyecto destino.</li>
+<li class="ordered">Navegar a <strong>SQL Editor</strong>, crear una nueva consulta y pegar el contenido completo de [<code class="inline-code">supabase_schema.sql</code>](file:///c:/Desarrollo/Desarrollo/Desarrollo%20web/App_informes/supabase_schema.sql).</li>
+<li class="ordered">Ejecutar el script y confirmar que aparezca el mensaje de éxito (<em>Success. No rows returned</em>).</li>
+<li class="ordered">En <strong>Project Settings -&gt; API</strong>, copiar los valores de:</li>
+</ol><ul><li><code class="inline-code">Project URL</code></li>
+<li><code class="inline-code">anon public key</code></li>
+</ul>
+<h3 class="subsection-title">Paso 2: Configuración del Frontend en la Plataforma de Hosting</h3>
+<ol><li class="ordered">Vincular el repositorio de GitHub <code class="inline-code">ErickKNT/app-informes-global</code> al proyecto en Vercel, Netlify o Cloudflare Pages.</li>
+<li class="ordered">Definir los parámetros de compilación:</li>
+</ol><ul><li><strong>Framework Preset:</strong> <code class="inline-code">Vite</code></li>
+<li><strong>Build Command:</strong> <code class="inline-code">npm run build</code></li>
+<li><strong>Output Directory:</strong> <code class="inline-code">dist</code></li>
+<li><strong>Install Command:</strong> <code class="inline-code">npm install</code></li>
+</ul>3. Configurar las Variables de Entorno en el panel de hosting:
+<ul><li><code class="inline-code">VITE_SUPABASE_URL</code>: <em>URL copiada en el Paso 1</em></li>
+<li><code class="inline-code">VITE_SUPABASE_ANON_KEY</code>: <em>anon public key copiada en el Paso 1</em></li>
+</ul>
+<h3 class="subsection-title">Paso 3: Despliegue y Verificación de Humo (Smoke Testing)</h3>
+<ol><li class="ordered">Iniciar el despliegue automático desde la rama <code class="inline-code">main</code>.</li>
+<li class="ordered">Una vez completado, acceder a la URL pública generada y validar:</li>
+</ol><ul><li>Carga limpia de la pantalla de login con protocolo HTTPS activo.</li>
+<li>Navegación hacia <em>"Mi Informe Mensual"</em>.</li>
+<li>Comprobación del registro del Service Worker en la consola del navegador.</li>
+</ul>
+---
+
+<h2 class="section-title">13.3 Procedimiento de Rollback (Reversión Inmediata)</h2>
+En caso de detectarse un fallo crítico tras un despliegue:
+<ol><li class="ordered"><strong>Reversión en Hosting:</strong> En el panel de Vercel/Netlify, acceder a la pestaña <strong>Deployments</strong>, ubicar el despliegue estable anterior y pulsar <strong>Instant Rollback / Promote to Production</strong>. Esta acción toma menos de 10 segundos.</li>
+<li class="ordered"><strong>Reversión en Git:</strong></li>
+</ol>   <pre class="code-block bash"><code>git revert HEAD
+   git push origin main</code></pre>
+
+<p>---</p>
+
+<h2 class="section-title">13.4 Estrategia de Backups y Recuperación ante Desastres (Disaster Recovery)</h2>
+<ol><li class="ordered"><strong>Copias Automatizadas de PostgreSQL:</strong> Supabase ejecuta respaldos diarios automáticos (Point-in-Time Recovery - PITR en planes Pro).</li>
+<li class="ordered"><strong>Respaldo Teocrático en Texto Plano:</strong> La secretaría debe exportar mensualmente los informes consolidados en formato S-21-S y S-1 tras el cierre oficial de ciclo, conservando copias en medios de almacenamiento seguro externos.</li>
+</ol>
+
+<p>---</p>
+
+<h1 class="chapter-title">14. Architecture Decision Records (ADRs)</h1>
+
+<p>A continuación se documentan formalmente las decisiones arquitectónicas fundamentales adoptadas en el proyecto:</p>
+
+<p>---</p>
+
+<h3 class="subsection-title">ADR-001: Adopción de Atomic Design para la Arquitectura de Componentes</h3>
+<ul><li><strong>Fecha:</strong> 2024-09-01 | <strong>Estado:</strong> ACEPTADO</li>
+<li><strong>Contexto:</strong> La interfaz requería escalar desde elementos atómicos (botones, badges, inputs) hasta formularios complejos con lógica teocrática (tarjeta S-21, cierre de mes).</li>
+<li><strong>Decisión:</strong> Organizar los componentes en 5 capas: <code class="inline-code">atoms/</code>, <code class="inline-code">molecules/</code>, <code class="inline-code">organisms/</code>, <code class="inline-code">templates/</code> y <code class="inline-code">pages/</code>.</li>
+<li><strong>Consecuencias:</strong> Máxima reusabilidad, pruebas unitarias aisladas y consistencia visual garantizada en todo el sistema.</li>
+</ul>
+---
+
+<h3 class="subsection-title">ADR-002: Modelo de Control de Acceso por Roles en 3 Niveles Teocráticos</h3>
+<ul><li><strong>Fecha:</strong> 2024-09-05 | <strong>Estado:</strong> ACEPTADO</li>
+<li><strong>Contexto:</strong> Los publicadores solo deben ver su informe; los encargados deben supervisar únicamente a su grupo; los ancianos y el secretario deben auditar toda la congregación.</li>
+<li><strong>Decisión:</strong> Implementar 3 niveles de autorización reflejados tanto en la UI (guards reactivos) como en la base de datos (políticas RLS con funciones <code class="inline-code">is_admin_or_elder</code> e <code class="inline-code">is_group_overseer</code>).</li>
+<li><strong>Consecuencias:</strong> Cumplimiento estricto de la privacidad congregacional y principio de menor privilegio (Least Privilege).</li>
+</ul>
+---
+
+<h3 class="subsection-title">ADR-003: Persistencia Híbrida (Supabase PostgreSQL + Modo Offline / PWA)</h3>
+<ul><li><strong>Fecha:</strong> 2024-09-06 | <strong>Estado:</strong> ACEPTADO</li>
+<li><strong>Contexto:</strong> En muchas áreas y Salones del Reino la conectividad celular es inestable o nula.</li>
+<li><strong>Decisión:</strong> Utilizar Supabase como backend principal en la nube, pero dotar a la aplicación de un Service Worker con estrategia <em>stale-while-revalidate</em> y estado local en memoria para funcionamiento sin conexión.</li>
+<li><strong>Consecuencias:</strong> La app nunca queda bloqueada por caídas de red y permite consultar datos en cualquier circunstancia.</li>
+</ul>
+---
+
+<h3 class="subsection-title">ADR-004: Integración de WhatsApp mediante Protocolo Universal URI (<code class="inline-code">wa.me</code>)</h3>
+<ul><li><strong>Fecha:</strong> 2024-09-07 | <strong>Estado:</strong> ACEPTADO</li>
+<li><strong>Contexto:</strong> Se requería notificar a los encargados sobre la fecha límite de entrega de informes.</li>
+<li><strong>Decisión:</strong> Descartar servicios de mensajería de terceros o bots de pago que violarían términos de servicio o requerirían credenciales costosas, optando por enlaces profundos universales <code class="inline-code">https://wa.me/{phone}?text={mensaje}</code> con personalización teocrática automática y modo de prueba.</li>
+<li><strong>Consecuencias:</strong> Cero costo de infraestructura, compatibilidad universal con WhatsApp Web y aplicaciones móviles en Android/iOS, y respeto absoluto a la privacidad.</li>
+</ul>
+---
+
+<h3 class="subsection-title">ADR-005: Formato Canónico y Flujo de Cierre de Mes (S-1 y S-21)</h3>
+<ul><li><strong>Fecha:</strong> 2024-09-08 | <strong>Estado:</strong> ACEPTADO</li>
+<li><strong>Contexto:</strong> La congregación debe enviar cifras oficiales a la Sucursal y archivar las tarjetas de registro de 12 meses.</li>
+<li><strong>Decisión:</strong> Construir el modal oficial S-1 con copia al portapapeles en 1 clic y el modal de cierre mensual con lista de comprobación de 3 puntos obligatorios.</li>
+<li><strong>Consecuencias:</strong> Se elimina el error humano en el traspaso de información a la Sucursal y se garantiza que ningún mes se cierre sin verificar a todos los grupos.</li>
+</ul>
+---
+
+<h3 class="subsection-title">ADR-006: Validación en Runtime con Zod Desacoplada de la UI</h3>
+<ul><li><strong>Fecha:</strong> 2024-09-08 | <strong>Estado:</strong> ACEPTADO</li>
+<li><strong>Contexto:</strong> La lógica de validación de horas y estudios según el privilegio del publicador era propensa a inconsistencias si se programaba dentro de los componentes JSX.</li>
+<li><strong>Decisión:</strong> Aislar las reglas de validación en esquemas puros Zod (<code class="inline-code">src/schemas/monthlyReportSchema.ts</code>) con mensajes en español y pruebas unitarias independientes.</li>
+<li><strong>Consecuencias:</strong> Código de componentes más limpio y pruebas unitarias exhaustivas sin necesidad de renderizar el DOM.</li>
+</ul>
+---
+
+<h3 class="subsection-title">ADR-007: Eliminación de Project References en <code class="inline-code">tsconfig.json</code> para Vite</h3>
+<ul><li><strong>Fecha:</strong> 2024-09-09 | <strong>Estado:</strong> ACEPTADO</li>
+<li><strong>Contexto:</strong> El uso de <code class="inline-code">references</code> hacia <code class="inline-code">tsconfig.node.json</code> causaba errores de compilación TS6310 (<em>Referenced project may not disable emit</em>) en editores y CI.</li>
+<li><strong>Decisión:</strong> Unificar la configuración en un solo <code class="inline-code">tsconfig.json</code> con <code class="inline-code">"include": ["src", "vite.config.ts"]</code>, eliminar <code class="inline-code">baseUrl</code> obsoleto y utilizar alias relativos directos <code class="inline-code">"@/<em>": ["./src/</em>"]</code>.</li>
+<li><strong>Consecuencias:</strong> Compilación limpia con 0 errores, compatibilidad nativa con TypeScript 5.7+ y eliminación de archivos de configuración redundantes.</li>
+</ul>
+---
+
+<h3 class="subsection-title">ADR-008: Progressive Web App con Manifiesto Standalone e Iconografía Teocrática</h3>
+<ul><li><strong>Fecha:</strong> 2024-09-09 | <strong>Estado:</strong> ACEPTADO</li>
+<li><strong>Contexto:</strong> Los hermanos necesitaban instalar la aplicación en sus teléfonos como si fuera una app nativa, pero sin iconografía religiosa inapropiada (cruces).</li>
+<li><strong>Decisión:</strong> Diseñar <code class="inline-code">manifest.webmanifest</code> con color temático institucional <code class="inline-code">#1E3A8A</code>, modo <code class="inline-code">standalone</code> e ícono vectorial del Salón del Reino (<code class="inline-code">Building2</code>).</li>
+<li><strong>Consecuencias:</strong> Experiencia de usuario nativa e instalable en iOS y Android respetando los principios teocráticos de la congregación.</li>
+</ul>
+
+<p>---</p>
+
+<h1 class="chapter-title">15. Trazabilidad de Requisitos y Gestión de Riesgos</h1>
+
+<h2 class="section-title">15.1 Matriz de Trazabilidad Integral (REQ -&gt; Feature -&gt; Componente -&gt; Servicio -&gt; DB -&gt; Test)</h2>
+<div class="table-container"><table><thead><tr><th>Requisito</th><th>Feature</th><th>Componente / UI</th><th>Hook / Servicio</th><th>Entidad en DB</th><th>Suite de Pruebas</th></tr></thead><tbody><tr><td><strong>REQ-001</strong></td><td>Llenado de Informe Personal</td><td><code class="inline-code">ReportSubmissionForm</code> en <code class="inline-code">MonthlyReportPage</code></td><td><code class="inline-code">useMonthlyReport</code> / <code class="inline-code">reportsService</code></td><td><code class="inline-code">public.monthly_reports</code></td><td><code class="inline-code">MonthlyReportPage.test.tsx</code>, <code class="inline-code">monthlyReportSchema.test.ts</code></td></tr><tr><td><strong>REQ-002</strong></td><td>Registro Asistido para Encargados</td><td><code class="inline-code">AssistedReportModal</code> en <code class="inline-code">ServiceGroupsPage</code></td><td><code class="inline-code">useServiceGroups</code> / <code class="inline-code">reportsService</code></td><td><code class="inline-code">public.monthly_reports</code></td><td><code class="inline-code">AssistedReportModal.test.tsx</code>, <code class="inline-code">ServiceGroupsPage.test.tsx</code></td></tr><tr><td><strong>REQ-003</strong></td><td>Supervisión de Grupo por Encargado</td><td><code class="inline-code">PublishersTable</code> en <code class="inline-code">ServiceGroupsPage</code></td><td><code class="inline-code">useServiceGroups</code> / <code class="inline-code">publishersService</code></td><td><code class="inline-code">public.profiles</code></td><td><code class="inline-code">PublishersTable.test.tsx</code>, <code class="inline-code">useServiceGroups.test.ts</code></td></tr><tr><td><strong>REQ-004</strong></td><td>Recordatorios por WhatsApp</td><td><code class="inline-code">WhatsAppReminderModal</code> en <code class="inline-code">DashboardPage</code></td><td><code class="inline-code">whatsappReminderService</code></td><td><code class="inline-code">public.service_groups</code></td><td><code class="inline-code">WhatsAppReminderModal.test.tsx</code>, <code class="inline-code">whatsappReminderService.test.ts</code></td></tr><tr><td><strong>REQ-005</strong></td><td>Cierre Mensual con Checklist</td><td><code class="inline-code">MonthClosingModal</code> en <code class="inline-code">DashboardPage</code></td><td>Lógica en <code class="inline-code">DashboardPage</code></td><td>Control de Período</td><td><code class="inline-code">MonthClosingModal.test.tsx</code>, <code class="inline-code">DashboardPage.test.tsx</code></td></tr><tr><td><strong>REQ-006</strong></td><td>Informe S-1 para la Sucursal</td><td><code class="inline-code">BranchReportSummaryModal</code> en <code class="inline-code">ConsolidatedReportsPage</code></td><td><code class="inline-code">exportService</code></td><td><code class="inline-code">monthly_reports</code>, <code class="inline-code">attendance</code></td><td><code class="inline-code">BranchReportSummaryModal.test.tsx</code>, <code class="inline-code">ConsolidatedReportsPage.test.tsx</code></td></tr><tr><td><strong>REQ-007</strong></td><td>Tarjeta Individual S-21</td><td><code class="inline-code">PublisherCardS21View</code> en <code class="inline-code">PublisherCardsPage</code></td><td><code class="inline-code">usePublisherManagement</code> / <code class="inline-code">publishersService</code></td><td><code class="inline-code">public.profiles</code>, <code class="inline-code">monthly_reports</code></td><td><code class="inline-code">PublisherCardS21View.test.tsx</code>, <code class="inline-code">PublisherCardsPage.test.tsx</code></td></tr><tr><td><strong>REQ-008</strong></td><td>Importación Masiva de Nómina CSV</td><td><code class="inline-code">PublisherImportModal</code> en <code class="inline-code">PublisherCardsPage</code></td><td><code class="inline-code">csvImportService</code></td><td><code class="inline-code">public.profiles</code></td><td><code class="inline-code">PublisherImportModal.test.tsx</code>, <code class="inline-code">csvImportService.test.ts</code></td></tr><tr><td><strong>REQ-009</strong></td><td>Control de Asistencia Semanal</td><td><code class="inline-code">AttendanceHistoryTable</code> en <code class="inline-code">MeetingAttendancePage</code></td><td><code class="inline-code">useMeetingAttendance</code> / <code class="inline-code">attendanceService</code></td><td><code class="inline-code">public.meeting_attendance</code></td><td><code class="inline-code">MeetingAttendancePage.test.tsx</code>, <code class="inline-code">attendanceService.test.ts</code></td></tr><tr><td><strong>REQ-010</strong></td><td>Tablón de Comunicados Oficiales</td><td><code class="inline-code">AnnouncementsBoard</code> en <code class="inline-code">DashboardPage</code></td><td><code class="inline-code">announcementsService</code></td><td><code class="inline-code">public.announcements</code></td><td><code class="inline-code">AnnouncementsBoard.test.tsx</code>, <code class="inline-code">announcementsService.test.ts</code></td></tr></tbody></table></div>
+---
+
+<h2 class="section-title">15.2 Matriz de Riesgos del Proyecto</h2>
+<div class="table-container"><table><thead><tr><th>Riesgo Técnico / Operativo</th><th>Probabilidad</th><th>Impacto</th><th>Nivel de Riesgo</th><th>Estrategia de Mitigación Implementada</th></tr></thead><tbody><tr><td><strong>Pérdida de conectividad celular en el Salón</strong></td><td>Alta</td><td>Alto</td><td><strong>ALTO</strong></td><td>Service Worker PWA con caché <em>stale-while-revalidate</em> y persistencia local de estado.</td></tr><tr><td><strong>Entrega de informes fuera de plazo (después del día 6)</strong></td><td>Alta</td><td>Medio</td><td><strong>MEDIO</strong></td><td>Notificaciones automáticas por WhatsApp a encargados con conteo dinámico de pendientes.</td></tr><tr><td><strong>Duplicación accidental de informes mensuales</strong></td><td>Media</td><td>Alto</td><td><strong>ALTO</strong></td><td>Constraint relacional de base de datos <code class="inline-code">UNIQUE(profile_id, month, year)</code>.</td></tr><tr><td><strong>Acceso no autorizado a datos de otros grupos</strong></td><td>Baja</td><td>Crítico</td><td><strong>CRÍTICO</strong></td><td>Políticas Row-Level Security (RLS) en PostgreSQL validadas con <code class="inline-code">auth.uid()</code>.</td></tr><tr><td><strong>Errores de formateo en el envío a la Sucursal</strong></td><td>Media</td><td>Alto</td><td><strong>ALTO</strong></td><td>Resumen S-1 compilado automáticamente con botón de copia limpia al portapapeles.</td></tr><tr><td><strong>Corrupción del índice de Git por observadores externos</strong></td><td>Baja</td><td>Medio</td><td><strong>BAJO</strong></td><td>Exclusión estricta de <code class="inline-code">.git</code> en <code class="inline-code">vite.config.ts</code> y configuración síncrona en <code class="inline-code">.git/config</code>.</td></tr></tbody></table></div>
+
+<p>---</p>
+
+<h1 class="chapter-title">16. Guía de Desarrollo, Estándares de Código y AI Guidelines</h1>
+
+<h2 class="section-title">16.1 AI DEVELOPMENT GUIDELINES (Instrucciones Mandatorias para Agentes de IA)</h2>
+Cualquier modelo o agente de IA que trabaje sobre este repositorio en el futuro debe acatar de forma estricta las siguientes reglas operativas:
+
+<div class="alert alert-important"><strong>[IMPORTANT]</strong> &gt; <strong>REGLA FUNDAMENTAL PARA AGENTES DE IA:</strong></div>
+&gt; Queda terminantemente prohibido modificar código fuente sin comprender previamente la arquitectura existente, verificar las pruebas existentes y evaluar el impacto lateral del cambio.
+
+<h3 class="subsection-title">Reglas Específicas para Agentes:</h3>
+<ol><li class="ordered"><strong>No alucinaciones de dependencias ni tablas:</strong> No asumas que existen tablas o librerías adicionales que no figuren en [<code class="inline-code">supabase_schema.sql</code>](file:///c:/Desarrollo/Desarrollo/Desarrollo%20web/App_informes/supabase_schema.sql) o [<code class="inline-code">package.json</code>](file:///c:/Desarrollo/Desarrollo/Desarrollo%20web/App_informes/package.json).</li>
+<li class="ordered"><strong>Respeto al Atomic Design:</strong> Al crear nuevos componentes, ubícalos en su carpeta correspondiente (<code class="inline-code">atoms/</code>, <code class="inline-code">molecules/</code>, <code class="inline-code">organisms/</code>) e incluye siempre su archivo de exportación <code class="inline-code">index.ts</code> y su suite de pruebas <code class="inline-code">&lt;Nombre&gt;.test.tsx</code>.</li>
+<li class="ordered"><strong>Mantenimiento del 100% de Pruebas:</strong> Antes de dar por concluida una tarea, es obligatorio ejecutar:</li>
+</ol>   <pre class="code-block bash"><code>npx tsc --noEmit
+   npm test -- --run
+   npm run build</code></pre>
+   Cualquier regresión o prueba rota debe resolverse inmediatamente.
+<ol><li class="ordered"><strong>Respeto a las Convenciones Teocráticas:</strong></li>
+</ol><ul><li>Jamás utilizar íconos de cruces; utilizar <code class="inline-code">Building2</code> de Lucide React.</li>
+<li>El año de servicio teocrático abarca de Septiembre a Agosto.</li>
+<li>Los publicadores generales solo reportan participación y estudios; las horas corresponden exclusivamente a precursores.</li>
+</ul>5. <strong>No exponer claves secretas:</strong> Jamás incluir <code class="inline-code">service_role</code> ni contraseñas en archivos accesibles por el frontend.
+
+<p>---</p>
+
+<h2 class="section-title">16.2 Estándares y Convenciones de Codificación</h2>
+<ul><li><strong>Nombres de Archivos:</strong></li>
+<li>Componentes React: PascalCase (ej. <code class="inline-code">MonthlyReportPage.tsx</code>, <code class="inline-code">BranchReportSummaryModal.tsx</code>).</li>
+<li>Servicios, hooks y utilidades: camelCase (ej. <code class="inline-code">publishersService.ts</code>, <code class="inline-code">useMonthlyReport.ts</code>, <code class="inline-code">cn.ts</code>).</li>
+<li><strong>Exportaciones:</strong> Siempre utilizar exportaciones nombradas acompañadas de un archivo barril <code class="inline-code">index.ts</code> por componente.</li>
+<li><strong>Tipado Estricto:</strong> Evitar el uso de <code class="inline-code">any</code>. Definir tipos explícitos para todas las funciones, props y retornos.</li>
+<li><strong>Comentarios en el Código:</strong> Los comentarios deben explicar el <strong>POR QUÉ</strong> de una decisión de negocio o técnica, no repetir lo evidente que el código ya expresa.</li>
+</ul>
+
+<p>---</p>
+
+<h1 class="chapter-title">17. Guía de Resolución de Problemas (Troubleshooting) y Glosario</h1>
+
+<h2 class="section-title">17.1 Guía de Resolución de Problemas Frecuentes</h2>
+
+<h3 class="subsection-title">Problema 1: Error en Git <code class="inline-code">fatal: .git/index: index file smaller than expected</code></h3>
+<ul><li><strong>Síntoma:</strong> Los comandos de Git fallan indicando que el índice está corrupto o truncado en 0 bytes.</li>
+<li><strong>Causa:</strong> En entornos Windows NTFS, observadores de archivos en segundo plano (como Chokidar en Vite sin exclusión) interceptan el archivo temporal <code class="inline-code">.git/index.lock</code> durante operaciones atómicas de renombrado.</li>
+<li><strong>Solución Definitiva:</strong></li>
+</ul>  1. Ejecutar en PowerShell:
+     <pre class="code-block powershell"><code>powershell -Command "Remove-Item -Path .git/index -Force; git reset HEAD; git status"</code></pre>
+<ol><li class="ordered">Verificar que en <code class="inline-code">vite.config.ts</code> se mantenga la exclusión:</li>
+</ol>     <pre class="code-block ts"><code>server: { watch: { ignored: ['<strong>/.git/</strong>', '<strong>/dist/</strong>', '<strong>/node_modules/</strong>'] } }</code></pre>
+
+<h3 class="subsection-title">Problema 2: Subrayado rojo o error residual en <code class="inline-code">tsconfig.json</code> en VS Code</h3>
+<ul><li><strong>Síntoma:</strong> El editor muestra un error en la línea de alias o rutas a pesar de que <code class="inline-code">npx tsc --noEmit</code> pasa con 0 errores.</li>
+<li><strong>Causa:</strong> Memoria caché desincronizada en el servidor de lenguaje interno de TypeScript de VS Code.</li>
+<li><strong>Solución:</strong></li>
+</ul>  1. Presionar <code class="inline-code">Ctrl + Shift + P</code> en VS Code.
+<ol><li class="ordered">Ejecutar el comando: <strong><code class="inline-code">TypeScript: Restart TS Server</code></strong>.</li>
+</ol>
+<h3 class="subsection-title">Problema 3: Error de autenticación o bloqueo por RLS en Supabase</h3>
+<ul><li><strong>Síntoma:</strong> Las consultas retornan un arreglo vacío <code class="inline-code">[]</code> o error <code class="inline-code">403 Forbidden</code> al consultar informes.</li>
+<li><strong>Causa:</strong> El usuario autenticado no tiene un perfil asociado en <code class="inline-code">public.profiles</code> o no cumple la condición de la política RLS.</li>
+<li><strong>Solución:</strong></li>
+</ul>  1. Verificar en el Table Editor de Supabase que exista el registro correspondiente en la tabla <code class="inline-code">profiles</code> con el mismo <code class="inline-code">id</code> de <code class="inline-code">auth.users</code>.
+<ol><li class="ordered">Comprobar que el rol (<code class="inline-code">publicador</code>, <code class="inline-code">anciano</code>, etc.) esté asignado correctamente.</li>
+</ol>
+---
+
+<h2 class="section-title">17.2 Glosario de Términos Teocráticos y Técnicos</h2>
+<ul><li><strong>Publicador:</strong> Miembro de la congregación que participa activamente en el ministerio del campo.</li>
+<li><strong>Precursor Regular:</strong> Evangelizador de tiempo completo con una meta canónica de horas anuales (600 horas en el año de servicio).</li>
+<li><strong>Precursor Auxiliar:</strong> Publicador que asume temporalmente una meta mensual especial de horas (generalmente 30 o 15 horas).</li>
+<li><strong>Año de Servicio:</strong> Ciclo administrativo oficial que comprende 12 meses consecutivos desde el 1 de Septiembre hasta el 31 de Agosto.</li>
+<li><strong>Tarjeta S-21:</strong> <em>Registro de publicador de la congregación</em>, expediente oficial individual donde se asienta la actividad de cada mes.</li>
+<li><strong>Informe S-1:</strong> <em>Informe mensual de la congregación</em>, documento oficial que el secretario remite a la Sucursal con las cifras consolidadas.</li>
+<li><strong>RLS (Row-Level Security):</strong> Mecanismo de seguridad a nivel de motor de base de datos en PostgreSQL que filtra el acceso a filas según la identidad del usuario autenticado.</li>
+<li><strong>PWA (Progressive Web App):</strong> Aplicación web que aprovecha capacidades modernas de navegadores para ofrecer instalación local y funcionamiento offline.</li>
+</ul>
+
+<p>---</p>
+  </div>
+</body>
+</html>
