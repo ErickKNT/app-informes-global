@@ -123,16 +123,17 @@ export const WhatsAppReminderModal: React.FC<WhatsAppReminderModalProps> = ({
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
-      className="fixed inset-0 z-50 overflow-y-auto p-3 sm:p-4 bg-on-surface/40 backdrop-blur-xs flex items-center justify-center animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 overflow-y-auto p-2 sm:p-4 bg-on-surface/40 backdrop-blur-xs animate-in fade-in duration-200"
     >
-      <div
-        className={cn(
-          'bg-surface-container-lowest rounded-3xl border border-surface-container-high shadow-2xl',
-          'w-full max-w-2xl max-h-[calc(100dvh-2rem)] overflow-hidden flex flex-col my-auto'
-        )}
-      >
-        {/* Header del Modal */}
-        <div className="flex-shrink-0 flex items-center justify-between p-4 sm:p-5 bg-surface-container-low border-b border-surface-container-high/80">
+      <div className="flex min-h-full items-start sm:items-center justify-center py-2 sm:py-6 pointer-events-none">
+        <div
+          className={cn(
+            'bg-surface-container-lowest rounded-3xl border border-surface-container-high shadow-2xl',
+            'w-full max-w-2xl max-h-[calc(100dvh-2.5rem)] overflow-hidden flex flex-col pointer-events-auto min-h-0'
+          )}
+        >
+          {/* Header del Modal */}
+          <div className="flex-shrink-0 flex items-center justify-between p-4 sm:p-5 bg-surface-container-low border-b border-surface-container-high/80">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center shadow-xs shrink-0">
               <MessageSquare className="w-5 h-5 text-emerald-600" />
@@ -158,7 +159,7 @@ export const WhatsAppReminderModal: React.FC<WhatsAppReminderModalProps> = ({
         </div>
 
         {/* Cuerpo con Scroll */}
-        <div className="p-4 sm:p-6 overflow-y-auto flex-1 flex flex-col gap-5 overscroll-contain">
+        <div className="p-4 sm:p-6 overflow-y-auto flex-1 min-h-0 flex flex-col gap-5 overscroll-contain">
           {/* Card de Configuración de Modo de Prueba */}
           <div className="p-4 rounded-2xl bg-emerald-500/5 border border-emerald-500/20 flex flex-col gap-3">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
@@ -353,6 +354,7 @@ export const WhatsAppReminderModal: React.FC<WhatsAppReminderModalProps> = ({
             Cerrar
           </Button>
         </div>
+      </div>
       </div>
     </div>
   );

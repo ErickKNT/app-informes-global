@@ -72,78 +72,80 @@ export const DeleteGroupModal: React.FC<DeleteGroupModalProps> = ({
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
-      className="fixed inset-0 z-50 overflow-y-auto p-3 sm:p-4 bg-on-surface/40 backdrop-blur-xs flex items-center justify-center animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 overflow-y-auto p-3 sm:p-4 bg-on-surface/40 backdrop-blur-xs animate-in fade-in duration-200"
     >
-      <div className="bg-surface-container-lowest rounded-2xl w-full max-w-md max-h-[calc(100dvh-2rem)] border border-surface-container-high shadow-2xl flex flex-col overflow-hidden my-auto">
-        {/* Header */}
-        <div className="flex-shrink-0 px-6 py-4 bg-error-container/30 border-b border-error-container flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-error text-on-error flex items-center justify-center shrink-0">
-              <AlertTriangle className="w-4 h-4" />
-            </div>
-            <h2
-              id="delete-group-title"
-              className="font-headline text-base font-bold text-on-surface"
-            >
-              Eliminar Grupo de Servicio
-            </h2>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Cerrar modal"
-            className="p-1.5 rounded-lg text-outline hover:bg-surface-container-high transition-colors shrink-0"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* Content con Scroll */}
-        <div className="p-5 sm:p-6 overflow-y-auto flex-1 flex flex-col gap-4 overscroll-contain">
-          {error && (
-            <div className="p-3 rounded-xl bg-error-container text-on-error-container text-xs font-semibold">
-              {error}
-            </div>
-          )}
-
-          <p className="text-xs text-on-surface-variant leading-relaxed">
-            ¿Estás seguro de que deseas eliminar el{' '}
-            <strong className="text-on-surface">{group.name}</strong>? Esta acción no se
-            puede deshacer.
-          </p>
-
-          {hasPublishers ? (
-            <div className="p-4 rounded-xl bg-surface-container-low border border-surface-container-high flex flex-col gap-3">
-              <div className="flex items-center gap-2 text-xs font-semibold text-primary">
-                <ArrowRightLeft className="w-4 h-4" />
-                <span>
-                  Este grupo tiene {publishersCount} publicador(es) asignado(s)
-                </span>
+      <div className="flex min-h-full items-start sm:items-center justify-center py-2 sm:py-6 pointer-events-none">
+        <div className="bg-surface-container-lowest rounded-2xl w-full max-w-md max-h-[calc(100dvh-2.5rem)] border border-surface-container-high shadow-2xl flex flex-col min-h-0 overflow-hidden pointer-events-auto">
+          {/* Header Fijo */}
+          <div className="flex-shrink-0 px-6 py-4 bg-error-container/30 border-b border-error-container flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-error text-on-error flex items-center justify-center shrink-0">
+                <AlertTriangle className="w-4 h-4" />
               </div>
-              <p className="text-[11px] text-on-surface-variant">
-                Selecciona el grupo receptor al que serán transferidos automáticamente todos
-                los publicadores:
-              </p>
-
-              <Select
-                ariaLabel="Grupo receptor para publicadores"
-                value={fallbackGroupId}
-                onChange={(val) => setFallbackGroupId(val)}
-                disabled={isLoading}
-                options={otherGroups.map((grp) => ({
-                  value: grp.id,
-                  label: grp.name,
-                }))}
-              />
+              <h2
+                id="delete-group-title"
+                className="font-headline text-base font-bold text-on-surface"
+              >
+                Eliminar Grupo de Servicio
+              </h2>
             </div>
-          ) : (
-            <div className="p-3 rounded-xl bg-surface-container-low text-xs text-outline font-medium">
-              Este grupo no tiene publicadores asignados actualmente.
-            </div>
-          )}
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Cerrar modal"
+              className="p-1.5 rounded-lg text-outline hover:bg-surface-container-high transition-colors shrink-0"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
 
-          {/* Buttons */}
-          <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-surface-container-high/60 mt-auto">
+          {/* Content con Scroll */}
+          <div className="p-5 sm:p-6 pb-8 overflow-y-auto flex-1 min-h-0 flex flex-col gap-4 overscroll-contain">
+            {error && (
+              <div className="p-3 rounded-xl bg-error-container text-on-error-container text-xs font-semibold">
+                {error}
+              </div>
+            )}
+
+            <p className="text-xs text-on-surface-variant leading-relaxed">
+              ¿Estás seguro de que deseas eliminar el{' '}
+              <strong className="text-on-surface">{group.name}</strong>? Esta acción no se
+              puede deshacer.
+            </p>
+
+            {hasPublishers ? (
+              <div className="p-4 rounded-xl bg-surface-container-low border border-surface-container-high flex flex-col gap-3">
+                <div className="flex items-center gap-2 text-xs font-semibold text-primary">
+                  <ArrowRightLeft className="w-4 h-4" />
+                  <span>
+                    Este grupo tiene {publishersCount} publicador(es) asignado(s)
+                  </span>
+                </div>
+                <p className="text-[11px] text-on-surface-variant">
+                  Selecciona el grupo receptor al que serán transferidos automáticamente todos
+                  los publicadores:
+                </p>
+
+                <Select
+                  ariaLabel="Grupo receptor para publicadores"
+                  value={fallbackGroupId}
+                  onChange={(val) => setFallbackGroupId(val)}
+                  disabled={isLoading}
+                  options={otherGroups.map((grp) => ({
+                    value: grp.id,
+                    label: grp.name,
+                  }))}
+                />
+              </div>
+            ) : (
+              <div className="p-3 rounded-xl bg-surface-container-low text-xs text-outline font-medium">
+                Este grupo no tiene publicadores asignados actualmente.
+              </div>
+            )}
+          </div>
+
+          {/* Buttons Fijos en Footer */}
+          <div className="flex-shrink-0 px-6 py-3.5 bg-surface-container-low/60 border-t border-surface-container-high/60 flex items-center justify-end gap-2.5">
             <Button
               type="button"
               variant="outline"

@@ -70,42 +70,43 @@ export const MonthClosingModal: React.FC<MonthClosingModalProps> = ({
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
-      className="fixed inset-0 z-50 overflow-y-auto p-3 sm:p-4 bg-on-surface/40 backdrop-blur-xs flex items-center justify-center animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 overflow-y-auto p-2 sm:p-4 bg-on-surface/40 backdrop-blur-xs animate-in fade-in duration-200"
     >
-      <div
-        className={cn(
-          'bg-surface-container-lowest rounded-3xl border border-surface-container-high shadow-2xl',
-          'w-full max-w-xl max-h-[calc(100dvh-2rem)] overflow-hidden flex flex-col my-auto'
-        )}
-      >
-        {/* Header */}
-        <div className="flex-shrink-0 flex items-center justify-between p-4 sm:p-5 bg-surface-container-low border-b border-surface-container-high/80">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-secondary-container/60 text-secondary flex items-center justify-center shadow-xs shrink-0">
-              <CalendarCheck2 className="w-5 h-5 text-secondary" />
+      <div className="flex min-h-full items-start sm:items-center justify-center py-2 sm:py-6 pointer-events-none">
+        <div
+          className={cn(
+            'bg-surface-container-lowest rounded-3xl border border-surface-container-high shadow-2xl',
+            'w-full max-w-xl max-h-[calc(100dvh-2.5rem)] overflow-hidden flex flex-col pointer-events-auto min-h-0'
+          )}
+        >
+          {/* Header */}
+          <div className="flex-shrink-0 flex items-center justify-between p-4 sm:p-5 bg-surface-container-low border-b border-surface-container-high/80">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-secondary-container/60 text-secondary flex items-center justify-center shadow-xs shrink-0">
+                <CalendarCheck2 className="w-5 h-5 text-secondary" />
+              </div>
+              <div className="flex flex-col">
+                <h2 id="month-closing-title" className="font-headline text-base font-bold text-on-surface">
+                  Cierre Oficial del Ciclo Mensual
+                </h2>
+                <span className="text-xs text-on-surface-variant font-medium">
+                  Transición teocrática de informes y archivo
+                </span>
+              </div>
             </div>
-            <div className="flex flex-col">
-              <h2 id="month-closing-title" className="font-headline text-base font-bold text-on-surface">
-                Cierre Oficial del Ciclo Mensual
-              </h2>
-              <span className="text-xs text-on-surface-variant font-medium">
-                Transición teocrática de informes y archivo
-              </span>
-            </div>
+
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Cerrar ventana"
+              className="p-1.5 text-outline hover:text-on-surface hover:bg-surface-container rounded-xl transition-colors shrink-0"
+            >
+              <X className="w-5 h-5" />
+            </button>
           </div>
 
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Cerrar ventana"
-            className="p-1.5 text-outline hover:text-on-surface hover:bg-surface-container rounded-xl transition-colors shrink-0"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        {/* Contenido */}
-        <div className="p-4 sm:p-6 overflow-y-auto flex-1 flex flex-col gap-5 overscroll-contain">
+          {/* Contenido */}
+          <div className="p-4 sm:p-6 overflow-y-auto flex-1 min-h-0 flex flex-col gap-5 overscroll-contain">
           {/* Banner de Transición de Mes */}
           <div className="p-4 rounded-2xl bg-surface-container-low border border-surface-container-high flex items-center justify-between">
             <div className="flex flex-col">
@@ -240,6 +241,7 @@ export const MonthClosingModal: React.FC<MonthClosingModalProps> = ({
             <span>{isProcessing ? 'Cerrando mes...' : 'Confirmar Cierre de Mes'}</span>
           </Button>
         </div>
+      </div>
       </div>
     </div>
   );

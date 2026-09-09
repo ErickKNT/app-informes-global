@@ -101,167 +101,172 @@ export const GroupFormModal: React.FC<GroupFormModalProps> = ({
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
-      className="fixed inset-0 z-50 overflow-y-auto p-3 sm:p-4 bg-on-surface/40 backdrop-blur-xs flex items-center justify-center animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 overflow-y-auto p-3 sm:p-4 bg-on-surface/40 backdrop-blur-xs animate-in fade-in duration-200"
     >
-      <div className="bg-surface-container-lowest rounded-2xl w-full max-w-lg max-h-[calc(100dvh-2rem)] border border-surface-container-high shadow-2xl flex flex-col overflow-hidden my-auto">
-        {/* Header */}
-        <div className="flex-shrink-0 px-6 py-4 bg-surface-container-low border-b border-surface-container-high/60 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-primary-container text-on-primary flex items-center justify-center shrink-0">
-              <Users className="w-4 h-4" />
+      <div className="flex min-h-full items-start sm:items-center justify-center py-2 sm:py-6 pointer-events-none">
+        <div className="bg-surface-container-lowest rounded-2xl w-full max-w-lg max-h-[calc(100dvh-2.5rem)] border border-surface-container-high shadow-2xl flex flex-col min-h-0 overflow-hidden pointer-events-auto">
+          {/* Header Fijo */}
+          <div className="flex-shrink-0 px-6 py-4 bg-surface-container-low border-b border-surface-container-high/60 flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-primary-container text-on-primary flex items-center justify-center shrink-0">
+                <Users className="w-4 h-4" />
+              </div>
+              <h2
+                id="group-modal-title"
+                className="font-headline text-base font-bold text-on-surface"
+              >
+                {isEditing ? 'Modificar Grupo de Servicio' : 'Crear Nuevo Grupo de Servicio'}
+              </h2>
             </div>
-            <h2
-              id="group-modal-title"
-              className="font-headline text-base font-bold text-on-surface"
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Cerrar modal"
+              className="p-1.5 rounded-lg text-outline hover:bg-surface-container-high transition-colors shrink-0"
             >
-              {isEditing ? 'Modificar Grupo de Servicio' : 'Crear Nuevo Grupo de Servicio'}
-            </h2>
+              <X className="w-4 h-4" />
+            </button>
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Cerrar modal"
-            className="p-1.5 rounded-lg text-outline hover:bg-surface-container-high transition-colors shrink-0"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
 
-        {/* Body con Scroll */}
-        <form onSubmit={handleSubmit} className="p-5 sm:p-6 overflow-y-auto flex-1 flex flex-col gap-4 overscroll-contain">
-          {error && (
-            <div className="p-3 rounded-xl bg-error-container text-on-error-container text-xs font-semibold">
-              {error}
-            </div>
-          )}
+          {/* Form con scroll y footer fijo */}
+          <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+            <div className="p-5 sm:p-6 pb-12 overflow-y-auto flex-1 min-h-0 flex flex-col gap-4 overscroll-contain">
+              {error && (
+                <div className="p-3 rounded-xl bg-error-container text-on-error-container text-xs font-semibold">
+                  {error}
+                </div>
+              )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <FormField id="group-number" label="Número" required>
-              <Input
-                id="group-number"
-                type="number"
-                min={1}
-                max={50}
-                value={groupNumber}
-                onChange={(e) => setGroupNumber(parseInt(e.target.value, 10) || 1)}
-                disabled={isLoading}
-                required
-              />
-            </FormField>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <FormField id="group-number" label="Número" required>
+                  <Input
+                    id="group-number"
+                    type="number"
+                    min={1}
+                    max={50}
+                    value={groupNumber}
+                    onChange={(e) => setGroupNumber(parseInt(e.target.value, 10) || 1)}
+                    disabled={isLoading}
+                    required
+                  />
+                </FormField>
 
-            <div className="sm:col-span-2">
-              <FormField id="group-name" label="Nombre del Grupo" required>
+                <div className="sm:col-span-2">
+                  <FormField id="group-name" label="Nombre del Grupo" required>
+                    <Input
+                      id="group-name"
+                      value={name}
+                      onChange={(e) => {
+                        setName(e.target.value);
+                        setError(null);
+                      }}
+                      placeholder="Ej. Grupo 6 - Valle Dorado"
+                      disabled={isLoading}
+                      required
+                    />
+                  </FormField>
+                </div>
+              </div>
+
+              <FormField id="group-location" label="Lugar de Reunión para la Salida">
                 <Input
-                  id="group-name"
-                  value={name}
-                  onChange={(e) => {
-                    setName(e.target.value);
-                    setError(null);
-                  }}
-                  placeholder="Ej. Grupo 6 - Valle Dorado"
+                  id="group-location"
+                  value={meetingLocation}
+                  onChange={(e) => setMeetingLocation(e.target.value)}
+                  placeholder="Ej. Casa Hno. Méndez / Salón Auxiliar"
                   disabled={isLoading}
-                  required
                 />
               </FormField>
+
+              <FormField id="group-schedule" label="Horario de Salida a Predicar">
+                <Input
+                  id="group-schedule"
+                  value={meetingSchedule}
+                  onChange={(e) => setMeetingSchedule(e.target.value)}
+                  placeholder="Ej. Sábados y Domingos 9:00 AM"
+                  disabled={isLoading}
+                />
+              </FormField>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Encargado */}
+                <div className="flex flex-col gap-1.5">
+                  <label
+                    htmlFor="overseer-select"
+                    className="text-xs font-semibold text-on-surface flex items-center gap-1"
+                  >
+                    <ShieldCheck className="w-3.5 h-3.5 text-primary" />
+                    <span>Superintendente / Encargado</span>
+                  </label>
+                  <Select
+                    id="overseer-select"
+                    ariaLabel="Superintendente de grupo"
+                    value={overseerId}
+                    onChange={(val) => setOverseerId(val)}
+                    disabled={isLoading}
+                    placeholder="-- Sin Asignar --"
+                    options={[
+                      { value: '', label: '-- Sin Asignar --' },
+                      ...availableElders.map((elder) => ({
+                        value: elder.id,
+                        label: `${elder.full_name} (${elder.role})`,
+                      })),
+                    ]}
+                  />
+                </div>
+
+                {/* Auxiliar */}
+                <div className="flex flex-col gap-1.5">
+                  <label
+                    htmlFor="assistant-select"
+                    className="text-xs font-semibold text-on-surface flex items-center gap-1"
+                  >
+                    <ShieldCheck className="w-3.5 h-3.5 text-secondary" />
+                    <span>Auxiliar de Grupo</span>
+                  </label>
+                  <Select
+                    id="assistant-select"
+                    ariaLabel="Auxiliar de grupo"
+                    value={assistantId}
+                    onChange={(val) => setAssistantId(val)}
+                    disabled={isLoading}
+                    placeholder="-- Sin Asignar --"
+                    options={[
+                      { value: '', label: '-- Sin Asignar --' },
+                      ...availableElders.map((elder) => ({
+                        value: elder.id,
+                        label: `${elder.full_name} (${elder.role})`,
+                      })),
+                    ]}
+                  />
+                </div>
+              </div>
             </div>
-          </div>
 
-          <FormField id="group-location" label="Lugar de Reunión para la Salida">
-            <Input
-              id="group-location"
-              value={meetingLocation}
-              onChange={(e) => setMeetingLocation(e.target.value)}
-              placeholder="Ej. Casa Hno. Méndez / Salón Auxiliar"
-              disabled={isLoading}
-            />
-          </FormField>
-
-          <FormField id="group-schedule" label="Horario de Salida a Predicar">
-            <Input
-              id="group-schedule"
-              value={meetingSchedule}
-              onChange={(e) => setMeetingSchedule(e.target.value)}
-              placeholder="Ej. Sábados y Domingos 9:00 AM"
-              disabled={isLoading}
-            />
-          </FormField>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* Encargado */}
-            <div className="flex flex-col gap-1.5">
-              <label
-                htmlFor="overseer-select"
-                className="text-xs font-semibold text-on-surface flex items-center gap-1"
-              >
-                <ShieldCheck className="w-3.5 h-3.5 text-primary" />
-                <span>Superintendente / Encargado</span>
-              </label>
-              <Select
-                id="overseer-select"
-                ariaLabel="Superintendente de grupo"
-                value={overseerId}
-                onChange={(val) => setOverseerId(val)}
+            {/* Actions Fijas en el Footer */}
+            <div className="flex-shrink-0 px-6 py-3.5 bg-surface-container-low/60 border-t border-surface-container-high/60 flex items-center justify-end gap-2.5">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={onClose}
                 disabled={isLoading}
-                placeholder="-- Sin Asignar --"
-                options={[
-                  { value: '', label: '-- Sin Asignar --' },
-                  ...availableElders.map((elder) => ({
-                    value: elder.id,
-                    label: `${elder.full_name} (${elder.role})`,
-                  })),
-                ]}
-              />
-            </div>
-
-            {/* Auxiliar */}
-            <div className="flex flex-col gap-1.5">
-              <label
-                htmlFor="assistant-select"
-                className="text-xs font-semibold text-on-surface flex items-center gap-1"
+                className="text-xs"
               >
-                <ShieldCheck className="w-3.5 h-3.5 text-secondary" />
-                <span>Auxiliar de Grupo</span>
-              </label>
-              <Select
-                id="assistant-select"
-                ariaLabel="Auxiliar de grupo"
-                value={assistantId}
-                onChange={(val) => setAssistantId(val)}
-                disabled={isLoading}
-                placeholder="-- Sin Asignar --"
-                options={[
-                  { value: '', label: '-- Sin Asignar --' },
-                  ...availableElders.map((elder) => ({
-                    value: elder.id,
-                    label: `${elder.full_name} (${elder.role})`,
-                  })),
-                ]}
-              />
+                Cancelar
+              </Button>
+              <Button
+                type="submit"
+                variant="primary"
+                size="sm"
+                isLoading={isLoading}
+                className="text-xs"
+              >
+                {isEditing ? 'Guardar Cambios' : 'Crear Grupo'}
+              </Button>
             </div>
-          </div>
-
-          <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-surface-container-high/60 mt-auto">
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={onClose}
-              disabled={isLoading}
-              className="text-xs"
-            >
-              Cancelar
-            </Button>
-            <Button
-              type="submit"
-              variant="primary"
-              size="sm"
-              isLoading={isLoading}
-              className="text-xs"
-            >
-              {isEditing ? 'Guardar Cambios' : 'Crear Grupo'}
-            </Button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );

@@ -42,6 +42,18 @@ export const AnnouncementsBoard: React.FC<AnnouncementsBoardProps> = ({
     refreshAnnouncements();
   }, []);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsCreateModalOpen(false);
+      }
+    };
+    if (isCreateModalOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isCreateModalOpen]);
+
   const handleCreate = (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !content.trim()) return;
@@ -203,124 +215,128 @@ export const AnnouncementsBoard: React.FC<AnnouncementsBoardProps> = ({
           onClick={(e) => {
             if (e.target === e.currentTarget) setIsCreateModalOpen(false);
           }}
-          className="fixed inset-0 z-50 overflow-y-auto p-3 sm:p-4 bg-on-surface/40 backdrop-blur-xs flex items-center justify-center animate-in fade-in duration-200"
+          className="fixed inset-0 z-50 overflow-y-auto p-2 sm:p-4 bg-on-surface/40 backdrop-blur-xs animate-in fade-in duration-200"
         >
-          <div className="bg-surface-container-lowest rounded-2xl border border-surface-container-high shadow-2xl w-full max-w-lg max-h-[calc(100dvh-2rem)] flex flex-col overflow-hidden my-auto">
-            <div className="flex-shrink-0 flex items-center justify-between p-4 sm:p-5 bg-surface-container-low border-b border-surface-container-high">
-              <h3 id="new-announcement-title" className="font-headline text-base font-bold text-on-surface">
-                Publicar Nuevo Anuncio
-              </h3>
-              <button
-                type="button"
-                onClick={() => setIsCreateModalOpen(false)}
-                className="text-outline hover:text-on-surface p-1 rounded-lg shrink-0 transition-colors"
-                aria-label="Cerrar modal"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <form onSubmit={handleCreate} className="p-4 sm:p-6 overflow-y-auto flex-1 flex flex-col gap-3.5 overscroll-contain">
-              <div>
-                <label className="block text-xs font-semibold text-on-surface mb-1">
-                  Título del Anuncio *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder="Ej. Visita del Superintendente de Circuito"
-                  className="w-full text-xs bg-surface-container-low border border-surface-container-high rounded-xl p-2.5 text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-on-surface mb-1">
-                  Contenido / Mensaje *
-                </label>
-                <textarea
-                  required
-                  rows={3}
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  placeholder="Detalles sobre el anuncio..."
-                  className="w-full text-xs bg-surface-container-low border border-surface-container-high rounded-xl p-2.5 text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none"
-                />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-semibold text-on-surface mb-1">
-                    Prioridad
-                  </label>
-                  <select
-                    value={priority}
-                    onChange={(e) => setPriority(e.target.value as 'normal' | 'alta')}
-                    className="w-full text-xs bg-surface-container-low border border-surface-container-high rounded-xl p-2.5 text-on-surface focus:outline-none"
-                  >
-                    <option value="normal">Normal / General</option>
-                    <option value="alta">Alta / Importante</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-on-surface mb-1">
-                    Publicado Por
-                  </label>
-                  <input
-                    type="text"
-                    value={authorName}
-                    onChange={(e) => setAuthorName(e.target.value)}
-                    placeholder="Ej. Cuerpo de Ancianos"
-                    className="w-full text-xs bg-surface-container-low border border-surface-container-high rounded-xl p-2.5 text-on-surface focus:outline-none"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-semibold text-on-surface mb-1">
-                    Fecha / Horario (Opcional)
-                  </label>
-                  <input
-                    type="text"
-                    value={dateNote}
-                    onChange={(e) => setDateNote(e.target.value)}
-                    placeholder="Ej. Sábado 9:00 AM"
-                    className="w-full text-xs bg-surface-container-low border border-surface-container-high rounded-xl p-2.5 text-on-surface focus:outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-on-surface mb-1">
-                    Lugar / Salón (Opcional)
-                  </label>
-                  <input
-                    type="text"
-                    value={locationNote}
-                    onChange={(e) => setLocationNote(e.target.value)}
-                    placeholder="Ej. Salón Principal"
-                    className="w-full text-xs bg-surface-container-low border border-surface-container-high rounded-xl p-2.5 text-on-surface focus:outline-none"
-                  />
-                </div>
-              </div>
-
-              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-surface-container-high mt-auto">
-                <Button
+          <div className="flex min-h-full items-start sm:items-center justify-center py-2 sm:py-6 pointer-events-none">
+            <div className="bg-surface-container-lowest rounded-2xl border border-surface-container-high shadow-2xl w-full max-w-lg max-h-[calc(100dvh-2.5rem)] flex flex-col overflow-hidden pointer-events-auto min-h-0">
+              <div className="flex-shrink-0 flex items-center justify-between p-4 sm:p-5 bg-surface-container-low border-b border-surface-container-high">
+                <h3 id="new-announcement-title" className="font-headline text-base font-bold text-on-surface">
+                  Publicar Nuevo Anuncio
+                </h3>
+                <button
                   type="button"
-                  variant="ghost"
-                  size="sm"
                   onClick={() => setIsCreateModalOpen(false)}
-                  className="text-xs"
+                  className="text-outline hover:text-on-surface p-1 rounded-lg shrink-0 transition-colors"
+                  aria-label="Cerrar modal"
                 >
-                  Cancelar
-                </Button>
-                <Button type="submit" variant="primary" size="sm" className="text-xs">
-                  Publicar Anuncio
-                </Button>
+                  <X className="w-4 h-4" />
+                </button>
               </div>
-            </form>
+
+              <form onSubmit={handleCreate} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+                <div className="p-4 sm:p-6 overflow-y-auto flex-1 min-h-0 flex flex-col gap-3.5 overscroll-contain">
+                  <div>
+                    <label className="block text-xs font-semibold text-on-surface mb-1">
+                      Título del Anuncio *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      placeholder="Ej. Visita del Superintendente de Circuito"
+                      className="w-full text-xs bg-surface-container-low border border-surface-container-high rounded-xl p-2.5 text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-on-surface mb-1">
+                      Contenido / Mensaje *
+                    </label>
+                    <textarea
+                      required
+                      rows={3}
+                      value={content}
+                      onChange={(e) => setContent(e.target.value)}
+                      placeholder="Detalles sobre el anuncio..."
+                      className="w-full text-xs bg-surface-container-low border border-surface-container-high rounded-xl p-2.5 text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/20 resize-none"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-on-surface mb-1">
+                        Prioridad
+                      </label>
+                      <select
+                        value={priority}
+                        onChange={(e) => setPriority(e.target.value as 'normal' | 'alta')}
+                        className="w-full text-xs bg-surface-container-low border border-surface-container-high rounded-xl p-2.5 text-on-surface focus:outline-none"
+                      >
+                        <option value="normal">Normal / General</option>
+                        <option value="alta">Alta / Importante</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-on-surface mb-1">
+                        Publicado Por
+                      </label>
+                      <input
+                        type="text"
+                        value={authorName}
+                        onChange={(e) => setAuthorName(e.target.value)}
+                        placeholder="Ej. Cuerpo de Ancianos"
+                        className="w-full text-xs bg-surface-container-low border border-surface-container-high rounded-xl p-2.5 text-on-surface focus:outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-on-surface mb-1">
+                        Fecha / Horario (Opcional)
+                      </label>
+                      <input
+                        type="text"
+                        value={dateNote}
+                        onChange={(e) => setDateNote(e.target.value)}
+                        placeholder="Ej. Sábado 9:00 AM"
+                        className="w-full text-xs bg-surface-container-low border border-surface-container-high rounded-xl p-2.5 text-on-surface focus:outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-on-surface mb-1">
+                        Lugar / Salón (Opcional)
+                      </label>
+                      <input
+                        type="text"
+                        value={locationNote}
+                        onChange={(e) => setLocationNote(e.target.value)}
+                        placeholder="Ej. Salón Principal"
+                        className="w-full text-xs bg-surface-container-low border border-surface-container-high rounded-xl p-2.5 text-on-surface focus:outline-none"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex-shrink-0 p-4 bg-surface-container-low border-t border-surface-container-high flex items-center justify-end gap-2.5">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setIsCreateModalOpen(false)}
+                    className="text-xs"
+                  >
+                    Cancelar
+                  </Button>
+                  <Button type="submit" variant="primary" size="sm" className="text-xs">
+                    Publicar Anuncio
+                  </Button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       )}

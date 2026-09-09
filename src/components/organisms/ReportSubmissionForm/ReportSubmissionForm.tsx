@@ -18,6 +18,7 @@ export interface ReportSubmissionFormProps {
   className?: string;
   onHoursChange?: (hours: number) => void;
   role?: ServicePrivilege;
+  hideTitle?: boolean;
 }
 
 export const ReportSubmissionForm: React.FC<ReportSubmissionFormProps> = ({
@@ -27,6 +28,7 @@ export const ReportSubmissionForm: React.FC<ReportSubmissionFormProps> = ({
   className,
   onHoursChange,
   role = 'publicador',
+  hideTitle = false,
 }) => {
   const isPioneer = role === 'precursor_auxiliar' || role === 'precursor_regular';
   const [participated, setParticipated] = useState<boolean>(
@@ -112,14 +114,16 @@ export const ReportSubmissionForm: React.FC<ReportSubmissionFormProps> = ({
         className
       )}
     >
-      <div className="flex flex-col gap-1 border-b border-surface-container-high pb-4">
-        <h2 className="font-headline text-lg md:text-xl font-bold text-primary">
-          Detalle de Actividad en el Ministerio
-        </h2>
-        <p className="text-xs text-on-surface-variant">
-          Ingresa tus datos de servicio del mes para ser consolidados por la congregación.
-        </p>
-      </div>
+      {!hideTitle && (
+        <div className="flex flex-col gap-1 border-b border-surface-container-high pb-4">
+          <h2 className="font-headline text-lg md:text-xl font-bold text-primary">
+            Detalle de Actividad en el Ministerio
+          </h2>
+          <p className="text-xs text-on-surface-variant">
+            Ingresa tus datos de servicio del mes para ser consolidados por la congregación.
+          </p>
+        </div>
+      )}
 
       {errors.form && (
         <div role="alert" className="p-3.5 rounded-xl bg-error-container text-on-error-container text-xs font-medium">

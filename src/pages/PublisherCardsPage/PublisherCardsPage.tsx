@@ -380,33 +380,38 @@ export const PublisherCardsPage: React.FC<PublisherCardsPageProps> = ({
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-on-surface/40 backdrop-blur-xs animate-in fade-in duration-200"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setConfirmDeactivateId(null);
+          }}
+          className="fixed inset-0 z-50 overflow-y-auto p-3 sm:p-4 bg-on-surface/40 backdrop-blur-xs animate-in fade-in duration-200"
         >
-          <div className="bg-surface-container-lowest rounded-2xl w-full max-w-sm border border-surface-container-high shadow-xl p-6 flex flex-col gap-4">
-            <h3 className="font-headline text-base font-bold text-on-surface">
-              Dar de baja a publicador
-            </h3>
-            <p className="text-xs text-on-surface-variant">
-              ¿Deseas dar de baja a este publicador? El historial de sus informes previos se
-              conservará en el archivo anual S-21 por motivos de auditoría teocrática.
-            </p>
-            <div className="flex items-center justify-end gap-2.5 pt-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setConfirmDeactivateId(null)}
-                className="text-xs"
-              >
-                Cancelar
-              </Button>
-              <Button
-                variant="danger"
-                size="sm"
-                onClick={handleConfirmDeactivate}
-                className="text-xs"
-              >
-                Confirmar Baja
-              </Button>
+          <div className="flex min-h-full items-center justify-center py-2 sm:py-6 pointer-events-none">
+            <div className="bg-surface-container-lowest rounded-2xl w-full max-w-sm border border-surface-container-high shadow-xl p-6 flex flex-col gap-4 pointer-events-auto">
+              <h3 className="font-headline text-base font-bold text-on-surface">
+                Dar de baja a publicador
+              </h3>
+              <p className="text-xs text-on-surface-variant">
+                ¿Deseas dar de baja a este publicador? El historial de sus informes previos se
+                conservará en el archivo anual S-21 por motivos de auditoría teocrática.
+              </p>
+              <div className="flex items-center justify-end gap-2.5 pt-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setConfirmDeactivateId(null)}
+                  className="text-xs"
+                >
+                  Cancelar
+                </Button>
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={handleConfirmDeactivate}
+                  className="text-xs"
+                >
+                  Confirmar Baja
+                </Button>
+              </div>
             </div>
           </div>
         </div>

@@ -106,165 +106,169 @@ export const PublisherFormModal: React.FC<PublisherFormModalProps> = ({
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
-      className="fixed inset-0 z-50 overflow-y-auto p-3 sm:p-4 bg-on-surface/40 backdrop-blur-xs flex items-center justify-center animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 overflow-y-auto p-3 sm:p-4 bg-on-surface/40 backdrop-blur-xs animate-in fade-in duration-200"
     >
-      <div className="bg-surface-container-lowest rounded-2xl w-full max-w-lg max-h-[calc(100dvh-2rem)] border border-surface-container-high shadow-2xl flex flex-col overflow-hidden my-auto">
-        {/* Header */}
-        <div className="flex-shrink-0 px-6 py-4 bg-surface-container-low border-b border-surface-container-high/60 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-primary-container text-on-primary flex items-center justify-center shrink-0">
-              <User className="w-4 h-4" />
-            </div>
-            <h2
-              id="publisher-modal-title"
-              className="font-headline text-base font-bold text-on-surface"
-            >
-              {isEditing ? 'Editar Publicador / Rol' : 'Registrar Nuevo Publicador'}
-            </h2>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Cerrar modal"
-            className="p-1.5 rounded-lg text-outline hover:bg-surface-container-high transition-colors shrink-0"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* Form Body con Scroll */}
-        <form onSubmit={handleSubmit} className="p-5 sm:p-6 overflow-y-auto flex-1 flex flex-col gap-4 overscroll-contain">
-          {error && (
-            <div className="p-3 rounded-xl bg-error-container text-on-error-container text-xs font-semibold">
-              {error}
-            </div>
-          )}
-
-          {/* Full Name */}
-          <FormField id="publisher-name" label="Nombre Completo" required>
-            <Input
-              id="publisher-name"
-              value={fullName}
-              onChange={(e) => {
-                setFullName(e.target.value);
-                setError(null);
-              }}
-              placeholder="Ej. Juan Pérez"
-              disabled={isLoading}
-              required
-            />
-          </FormField>
-
-          {/* Phone */}
-          <FormField id="publisher-phone" label="Teléfono / WhatsApp (opcional)">
-            <Input
-              id="publisher-phone"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="+52 55 1234 5678"
-              disabled={isLoading}
-            />
-          </FormField>
-
-          {/* Row: Role & Privilege */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* Nombramiento Teocrático */}
-            <div className="flex flex-col gap-1.5">
-              <label
-                htmlFor="role-select"
-                className="text-xs font-semibold text-on-surface flex items-center gap-1"
+      <div className="flex min-h-full items-start sm:items-center justify-center py-2 sm:py-6 pointer-events-none">
+        <div className="bg-surface-container-lowest rounded-2xl w-full max-w-lg max-h-[calc(100dvh-2.5rem)] border border-surface-container-high shadow-2xl flex flex-col min-h-0 overflow-hidden pointer-events-auto">
+          {/* Header Fijo */}
+          <div className="flex-shrink-0 px-6 py-4 bg-surface-container-low border-b border-surface-container-high/60 flex items-center justify-between">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-lg bg-primary-container text-on-primary flex items-center justify-center shrink-0">
+                <User className="w-4 h-4" />
+              </div>
+              <h2
+                id="publisher-modal-title"
+                className="font-headline text-base font-bold text-on-surface"
               >
-                <ShieldCheck className="w-3.5 h-3.5 text-primary" />
-                <span>Nombramiento / Rol</span>
-              </label>
-              <Select<PublisherRole>
-                id="role-select"
-                ariaLabel="Nombramiento o rol"
-                value={role}
-                onChange={(val) => setRole(val as PublisherRole)}
-                disabled={isLoading}
-                options={[
-                  { value: 'publicador', label: 'Publicador' },
-                  { value: 'siervo_ministerial', label: 'Siervo Ministerial' },
-                  { value: 'anciano', label: 'Anciano' },
-                  { value: 'secretario', label: 'Secretario' },
-                ]}
-              />
+                {isEditing ? 'Editar Publicador / Rol' : 'Registrar Nuevo Publicador'}
+              </h2>
             </div>
-
-            {/* Privilegio de Servicio */}
-            <div className="flex flex-col gap-1.5">
-              <label
-                htmlFor="privilege-select"
-                className="text-xs font-semibold text-on-surface flex items-center gap-1"
-              >
-                <Award className="w-3.5 h-3.5 text-secondary" />
-                <span>Privilegio de Servicio</span>
-              </label>
-              <Select<ServicePrivilege>
-                id="privilege-select"
-                ariaLabel="Privilegio de servicio"
-                value={privilege}
-                onChange={(val) => setPrivilege(val as ServicePrivilege)}
-                disabled={isLoading}
-                options={[
-                  { value: 'publicador', label: 'Publicador (Requisito no horario)' },
-                  { value: 'precursor_auxiliar', label: 'Precursor Auxiliar (30h)' },
-                  { value: 'precursor_regular', label: 'Precursor Regular (50h / 600h anual)' },
-                ]}
-              />
-            </div>
-          </div>
-
-          {/* Assigned Group */}
-          <div className="flex flex-col gap-1.5">
-            <label
-              htmlFor="group-select"
-              className="text-xs font-semibold text-on-surface flex items-center gap-1"
-            >
-              <Users className="w-3.5 h-3.5 text-primary" />
-              <span>Grupo de Servicio Asignado</span>
-            </label>
-            <Select
-              id="group-select"
-              ariaLabel="Grupo de servicio asignado"
-              value={groupId}
-              onChange={(val) => setGroupId(val)}
-              disabled={isLoading}
-              placeholder="-- Sin Grupo Asignado --"
-              options={[
-                { value: '', label: '-- Sin Grupo Asignado --' },
-                ...availableGroups.map((grp) => ({
-                  value: grp.id,
-                  label: grp.name,
-                })),
-              ]}
-            />
-          </div>
-
-          {/* Actions */}
-          <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-surface-container-high/60 mt-auto">
-            <Button
+            <button
               type="button"
-              variant="outline"
-              size="sm"
               onClick={onClose}
-              disabled={isLoading}
-              className="text-xs"
+              aria-label="Cerrar modal"
+              className="p-1.5 rounded-lg text-outline hover:bg-surface-container-high transition-colors shrink-0"
             >
-              Cancelar
-            </Button>
-            <Button
-              type="submit"
-              variant="primary"
-              size="sm"
-              isLoading={isLoading}
-              className="text-xs"
-            >
-              {isEditing ? 'Guardar Cambios' : 'Registrar Publicador'}
-            </Button>
+              <X className="w-4 h-4" />
+            </button>
           </div>
-        </form>
+
+          {/* Form con cuerpo scrolleable y footer fijo */}
+          <form onSubmit={handleSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+            <div className="p-5 sm:p-6 overflow-y-auto flex-1 min-h-0 flex flex-col gap-4 overscroll-contain">
+              {error && (
+                <div className="p-3 rounded-xl bg-error-container text-on-error-container text-xs font-semibold">
+                  {error}
+                </div>
+              )}
+
+              {/* Full Name */}
+              <FormField id="publisher-name" label="Nombre Completo" required>
+                <Input
+                  id="publisher-name"
+                  value={fullName}
+                  onChange={(e) => {
+                    setFullName(e.target.value);
+                    setError(null);
+                  }}
+                  placeholder="Ej. Juan Pérez"
+                  disabled={isLoading}
+                  required
+                />
+              </FormField>
+
+              {/* Phone */}
+              <FormField id="publisher-phone" label="Teléfono / WhatsApp (opcional)">
+                <Input
+                  id="publisher-phone"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="+52 55 1234 5678"
+                  disabled={isLoading}
+                />
+              </FormField>
+
+              {/* Row: Role & Privilege */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Nombramiento Teocrático */}
+                <div className="flex flex-col gap-1.5">
+                  <label
+                    htmlFor="role-select"
+                    className="text-xs font-semibold text-on-surface flex items-center gap-1"
+                  >
+                    <ShieldCheck className="w-3.5 h-3.5 text-primary" />
+                    <span>Nombramiento / Rol</span>
+                  </label>
+                  <Select<PublisherRole>
+                    id="role-select"
+                    ariaLabel="Nombramiento o rol"
+                    value={role}
+                    onChange={(val) => setRole(val as PublisherRole)}
+                    disabled={isLoading}
+                    options={[
+                      { value: 'publicador', label: 'Publicador' },
+                      { value: 'siervo_ministerial', label: 'Siervo Ministerial' },
+                      { value: 'anciano', label: 'Anciano' },
+                      { value: 'secretario', label: 'Secretario' },
+                    ]}
+                  />
+                </div>
+
+                {/* Privilegio de Servicio */}
+                <div className="flex flex-col gap-1.5">
+                  <label
+                    htmlFor="privilege-select"
+                    className="text-xs font-semibold text-on-surface flex items-center gap-1"
+                  >
+                    <Award className="w-3.5 h-3.5 text-secondary" />
+                    <span>Privilegio de Servicio</span>
+                  </label>
+                  <Select<ServicePrivilege>
+                    id="privilege-select"
+                    ariaLabel="Privilegio de servicio"
+                    value={privilege}
+                    onChange={(val) => setPrivilege(val as ServicePrivilege)}
+                    disabled={isLoading}
+                    options={[
+                      { value: 'publicador', label: 'Publicador (Requisito no horario)' },
+                      { value: 'precursor_auxiliar', label: 'Precursor Auxiliar (30h)' },
+                      { value: 'precursor_regular', label: 'Precursor Regular (50h / 600h anual)' },
+                    ]}
+                  />
+                </div>
+              </div>
+
+              {/* Assigned Group */}
+              <div className="flex flex-col gap-1.5">
+                <label
+                  htmlFor="group-select"
+                  className="text-xs font-semibold text-on-surface flex items-center gap-1"
+                >
+                  <Users className="w-3.5 h-3.5 text-primary" />
+                  <span>Grupo de Servicio Asignado</span>
+                </label>
+                <Select
+                  id="group-select"
+                  ariaLabel="Grupo de servicio asignado"
+                  value={groupId}
+                  onChange={(val) => setGroupId(val)}
+                  disabled={isLoading}
+                  placeholder="-- Sin Grupo Asignado --"
+                  options={[
+                    { value: '', label: '-- Sin Grupo Asignado --' },
+                    ...availableGroups.map((grp) => ({
+                      value: grp.id,
+                      label: grp.name,
+                    })),
+                  ]}
+                />
+              </div>
+            </div>
+
+            {/* Actions Fijas en el Footer */}
+            <div className="flex-shrink-0 px-6 py-3.5 bg-surface-container-low/60 border-t border-surface-container-high/60 flex items-center justify-end gap-2.5">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={onClose}
+                disabled={isLoading}
+                className="text-xs"
+              >
+                Cancelar
+              </Button>
+              <Button
+                type="submit"
+                variant="primary"
+                size="sm"
+                isLoading={isLoading}
+                className="text-xs"
+              >
+                {isEditing ? 'Guardar Cambios' : 'Registrar Publicador'}
+              </Button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

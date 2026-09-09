@@ -46,11 +46,27 @@ export const Select = <T extends string = string>({
   size = 'sm',
 }: SelectProps<T>): React.ReactElement => {
   const [isOpen, setIsOpen] = useState(false);
+  const [openUpwards, setOpenUpwards] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const generatedId = useId();
   const selectId = id || generatedId;
 
   const selectedOption = options.find((opt) => opt.value === value);
+
+  const toggleDropdown = () => {
+    if (disabled) return;
+    if (!isOpen && containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - rect.bottom;
+      // Si hay menos de 230px abajo y más espacio arriba, abrir hacia arriba
+      if (spaceBelow < 230 && rect.top > spaceBelow) {
+        setOpenUpwards(true);
+      } else {
+        setOpenUpwards(false);
+      }
+    }
+    setIsOpen((prev) => !prev);
+  };
 
   // Cerrar al hacer clic fuera
   useEffect(() => {
@@ -77,7 +93,7 @@ export const Select = <T extends string = string>({
       setIsOpen(false);
     } else if (e.key === 'ArrowDown' && !isOpen) {
       e.preventDefault();
-      setIsOpen(true);
+      toggleDropdown();
     }
   };
 
@@ -108,7 +124,7 @@ export const Select = <T extends string = string>({
       <button
         type="button"
         disabled={disabled}
-        onClick={() => !disabled && setIsOpen((prev) => !prev)}
+        onClick={toggleDropdown}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         title={effectiveAriaLabel}
@@ -141,9 +157,10 @@ export const Select = <T extends string = string>({
           role="listbox"
           aria-label={effectiveAriaLabel}
           className={cn(
-            'absolute top-full left-0 mt-1.5 z-50 min-w-full w-max max-w-xs',
+            'absolute left-0 z-50 min-w-full w-max max-w-[calc(100vw-2.5rem)] sm:max-w-xs',
+            openUpwards ? 'bottom-full mb-1.5' : 'top-full mt-1.5',
             'bg-surface-container-lowest border border-surface-container-high rounded-2xl shadow-xl p-1.5',
-            'flex flex-col gap-0.5 max-h-60 overflow-y-auto',
+            'flex flex-col gap-0.5 max-h-52 overflow-y-auto overscroll-contain',
             'animate-in fade-in zoom-in-95 duration-150',
             menuClassName
           )}

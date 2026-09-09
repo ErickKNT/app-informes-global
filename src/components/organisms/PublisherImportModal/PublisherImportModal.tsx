@@ -84,42 +84,43 @@ export const PublisherImportModal: React.FC<PublisherImportModalProps> = ({
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
       }}
-      className="fixed inset-0 z-50 overflow-y-auto p-3 sm:p-4 bg-on-surface/40 backdrop-blur-xs flex items-center justify-center animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 overflow-y-auto p-2 sm:p-4 bg-on-surface/40 backdrop-blur-xs animate-in fade-in duration-200"
     >
-      <div
-        className={cn(
-          'bg-surface-container-lowest rounded-3xl border border-surface-container-high shadow-2xl',
-          'w-full max-w-2xl max-h-[calc(100dvh-2rem)] overflow-hidden flex flex-col my-auto'
-        )}
-      >
-        {/* Header */}
-        <div className="flex-shrink-0 flex items-center justify-between p-4 sm:p-5 bg-surface-container-low border-b border-surface-container-high/80">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-primary-container text-on-primary flex items-center justify-center shadow-xs shrink-0">
-              <UploadCloud className="w-5 h-5 text-primary-fixed" />
+      <div className="flex min-h-full items-start sm:items-center justify-center py-2 sm:py-6 pointer-events-none">
+        <div
+          className={cn(
+            'bg-surface-container-lowest rounded-3xl border border-surface-container-high shadow-2xl',
+            'w-full max-w-2xl max-h-[calc(100dvh-2.5rem)] overflow-hidden flex flex-col pointer-events-auto min-h-0'
+          )}
+        >
+          {/* Header */}
+          <div className="flex-shrink-0 flex items-center justify-between p-4 sm:p-5 bg-surface-container-low border-b border-surface-container-high/80">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-primary-container text-on-primary flex items-center justify-center shadow-xs shrink-0">
+                <UploadCloud className="w-5 h-5 text-primary-fixed" />
+              </div>
+              <div className="flex flex-col">
+                <h2 id="import-modal-title" className="font-headline text-base font-bold text-on-surface">
+                  Importación Masiva de Publicadores
+                </h2>
+                <span className="text-xs text-on-surface-variant font-medium">
+                  Carga de congregación desde archivo CSV o Excel
+                </span>
+              </div>
             </div>
-            <div className="flex flex-col">
-              <h2 id="import-modal-title" className="font-headline text-base font-bold text-on-surface">
-                Importación Masiva de Publicadores
-              </h2>
-              <span className="text-xs text-on-surface-variant font-medium">
-                Carga de congregación desde archivo CSV o Excel
-              </span>
-            </div>
+
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Cerrar ventana"
+              className="p-1.5 text-outline hover:text-on-surface hover:bg-surface-container rounded-xl transition-colors shrink-0"
+            >
+              <X className="w-5 h-5" />
+            </button>
           </div>
 
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Cerrar ventana"
-            className="p-1.5 text-outline hover:text-on-surface hover:bg-surface-container rounded-xl transition-colors shrink-0"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        {/* Contenido con Scroll */}
-        <div className="p-4 sm:p-6 overflow-y-auto flex-1 flex flex-col gap-5 overscroll-contain">
+          {/* Contenido con Scroll */}
+          <div className="p-4 sm:p-6 overflow-y-auto flex-1 min-h-0 flex flex-col gap-5 overscroll-contain">
           {/* Zona de Carga de Archivo */}
           <div
             onClick={() => fileInputRef.current?.click()}
@@ -243,6 +244,7 @@ export const PublisherImportModal: React.FC<PublisherImportModalProps> = ({
             </span>
           </Button>
         </div>
+      </div>
       </div>
     </div>
   );
