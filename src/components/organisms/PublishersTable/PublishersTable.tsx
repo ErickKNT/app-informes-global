@@ -268,6 +268,7 @@ export const PublishersTable: React.FC<PublishersTableProps> = ({
                           variant="primary"
                           onClick={() => onRegisterReport && onRegisterReport(pub)}
                           className="text-[11px] py-1 px-2.5"
+                          aria-label={`Registrar informe de ${pub.name}`}
                         >
                           <PlusCircle className="w-3.5 h-3.5" />
                           Registrar

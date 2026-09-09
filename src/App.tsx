@@ -4,6 +4,7 @@ import { DashboardPage } from '@/pages/DashboardPage';
 import { MonthlyReportPage } from '@/pages/MonthlyReportPage';
 import { ServiceGroupsPage } from '@/pages/ServiceGroupsPage';
 import { ConsolidatedReportsPage } from '@/pages/ConsolidatedReportsPage';
+import { PublisherCardsPage } from '@/pages/PublisherCardsPage';
 
 export function App() {
   const [currentPath, setCurrentPath] = useState<NavigationPath>('panel-general');
@@ -26,6 +27,9 @@ export function App() {
 
       case 'reportes-consolidados':
         return <ConsolidatedReportsPage />;
+
+      case 'tarjetas-publicador':
+        return <PublisherCardsPage />;
 
       default:
         return <DashboardPage />;

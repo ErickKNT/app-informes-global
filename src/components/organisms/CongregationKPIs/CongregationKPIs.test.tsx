@@ -28,3 +28,4 @@ describe('CongregationKPIs organism', () => {
     expect(screen.getByText('2 en seguimiento')).toBeInTheDocument();
   });
 });
+

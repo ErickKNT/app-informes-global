@@ -34,3 +34,4 @@ describe('S21ConsolidatedTable organism', () => {
     expect(screen.getByText('2 / 12 Meses Registrados')).toBeInTheDocument();
   });
 });
+

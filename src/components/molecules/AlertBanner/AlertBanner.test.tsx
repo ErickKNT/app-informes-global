@@ -29,3 +29,4 @@ describe('AlertBanner molecule', () => {
     expect(handleNotify).toHaveBeenCalledTimes(1);
   });
 });
+

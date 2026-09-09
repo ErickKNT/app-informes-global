@@ -63,3 +63,4 @@ describe('ConsolidatedReportsPage', () => {
     expect(confirmation).toBeInTheDocument();
   });
 });
+

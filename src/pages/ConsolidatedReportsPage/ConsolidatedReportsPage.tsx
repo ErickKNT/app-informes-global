@@ -190,3 +190,4 @@ export const ConsolidatedReportsPage: React.FC<ConsolidatedReportsPageProps> = (
 };
 
 ConsolidatedReportsPage.displayName = 'ConsolidatedReportsPage';
+

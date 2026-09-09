@@ -8,13 +8,15 @@ import {
   Church,
   ShieldCheck,
   User,
+  Contact,
 } from 'lucide-react';
 
 export type NavigationPath =
   | 'panel-general'
   | 'mi-informe-mensual'
   | 'grupos-de-servicio'
-  | 'reportes-consolidados';
+  | 'reportes-consolidados'
+  | 'tarjetas-publicador';
 
 export interface AppLayoutProps {
   currentPath: NavigationPath;
@@ -42,6 +44,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
     { path: 'mi-informe-mensual', label: 'Mi Informe Mensual', icon: CalendarCheck },
     { path: 'grupos-de-servicio', label: 'Grupos de Servicio', icon: Users },
     { path: 'reportes-consolidados', label: 'Reportes Consolidados', icon: BarChart3 },
+    { path: 'tarjetas-publicador', label: 'Tarjetas de Publicador', icon: Contact },
   ];
 
   return (

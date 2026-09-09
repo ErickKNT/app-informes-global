@@ -40,3 +40,4 @@ describe('HistoricalComparativeChart organism', () => {
     expect(screen.getByText(/98% entregados a tiempo/i)).toBeInTheDocument();
   });
 });
+

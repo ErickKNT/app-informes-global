@@ -5,6 +5,8 @@ export type BadgeVariant =
   | 'publicador'
   | 'auxiliar'
   | 'regular'
+  | 'precursor_auxiliar'
+  | 'precursor_regular'
   | 'entregado'
   | 'pendiente'
   | 'info';
@@ -27,6 +29,8 @@ export const Badge: React.FC<BadgeProps> = ({
     publicador: 'bg-surface-container-high text-on-surface-variant border border-outline-variant/60',
     auxiliar: 'bg-tertiary-fixed text-on-tertiary-fixed border border-tertiary-fixed-dim/70',
     regular: 'bg-secondary-container text-on-secondary-container border border-secondary-container',
+    precursor_auxiliar: 'bg-tertiary-fixed text-on-tertiary-fixed border border-tertiary-fixed-dim/70',
+    precursor_regular: 'bg-secondary-container text-on-secondary-container border border-secondary-container',
     entregado: 'bg-secondary-container/60 text-on-secondary-container',
     pendiente: 'bg-tertiary-fixed text-tertiary-container',
     info: 'bg-primary-container text-on-primary',

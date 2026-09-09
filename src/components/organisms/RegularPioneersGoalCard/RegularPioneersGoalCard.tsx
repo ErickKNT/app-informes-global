@@ -318,3 +318,4 @@ export const RegularPioneersGoalCard: React.FC<RegularPioneersGoalCardProps> = (
 };
 
 RegularPioneersGoalCard.displayName = 'RegularPioneersGoalCard';
+

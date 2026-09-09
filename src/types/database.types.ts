@@ -86,13 +86,22 @@ export type Database = {
       };
       service_groups: {
         Row: ServiceGroup;
-        Insert: Omit<ServiceGroup, 'id' | 'created_at'>;
+        Insert: Omit<ServiceGroup, 'id' | 'created_at'> & {
+          id?: string;
+          created_at?: string;
+        };
         Update: Partial<ServiceGroup>;
         Relationships: GenericRelationship[];
       };
       profiles: {
         Row: Profile;
-        Insert: Omit<Profile, 'created_at' | 'updated_at'>;
+        Insert: Omit<Profile, 'id' | 'created_at' | 'updated_at'> & {
+          id?: string;
+          created_at?: string;
+          updated_at?: string;
+          is_active?: boolean;
+          avatar_url?: string | null;
+        };
         Update: Partial<Profile>;
         Relationships: GenericRelationship[];
       };
@@ -132,4 +141,39 @@ export type Database = {
     };
     CompositeTypes: Record<string, never>;
   };
+};
+
+export type ProfileInsert = Database['public']['Tables']['profiles']['Insert'];
+export type ProfileUpdate = Database['public']['Tables']['profiles']['Update'];
+
+export type ServiceGroupInsert = Database['public']['Tables']['service_groups']['Insert'];
+export type ServiceGroupUpdate = Database['public']['Tables']['service_groups']['Update'];
+
+/**
+ * Registro mensual para la tarjeta S-21 del publicador (Septiembre a Agosto)
+ */
+export type PublisherMonthRecord = {
+  month: number;
+  year: number;
+  monthName: string;
+  participated: boolean;
+  hours: number;
+  bible_studies: number;
+  notes: string | null;
+  status: ReportStatus | 'no_entregado';
+};
+
+/**
+ * Tarjeta Canónica S-21 de Registro de Publicador
+ */
+export type PublisherS21Card = {
+  publisher: Profile;
+  serviceGroup: ServiceGroup | null;
+  serviceYear: string;
+  records: PublisherMonthRecord[];
+  totalHours: number;
+  averageHours: number;
+  totalStudies: number;
+  annualGoal: number;
+  goalProgressPct: number;
 };

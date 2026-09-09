@@ -21,3 +21,4 @@ describe('Sparkline molecule', () => {
     expect(screen.getByRole('img', { name: /estabilidad/i })).toBeInTheDocument();
   });
 });
+

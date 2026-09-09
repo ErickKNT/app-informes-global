@@ -55,3 +55,4 @@ describe('GroupsOverviewTable organism', () => {
     expect(handleView).toHaveBeenCalledWith('g1');
   });
 });
+

@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import type { PublisherListItem } from '@/components/organisms/PublishersTable';
 import type { SupervisorInfo } from '@/components/organisms/GroupSupervisorsCard';
 import type { GroupMetrics } from '@/components/organisms/GroupMetricsCards';
+import type { ServiceGroupInsert } from '@/types/database.types';
 
 export interface ServiceGroupSupervisors {
   overseer: SupervisorInfo;
@@ -135,6 +136,12 @@ export interface UseServiceGroupsReturn {
     publisherId: string,
     data: { hours: number; bibleStudies: number; notes?: string }
   ) => void;
+  createGroup: (data: ServiceGroupInsert, overseerName?: string, assistantName?: string) => void;
+  updateGroup: (
+    id: string,
+    updates: Partial<ServiceGroupTabItem['supervisors']> & { name?: string; groupNumber?: number }
+  ) => void;
+  deleteGroup: (id: string, fallbackGroupId?: string) => void;
 }
 
 export function useServiceGroups(
@@ -196,11 +203,121 @@ export function useServiceGroups(
     []
   );
 
+  const createGroup = useCallback(
+    (data: ServiceGroupInsert, overseerName = 'Por designar', assistantName = 'Por designar') => {
+      const newGroupItem: ServiceGroupTabItem = {
+        id: `group-${Date.now()}`,
+        groupNumber: data.group_number,
+        name: data.name,
+        publishersCount: 0,
+        reportedCount: 0,
+        supervisors: {
+          overseer: { name: overseerName, role: 'Anciano / Sup. de Grupo' },
+          assistant: { name: assistantName, role: 'Siervo Ministerial / Auxiliar' },
+          schedule: data.meeting_schedule || 'Sábados 9:00 AM',
+          location: data.meeting_location || 'Por definir',
+        },
+        metrics: {
+          totalPublishers: 0,
+          reportedPublishers: 0,
+          totalHours: 0,
+          totalBibleStudies: 0,
+        },
+        publishers: [],
+      };
+
+      setGroups((prev) => [...prev, newGroupItem]);
+      setActiveGroupId(newGroupItem.id);
+    },
+    []
+  );
+
+  const updateGroup = useCallback(
+    (
+      id: string,
+      updates: Partial<ServiceGroupTabItem['supervisors']> & { name?: string; groupNumber?: number }
+    ) => {
+      setGroups((prev) =>
+        prev.map((g) => {
+          if (g.id !== id) return g;
+          return {
+            ...g,
+            name: updates.name ?? g.name,
+            groupNumber: updates.groupNumber ?? g.groupNumber,
+            supervisors: {
+              ...g.supervisors,
+              ...updates,
+            },
+          };
+        })
+      );
+    },
+    []
+  );
+
+  const deleteGroup = useCallback(
+    (id: string, fallbackGroupId?: string) => {
+      setGroups((prev) => {
+        const groupToDelete = prev.find((g) => g.id === id);
+        if (!groupToDelete) return prev;
+
+        const remainingGroups = prev.filter((g) => g.id !== id);
+
+        // Si hay grupo de respaldo y el grupo a eliminar tenía publicadores, transferirlos
+        if (fallbackGroupId && groupToDelete.publishers.length > 0) {
+          return remainingGroups.map((g) => {
+            if (g.id !== fallbackGroupId) return g;
+
+            const combinedPublishers = [...g.publishers, ...groupToDelete.publishers];
+            const newTotalPublishers = combinedPublishers.length;
+            const newReportedCount = combinedPublishers.filter((p) => p.hasReported).length;
+            const newTotalHours = combinedPublishers.reduce(
+              (sum, p) => sum + (p.hours || 0),
+              0
+            );
+            const newStudies = combinedPublishers.reduce(
+              (sum, p) => sum + (p.bibleStudies || 0),
+              0
+            );
+
+            return {
+              ...g,
+              publishersCount: newTotalPublishers,
+              reportedCount: newReportedCount,
+              publishers: combinedPublishers,
+              metrics: {
+                ...g.metrics,
+                totalPublishers: newTotalPublishers,
+                reportedPublishers: newReportedCount,
+                totalHours: newTotalHours,
+                totalBibleStudies: newStudies,
+              },
+            };
+          });
+        }
+
+        return remainingGroups;
+      });
+
+      // Si el grupo activo era el eliminado, cambiar al fallback
+      setActiveGroupId((currentActive) => {
+        if (currentActive === id) {
+          return fallbackGroupId || 'group-1';
+        }
+        return currentActive;
+      });
+    },
+    []
+  );
+
   return {
     groups,
     activeGroupId,
     activeGroup,
     setActiveGroupId,
     recordAssistedReport,
+    createGroup,
+    updateGroup,
+    deleteGroup,
   };
 }

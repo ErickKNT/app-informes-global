@@ -183,3 +183,4 @@ export const PastoralAlertsCard: React.FC<PastoralAlertsCardProps> = ({
 };
 
 PastoralAlertsCard.displayName = 'PastoralAlertsCard';
+

@@ -42,3 +42,4 @@ describe('ConsolidatedMetricsSummary organism', () => {
     expect(screen.getByText('Total publicadores: 92')).toBeInTheDocument();
   });
 });
+

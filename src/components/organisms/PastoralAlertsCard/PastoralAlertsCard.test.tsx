@@ -23,3 +23,4 @@ describe('PastoralAlertsCard organism', () => {
     expect(handleReview).toHaveBeenCalledWith('req-1');
   });
 });
+

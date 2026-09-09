@@ -29,5 +29,11 @@ describe('App root with complete navigation and Atomic Design pages', () => {
 
     expect(screen.getByRole('heading', { name: /reportes y análisis de servicio/i })).toBeInTheDocument();
     expect(screen.getByText('Formato S-21-S')).toBeInTheDocument();
+
+    const publisherCardsNavButton = screen.getByRole('button', { name: /tarjetas de publicador/i });
+    await userEvent.click(publisherCardsNavButton);
+
+    expect(screen.getByRole('heading', { name: /tarjetas de publicador/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /nuevo publicador/i })).toBeInTheDocument();
   });
 });

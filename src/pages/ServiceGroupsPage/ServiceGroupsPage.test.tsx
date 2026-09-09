@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ServiceGroupsPage } from './ServiceGroupsPage';
 
@@ -19,27 +19,46 @@ describe('ServiceGroupsPage', () => {
     const group2Tab = screen.getByRole('button', { name: /grupo 2 - betel/i });
     await userEvent.click(group2Tab);
 
+    expect(screen.getAllByText(/grupo 2 - betel/i).length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText('Fernando Ruiz').length).toBeGreaterThanOrEqual(1);
   });
 
   it('abre el modal asistido y permite registrar un informe pendiente', async () => {
     render(<ServiceGroupsPage />);
 
-    // Buscar el botón registrar en Daniel Castillo (pendiente)
-    const registerButtons = screen.getAllByRole('button', { name: /registrar/i });
-    await userEvent.click(registerButtons[0]!);
+    const danielRowButton = screen.getByRole('button', { name: /registrar informe de daniel castillo/i });
+    await userEvent.click(danielRowButton);
 
-    expect(screen.getByRole('dialog')).toBeInTheDocument();
-    expect(screen.getByText(/registrar informe asistido/i)).toBeInTheDocument();
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toBeInTheDocument();
+    expect(within(dialog).getByText(/registrar informe asistido/i)).toBeInTheDocument();
 
-    const hoursInput = screen.getByLabelText(/horas de servicio/i);
-    await userEvent.clear(hoursInput);
-    await userEvent.type(hoursInput, '15');
+    const hoursInput = within(dialog).getByLabelText(/horas de servicio/i);
+    await userEvent.type(hoursInput, '11');
 
-    const submitButton = screen.getByRole('button', { name: /enviar informe/i });
+    const submitButton = within(dialog).getByRole('button', { name: /enviar informe/i });
     await userEvent.click(submitButton);
 
     // El modal debe haberse cerrado y Daniel Castillo ahora debe mostrar "Entregado"
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('permite abrir el modal de crear grupo y registrar uno nuevo', async () => {
+    render(<ServiceGroupsPage />);
+
+    const createGroupButton = screen.getByRole('button', { name: /crear grupo/i });
+    await userEvent.click(createGroupButton);
+
+    const dialog = screen.getByRole('dialog');
+    expect(within(dialog).getByRole('heading', { name: /crear nuevo grupo de servicio/i })).toBeInTheDocument();
+
+    const nameInput = within(dialog).getByLabelText(/nombre del grupo/i);
+    await userEvent.type(nameInput, 'Grupo 6 - Valle Dorado');
+
+    const submitBtn = within(dialog).getByRole('button', { name: /^crear grupo$/i });
+    await userEvent.click(submitBtn);
+
+    const feedback = await screen.findByText(/grupo "grupo 6 - valle dorado" creado con éxito/i);
+    expect(feedback).toBeInTheDocument();
   });
 });

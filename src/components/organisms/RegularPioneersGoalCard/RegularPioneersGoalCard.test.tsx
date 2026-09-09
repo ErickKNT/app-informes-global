@@ -58,3 +58,4 @@ describe('RegularPioneersGoalCard organism', () => {
     expect(feedback).toBeInTheDocument();
   });
 });
+
