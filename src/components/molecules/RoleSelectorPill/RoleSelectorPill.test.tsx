@@ -30,3 +30,4 @@ describe('RoleSelectorPill molecule', () => {
     expect(handleChange).toHaveBeenCalledWith('precursor_auxiliar');
   });
 });
+

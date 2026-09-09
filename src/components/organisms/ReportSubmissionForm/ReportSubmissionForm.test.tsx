@@ -60,3 +60,4 @@ describe('ReportSubmissionForm organism', () => {
     expect(handleHoursChange).toHaveBeenCalledWith(42);
   });
 });
+

@@ -106,3 +106,4 @@ export const HoursGaugeCard: React.FC<HoursGaugeCardProps> = ({
 };
 
 HoursGaugeCard.displayName = 'HoursGaugeCard';
+

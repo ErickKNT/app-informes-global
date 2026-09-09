@@ -29,3 +29,4 @@ describe('HoursGaugeCard organism', () => {
     expect(screen.getByText('30 horas')).toBeInTheDocument();
   });
 });
+

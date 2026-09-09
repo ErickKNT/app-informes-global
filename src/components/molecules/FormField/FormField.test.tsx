@@ -36,3 +36,4 @@ describe('FormField molecule', () => {
     expect(screen.getByText('Máximo 3 dígitos')).toBeInTheDocument();
   });
 });
+

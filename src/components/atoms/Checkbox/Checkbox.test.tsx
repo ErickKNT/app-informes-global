@@ -26,3 +26,4 @@ describe('Checkbox atom', () => {
     expect(handleChange).not.toHaveBeenCalled();
   });
 });
+

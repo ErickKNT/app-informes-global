@@ -35,3 +35,4 @@ describe('Input atom', () => {
     expect(screen.getByLabelText('Horas')).toBeDisabled();
   });
 });
+

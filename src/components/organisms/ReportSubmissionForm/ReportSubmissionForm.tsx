@@ -244,3 +244,4 @@ export const ReportSubmissionForm: React.FC<ReportSubmissionFormProps> = ({
 };
 
 ReportSubmissionForm.displayName = 'ReportSubmissionForm';
+

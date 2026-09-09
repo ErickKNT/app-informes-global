@@ -28,3 +28,4 @@ describe('Badge atom', () => {
     expect(badge).toHaveClass('text-tertiary-container');
   });
 });
+

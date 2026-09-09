@@ -127,3 +127,4 @@ export const MonthlyReportPage: React.FC<MonthlyReportPageProps> = ({ onSaveRepo
 };
 
 MonthlyReportPage.displayName = 'MonthlyReportPage';
+

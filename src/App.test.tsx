@@ -17,7 +17,7 @@ describe('App root with navigation and Atomic Design pages', () => {
     const groupsNavButton = screen.getByRole('button', { name: /grupos de servicio/i });
     await userEvent.click(groupsNavButton);
 
-    expect(screen.getByRole('heading', { name: /grupos de servicio/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /grupos de predicación y servicio/i })).toBeInTheDocument();
 
     const reportNavButton = screen.getByRole('button', { name: /mi informe mensual/i });
     await userEvent.click(reportNavButton);

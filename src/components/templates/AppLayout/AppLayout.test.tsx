@@ -30,3 +30,4 @@ describe('AppLayout template', () => {
     expect(handleNavigate).toHaveBeenCalledWith('grupos-de-servicio');
   });
 });
+
