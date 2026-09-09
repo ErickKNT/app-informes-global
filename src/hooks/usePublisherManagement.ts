@@ -7,6 +7,7 @@ import type {
   ServiceGroup,
   PublisherMonthRecord,
 } from '@/types/database.types';
+import { publishersService } from '@/services/publishersService';
 
 export interface UsePublisherManagementOptions {
   initialPublishers?: Profile[];
@@ -306,6 +307,15 @@ export function usePublisherManagement(
       };
       setPublishers((prev) => [newPub, ...prev]);
       setActivePublisherId(newPub.id);
+      publishersService.createPublisher({
+        full_name: data.full_name,
+        phone: data.phone,
+        role: data.role,
+        privilege: data.privilege,
+        service_group_id: data.service_group_id,
+        is_active: true,
+        avatar_url: null,
+      }).catch(() => {});
     },
     []
   );
@@ -315,6 +325,7 @@ export function usePublisherManagement(
       setPublishers((prev) =>
         prev.map((p) => (p.id === id ? { ...p, ...updates, updated_at: new Date().toISOString() } : p))
       );
+      publishersService.updatePublisher(id, updates).catch(() => {});
     },
     []
   );

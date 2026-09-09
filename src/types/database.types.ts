@@ -177,3 +177,19 @@ export type PublisherS21Card = {
   annualGoal: number;
   goalProgressPct: number;
 };
+
+/**
+ * Tipos para el módulo de Asistencia a las Reuniones
+ */
+export type MeetingType = 'midweek' | 'weekend';
+
+export type MeetingAttendanceRecord = {
+  id: string;
+  date: string; // YYYY-MM-DD
+  meeting_type: MeetingType;
+  attendance_count: number;
+  notes: string | null;
+  month: number;
+  year: number;
+  created_at?: string;
+};

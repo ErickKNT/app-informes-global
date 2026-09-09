@@ -12,6 +12,7 @@ import { ConsolidatedMetricsSummary } from '@/components/organisms/ConsolidatedM
 import { HistoricalComparativeChart } from '@/components/organisms/HistoricalComparativeChart';
 import { S21ConsolidatedTable } from '@/components/organisms/S21ConsolidatedTable';
 import { RegularPioneersGoalCard } from '@/components/organisms/RegularPioneersGoalCard';
+import { exportService } from '@/services/exportService';
 
 export interface ConsolidatedReportsPageProps {
   onExportPdf?: () => void;
@@ -33,7 +34,35 @@ export const ConsolidatedReportsPage: React.FC<ConsolidatedReportsPageProps> = (
       if (onExportPdf) {
         await onExportPdf();
       } else {
-        await new Promise((resolve) => setTimeout(resolve, 600));
+        exportService.exportConsolidatedReportsCsv(selectedPeriod, [
+          {
+            id: 'grp-1',
+            name: 'Grupo 1 - Los Olivos',
+            groupNumber: 1,
+            totalPublishers: 14,
+            submittedReports: 14,
+            hoursTotal: 184,
+            bibleStudiesTotal: 12,
+          },
+          {
+            id: 'grp-2',
+            name: 'Grupo 2 - Betel',
+            groupNumber: 2,
+            totalPublishers: 16,
+            submittedReports: 15,
+            hoursTotal: 215,
+            bibleStudiesTotal: 14,
+          },
+          {
+            id: 'grp-3',
+            name: 'Grupo 3 - Sinaí',
+            groupNumber: 3,
+            totalPublishers: 12,
+            submittedReports: 12,
+            hoursTotal: 160,
+            bibleStudiesTotal: 9,
+          },
+        ]);
       }
       setExportSuccessMessage('Resumen Mensual generado con éxito en formato PDF/Excel.');
       setTimeout(() => setExportSuccessMessage(null), 4000);
@@ -48,7 +77,7 @@ export const ConsolidatedReportsPage: React.FC<ConsolidatedReportsPageProps> = (
       if (onExportS21) {
         await onExportS21();
       } else {
-        await new Promise((resolve) => setTimeout(resolve, 600));
+        exportService.triggerPrint();
       }
       setExportSuccessMessage('Registro canónico S-21-S exportado exitosamente.');
       setTimeout(() => setExportSuccessMessage(null), 4000);

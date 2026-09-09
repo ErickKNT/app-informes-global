@@ -14,7 +14,10 @@ import {
   Clock,
   BookOpen,
   Award,
+  Printer,
+  Download,
 } from 'lucide-react';
+import { exportService } from '@/services/exportService';
 import { cn } from '@/utils/cn';
 
 export interface PublisherCardS21ViewProps {
@@ -103,7 +106,27 @@ export const PublisherCardS21View: React.FC<PublisherCardS21ViewProps> = ({
         </div>
 
         {/* Administrative Action Buttons */}
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2 no-print">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => exportService.triggerPrint()}
+            className="text-xs"
+            title="Imprimir o guardar como PDF"
+          >
+            <Printer className="w-3.5 h-3.5 text-outline" />
+            <span>Imprimir S-21</span>
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => exportService.exportPublisherS21Csv(card)}
+            className="text-xs"
+            title="Descargar en formato CSV para Excel"
+          >
+            <Download className="w-3.5 h-3.5 text-outline" />
+            <span>Exportar CSV</span>
+          </Button>
           <Button
             size="sm"
             variant="outline"
