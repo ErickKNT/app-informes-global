@@ -11,6 +11,7 @@ import {
 import { Button } from '@/components/atoms/Button';
 import { Badge } from '@/components/atoms/Badge';
 import { Avatar } from '@/components/atoms/Avatar';
+import { Select } from '@/components/atoms/Select';
 import { PublisherCardS21View } from '@/components/organisms/PublisherCardS21View';
 import {
   PublisherFormModal,
@@ -174,40 +175,35 @@ export const PublisherCardsPage: React.FC<PublisherCardsPageProps> = ({
             </div>
 
             {/* Filter by Group */}
-            <div className="flex items-center gap-1.5">
-              <Users className="w-3.5 h-3.5 text-outline" />
-              <select
-                aria-label="Filtrar por grupo"
-                value={selectedGroupId}
-                onChange={(e) => setSelectedGroupId(e.target.value)}
-                className="bg-surface-container-lowest text-xs text-on-surface font-semibold rounded-xl px-2.5 py-1.5 border border-surface-container-high focus:outline-none focus:ring-2 focus:ring-primary/20"
-              >
-                <option value="all">Todos los Grupos</option>
-                {availableGroups.map((grp) => (
-                  <option key={grp.id} value={grp.id}>
-                    {grp.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <Select
+              aria-label="Filtrar por grupo"
+              value={selectedGroupId}
+              onChange={(val) => setSelectedGroupId(val)}
+              icon={<Users className="w-3.5 h-3.5 text-outline" />}
+              options={[
+                { value: 'all', label: 'Todos los Grupos' },
+                ...availableGroups.map((grp) => ({
+                  value: grp.id,
+                  label: grp.name,
+                })),
+              ]}
+            />
 
             {/* Filter by Role / Privilege */}
-            <div className="flex items-center gap-1.5">
-              <Filter className="w-3.5 h-3.5 text-outline" />
-              <select
-                aria-label="Filtrar por rol o nombramiento"
-                value={selectedRole}
-                onChange={(e) => setSelectedRole(e.target.value)}
-                className="bg-surface-container-lowest text-xs text-on-surface font-semibold rounded-xl px-2.5 py-1.5 border border-surface-container-high focus:outline-none focus:ring-2 focus:ring-primary/20"
-              >
-                <option value="all">Todos los Nombramientos</option>
-                <option value="precursor_regular">Precursores Regulares</option>
-                <option value="precursor_auxiliar">Precursores Auxiliares</option>
-                <option value="anciano">Ancianos</option>
-                <option value="siervo_ministerial">Siervos Ministeriales</option>
-                <option value="publicador">Solo Publicadores</option>
-              </select>
-            </div>
+            <Select
+              aria-label="Filtrar por rol o nombramiento"
+              value={selectedRole}
+              onChange={(val) => setSelectedRole(val as Parameters<typeof setSelectedRole>[0])}
+              icon={<Filter className="w-3.5 h-3.5 text-outline" />}
+              options={[
+                { value: 'all', label: 'Todos los Nombramientos' },
+                { value: 'precursor_regular', label: 'Precursores Regulares' },
+                { value: 'precursor_auxiliar', label: 'Precursores Auxiliares' },
+                { value: 'anciano', label: 'Ancianos' },
+                { value: 'siervo_ministerial', label: 'Siervos Ministeriales' },
+                { value: 'publicador', label: 'Solo Publicadores' },
+              ]}
+            />
           </div>
 
           <span className="text-xs text-outline font-medium self-center">

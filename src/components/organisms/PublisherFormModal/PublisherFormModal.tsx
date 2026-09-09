@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
+import { Select } from '@/components/atoms/Select';
 import { FormField } from '@/components/molecules/FormField';
 import type {
   Profile,
@@ -161,19 +162,19 @@ export const PublisherFormModal: React.FC<PublisherFormModalProps> = ({
                 <ShieldCheck className="w-3.5 h-3.5 text-primary" />
                 <span>Nombramiento / Rol</span>
               </label>
-              <select
+              <Select<PublisherRole>
                 id="role-select"
-                aria-label="Nombramiento o rol"
+                ariaLabel="Nombramiento o rol"
                 value={role}
-                onChange={(e) => setRole(e.target.value as PublisherRole)}
+                onChange={(val) => setRole(val as PublisherRole)}
                 disabled={isLoading}
-                className="bg-surface-container-lowest text-xs text-on-surface font-medium rounded-xl p-2.5 border border-surface-container-high focus:outline-none focus:ring-2 focus:ring-primary/20"
-              >
-                <option value="publicador">Publicador</option>
-                <option value="siervo_ministerial">Siervo Ministerial</option>
-                <option value="anciano">Anciano</option>
-                <option value="secretario">Secretario</option>
-              </select>
+                options={[
+                  { value: 'publicador', label: 'Publicador' },
+                  { value: 'siervo_ministerial', label: 'Siervo Ministerial' },
+                  { value: 'anciano', label: 'Anciano' },
+                  { value: 'secretario', label: 'Secretario' },
+                ]}
+              />
             </div>
 
             {/* Privilegio de Servicio */}
@@ -185,18 +186,18 @@ export const PublisherFormModal: React.FC<PublisherFormModalProps> = ({
                 <Award className="w-3.5 h-3.5 text-secondary" />
                 <span>Privilegio de Servicio</span>
               </label>
-              <select
+              <Select<ServicePrivilege>
                 id="privilege-select"
-                aria-label="Privilegio de servicio"
+                ariaLabel="Privilegio de servicio"
                 value={privilege}
-                onChange={(e) => setPrivilege(e.target.value as ServicePrivilege)}
+                onChange={(val) => setPrivilege(val as ServicePrivilege)}
                 disabled={isLoading}
-                className="bg-surface-container-lowest text-xs text-on-surface font-medium rounded-xl p-2.5 border border-surface-container-high focus:outline-none focus:ring-2 focus:ring-primary/20"
-              >
-                <option value="publicador">Publicador (Requisito no horario)</option>
-                <option value="precursor_auxiliar">Precursor Auxiliar (30h)</option>
-                <option value="precursor_regular">Precursor Regular (50h / 600h anual)</option>
-              </select>
+                options={[
+                  { value: 'publicador', label: 'Publicador (Requisito no horario)' },
+                  { value: 'precursor_auxiliar', label: 'Precursor Auxiliar (30h)' },
+                  { value: 'precursor_regular', label: 'Precursor Regular (50h / 600h anual)' },
+                ]}
+              />
             </div>
           </div>
 
@@ -209,21 +210,21 @@ export const PublisherFormModal: React.FC<PublisherFormModalProps> = ({
               <Users className="w-3.5 h-3.5 text-primary" />
               <span>Grupo de Servicio Asignado</span>
             </label>
-            <select
+            <Select
               id="group-select"
-              aria-label="Grupo de servicio asignado"
+              ariaLabel="Grupo de servicio asignado"
               value={groupId}
-              onChange={(e) => setGroupId(e.target.value)}
+              onChange={(val) => setGroupId(val)}
               disabled={isLoading}
-              className="bg-surface-container-lowest text-xs text-on-surface font-medium rounded-xl p-2.5 border border-surface-container-high focus:outline-none focus:ring-2 focus:ring-primary/20"
-            >
-              <option value="">-- Sin Grupo Asignado --</option>
-              {availableGroups.map((grp) => (
-                <option key={grp.id} value={grp.id}>
-                  {grp.name}
-                </option>
-              ))}
-            </select>
+              placeholder="-- Sin Grupo Asignado --"
+              options={[
+                { value: '', label: '-- Sin Grupo Asignado --' },
+                ...availableGroups.map((grp) => ({
+                  value: grp.id,
+                  label: grp.name,
+                })),
+              ]}
+            />
           </div>
 
           {/* Actions */}

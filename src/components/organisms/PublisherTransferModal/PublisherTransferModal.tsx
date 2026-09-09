@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/atoms/Button';
+import { Select } from '@/components/atoms/Select';
 import type { Profile, ServiceGroup } from '@/types/database.types';
 import { ArrowRightLeft, X, CheckCircle2 } from 'lucide-react';
 
@@ -107,20 +108,17 @@ export const PublisherTransferModal: React.FC<PublisherTransferModalProps> = ({
             >
               Seleccionar Grupo Destino:
             </label>
-            <select
+            <Select
               id="target-group-select"
-              aria-label="Seleccionar grupo destino"
+              ariaLabel="Seleccionar grupo destino"
               value={selectedGroupId}
-              onChange={(e) => setSelectedGroupId(e.target.value)}
+              onChange={(val) => setSelectedGroupId(val)}
               disabled={isLoading}
-              className="bg-surface-container-lowest text-xs text-on-surface font-semibold rounded-xl p-3 border border-surface-container-high focus:outline-none focus:ring-2 focus:ring-primary/20"
-            >
-              {availableGroups.map((grp) => (
-                <option key={grp.id} value={grp.id}>
-                  {grp.name} {grp.id === publisher.service_group_id ? '(Actual)' : ''}
-                </option>
-              ))}
-            </select>
+              options={availableGroups.map((grp) => ({
+                value: grp.id,
+                label: `${grp.name} ${grp.id === publisher.service_group_id ? '(Actual)' : ''}`.trim(),
+              }))}
+            />
           </div>
 
           <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-surface-container-high/60 mt-2">

@@ -3,11 +3,11 @@ import {
   FileText,
   Download,
   RefreshCw,
-  ChevronDown,
   Sparkles,
   CheckCircle2,
 } from 'lucide-react';
 import { Button } from '@/components/atoms/Button';
+import { Select } from '@/components/atoms/Select';
 import { ConsolidatedMetricsSummary } from '@/components/organisms/ConsolidatedMetricsSummary';
 import { HistoricalComparativeChart } from '@/components/organisms/HistoricalComparativeChart';
 import { S21ConsolidatedTable } from '@/components/organisms/S21ConsolidatedTable';
@@ -105,52 +105,36 @@ export const ConsolidatedReportsPage: React.FC<ConsolidatedReportsPageProps> = (
           <div className="flex flex-wrap items-center gap-4">
             {/* Period Selector */}
             <div className="flex items-center gap-2">
-              <label
-                htmlFor="period-select"
-                className="text-xs text-on-surface-variant font-medium"
-              >
-                Período:
-              </label>
-              <div className="relative">
-                <select
-                  id="period-select"
-                  aria-label="Seleccionar período"
-                  value={selectedPeriod}
-                  onChange={(e) => setSelectedPeriod(e.target.value)}
-                  className="bg-surface-container-lowest text-xs text-on-surface font-semibold rounded-lg pl-3 pr-8 py-1.5 border border-surface-container-high shadow-2xs focus:outline-none focus:ring-2 focus:ring-primary/20 appearance-none cursor-pointer"
-                >
-                  <option value="2024-2025">Año de Servicio 2024-2025</option>
-                  <option value="2024-10">Octubre 2024 (Mes activo)</option>
-                  <option value="2024-09">Septiembre 2024</option>
-                  <option value="2023-2024">Año de Servicio 2023-2024</option>
-                </select>
-                <ChevronDown className="w-3.5 h-3.5 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-outline" />
-              </div>
+              <span className="text-xs text-on-surface-variant font-medium">Período:</span>
+              <Select
+                id="period-select"
+                aria-label="Seleccionar período"
+                value={selectedPeriod}
+                onChange={(val) => setSelectedPeriod(val)}
+                options={[
+                  { value: '2024-2025', label: 'Año de Servicio 2024-2025' },
+                  { value: '2024-10', label: 'Octubre 2024 (Mes activo)' },
+                  { value: '2024-09', label: 'Septiembre 2024' },
+                  { value: '2023-2024', label: 'Año de Servicio 2023-2024' },
+                ]}
+              />
             </div>
 
             {/* Category Selector */}
             <div className="flex items-center gap-2">
-              <label
-                htmlFor="category-select"
-                className="text-xs text-on-surface-variant font-medium"
-              >
-                Categoría:
-              </label>
-              <div className="relative">
-                <select
-                  id="category-select"
-                  aria-label="Seleccionar categoría"
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  className="bg-surface-container-lowest text-xs text-on-surface font-semibold rounded-lg pl-3 pr-8 py-1.5 border border-surface-container-high shadow-2xs focus:outline-none focus:ring-2 focus:ring-primary/20 appearance-none cursor-pointer"
-                >
-                  <option value="all">Toda la Congregación</option>
-                  <option value="regular_pioneers">Solo Precursores Regulares</option>
-                  <option value="auxiliary_pioneers">Solo Precursores Auxiliares</option>
-                  <option value="publishers">Solo Publicadores</option>
-                </select>
-                <ChevronDown className="w-3.5 h-3.5 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-outline" />
-              </div>
+              <span className="text-xs text-on-surface-variant font-medium">Categoría:</span>
+              <Select
+                id="category-select"
+                aria-label="Seleccionar categoría"
+                value={selectedCategory}
+                onChange={(val) => setSelectedCategory(val)}
+                options={[
+                  { value: 'all', label: 'Toda la Congregación' },
+                  { value: 'regular_pioneers', label: 'Solo Precursores Regulares' },
+                  { value: 'auxiliary_pioneers', label: 'Solo Precursores Auxiliares' },
+                  { value: 'publishers', label: 'Solo Publicadores' },
+                ]}
+              />
             </div>
           </div>
 

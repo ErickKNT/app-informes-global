@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/atoms/Button';
+import { Select } from '@/components/atoms/Select';
 import type { ServiceGroup } from '@/types/database.types';
 import { AlertTriangle, X, ArrowRightLeft, Trash2 } from 'lucide-react';
 
@@ -109,19 +110,16 @@ export const DeleteGroupModal: React.FC<DeleteGroupModalProps> = ({
                 los publicadores:
               </p>
 
-              <select
-                aria-label="Grupo receptor para publicadores"
+              <Select
+                ariaLabel="Grupo receptor para publicadores"
                 value={fallbackGroupId}
-                onChange={(e) => setFallbackGroupId(e.target.value)}
+                onChange={(val) => setFallbackGroupId(val)}
                 disabled={isLoading}
-                className="bg-surface-container-lowest text-xs text-on-surface font-semibold rounded-xl p-2.5 border border-surface-container-high focus:outline-none focus:ring-2 focus:ring-primary/20"
-              >
-                {otherGroups.map((grp) => (
-                  <option key={grp.id} value={grp.id}>
-                    {grp.name}
-                  </option>
-                ))}
-              </select>
+                options={otherGroups.map((grp) => ({
+                  value: grp.id,
+                  label: grp.name,
+                }))}
+              />
             </div>
           ) : (
             <div className="p-3 rounded-xl bg-surface-container-low text-xs text-outline font-medium">

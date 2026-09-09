@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
+import { Select } from '@/components/atoms/Select';
 import { FormField } from '@/components/molecules/FormField';
 import type { ServiceGroup, Profile, ServiceGroupInsert } from '@/types/database.types';
 import { Users, X, ShieldCheck } from 'lucide-react';
@@ -180,21 +181,21 @@ export const GroupFormModal: React.FC<GroupFormModalProps> = ({
                 <ShieldCheck className="w-3.5 h-3.5 text-primary" />
                 <span>Superintendente / Encargado</span>
               </label>
-              <select
+              <Select
                 id="overseer-select"
-                aria-label="Superintendente de grupo"
+                ariaLabel="Superintendente de grupo"
                 value={overseerId}
-                onChange={(e) => setOverseerId(e.target.value)}
+                onChange={(val) => setOverseerId(val)}
                 disabled={isLoading}
-                className="bg-surface-container-lowest text-xs text-on-surface font-medium rounded-xl p-2.5 border border-surface-container-high focus:outline-none focus:ring-2 focus:ring-primary/20"
-              >
-                <option value="">-- Sin Asignar --</option>
-                {availableElders.map((elder) => (
-                  <option key={elder.id} value={elder.id}>
-                    {elder.full_name} ({elder.role})
-                  </option>
-                ))}
-              </select>
+                placeholder="-- Sin Asignar --"
+                options={[
+                  { value: '', label: '-- Sin Asignar --' },
+                  ...availableElders.map((elder) => ({
+                    value: elder.id,
+                    label: `${elder.full_name} (${elder.role})`,
+                  })),
+                ]}
+              />
             </div>
 
             {/* Auxiliar */}
@@ -206,21 +207,21 @@ export const GroupFormModal: React.FC<GroupFormModalProps> = ({
                 <ShieldCheck className="w-3.5 h-3.5 text-secondary" />
                 <span>Auxiliar de Grupo</span>
               </label>
-              <select
+              <Select
                 id="assistant-select"
-                aria-label="Auxiliar de grupo"
+                ariaLabel="Auxiliar de grupo"
                 value={assistantId}
-                onChange={(e) => setAssistantId(e.target.value)}
+                onChange={(val) => setAssistantId(val)}
                 disabled={isLoading}
-                className="bg-surface-container-lowest text-xs text-on-surface font-medium rounded-xl p-2.5 border border-surface-container-high focus:outline-none focus:ring-2 focus:ring-primary/20"
-              >
-                <option value="">-- Sin Asignar --</option>
-                {availableElders.map((elder) => (
-                  <option key={elder.id} value={elder.id}>
-                    {elder.full_name} ({elder.role})
-                  </option>
-                ))}
-              </select>
+                placeholder="-- Sin Asignar --"
+                options={[
+                  { value: '', label: '-- Sin Asignar --' },
+                  ...availableElders.map((elder) => ({
+                    value: elder.id,
+                    label: `${elder.full_name} (${elder.role})`,
+                  })),
+                ]}
+              />
             </div>
           </div>
 
