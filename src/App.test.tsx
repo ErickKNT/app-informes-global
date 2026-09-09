@@ -3,18 +3,25 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { App } from './App';
 
-describe('App root component', () => {
-  it('renderiza el título y la insignia de arquitectura', () => {
+describe('App root with navigation and Atomic Design pages', () => {
+  it('inicia por defecto en la página Mi Informe Mensual', () => {
     render(<App />);
-    expect(screen.getByRole('heading', { name: /servicio & registro/i })).toBeInTheDocument();
-    expect(screen.getByText(/arquitectura atomic design lista/i)).toBeInTheDocument();
+
+    expect(screen.getByRole('heading', { name: /mi registro de servicio/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /enviar informe/i })).toBeInTheDocument();
   });
 
-  it('incrementa el contador del botón al hacer click', async () => {
+  it('permite navegar hacia Grupos de Servicio y Panel General', async () => {
     render(<App />);
-    const button = screen.getByRole('button', { name: /probar átomo botón \(0\)/i });
-    await userEvent.click(button);
-    expect(screen.getByRole('button', { name: /probar átomo botón \(1\)/i })).toBeInTheDocument();
+
+    const groupsNavButton = screen.getByRole('button', { name: /grupos de servicio/i });
+    await userEvent.click(groupsNavButton);
+
+    expect(screen.getByRole('heading', { name: /grupos de servicio/i })).toBeInTheDocument();
+
+    const reportNavButton = screen.getByRole('button', { name: /mi informe mensual/i });
+    await userEvent.click(reportNavButton);
+
+    expect(screen.getByRole('heading', { name: /mi registro de servicio/i })).toBeInTheDocument();
   });
 });
-
