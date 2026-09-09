@@ -27,6 +27,18 @@ export const DeleteGroupModal: React.FC<DeleteGroupModalProps> = ({
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    if (isOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
+  useEffect(() => {
     if (otherGroups.length > 0) {
       setFallbackGroupId(otherGroups[0]?.id || '');
     }
@@ -57,13 +69,16 @@ export const DeleteGroupModal: React.FC<DeleteGroupModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="delete-group-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-on-surface/40 backdrop-blur-xs animate-in fade-in duration-200"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      className="fixed inset-0 z-50 overflow-y-auto p-3 sm:p-4 bg-on-surface/40 backdrop-blur-xs flex items-center justify-center animate-in fade-in duration-200"
     >
-      <div className="bg-surface-container-lowest rounded-2xl w-full max-w-md border border-surface-container-high shadow-xl flex flex-col overflow-hidden">
+      <div className="bg-surface-container-lowest rounded-2xl w-full max-w-md max-h-[calc(100dvh-2rem)] border border-surface-container-high shadow-2xl flex flex-col overflow-hidden my-auto">
         {/* Header */}
-        <div className="px-6 py-4 bg-error-container/30 border-b border-error-container flex items-center justify-between">
+        <div className="flex-shrink-0 px-6 py-4 bg-error-container/30 border-b border-error-container flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-error text-on-error flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-error text-on-error flex items-center justify-center shrink-0">
               <AlertTriangle className="w-4 h-4" />
             </div>
             <h2
@@ -77,14 +92,14 @@ export const DeleteGroupModal: React.FC<DeleteGroupModalProps> = ({
             type="button"
             onClick={onClose}
             aria-label="Cerrar modal"
-            className="p-1.5 rounded-lg text-outline hover:bg-surface-container-high transition-colors"
+            className="p-1.5 rounded-lg text-outline hover:bg-surface-container-high transition-colors shrink-0"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Content */}
-        <div className="p-6 flex flex-col gap-4">
+        {/* Content con Scroll */}
+        <div className="p-5 sm:p-6 overflow-y-auto flex-1 flex flex-col gap-4 overscroll-contain">
           {error && (
             <div className="p-3 rounded-xl bg-error-container text-on-error-container text-xs font-semibold">
               {error}
@@ -128,7 +143,7 @@ export const DeleteGroupModal: React.FC<DeleteGroupModalProps> = ({
           )}
 
           {/* Buttons */}
-          <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-surface-container-high/60 mt-2">
+          <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-surface-container-high/60 mt-auto">
             <Button
               type="button"
               variant="outline"
@@ -158,4 +173,3 @@ export const DeleteGroupModal: React.FC<DeleteGroupModalProps> = ({
 };
 
 DeleteGroupModal.displayName = 'DeleteGroupModal';
-

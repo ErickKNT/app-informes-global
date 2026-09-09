@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { cn } from '@/utils/cn';
 import { Button } from '@/components/atoms/Button';
 import {
@@ -41,6 +41,18 @@ export const BranchReportSummaryModal: React.FC<BranchReportSummaryModalProps> =
   data,
 }) => {
   const [isCopied, setIsCopied] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    if (isOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -88,18 +100,21 @@ export const BranchReportSummaryModal: React.FC<BranchReportSummaryModalProps> =
       role="dialog"
       aria-modal="true"
       aria-labelledby="branch-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-on-surface/40 backdrop-blur-xs animate-in fade-in duration-200"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      className="fixed inset-0 z-50 overflow-y-auto p-3 sm:p-4 bg-on-surface/40 backdrop-blur-xs flex items-center justify-center animate-in fade-in duration-200"
     >
       <div
         className={cn(
           'bg-surface-container-lowest rounded-3xl border border-surface-container-high shadow-2xl',
-          'w-full max-w-2xl max-h-[92vh] overflow-hidden flex flex-col'
+          'w-full max-w-2xl max-h-[calc(100dvh-2rem)] overflow-hidden flex flex-col my-auto'
         )}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-5 bg-surface-container-low border-b border-surface-container-high/80 no-print">
+        <div className="flex-shrink-0 flex items-center justify-between p-4 sm:p-5 bg-surface-container-low border-b border-surface-container-high/80 no-print">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-primary-container text-on-primary flex items-center justify-center shadow-xs">
+            <div className="w-10 h-10 rounded-2xl bg-primary-container text-on-primary flex items-center justify-center shadow-xs shrink-0">
               <FileSpreadsheet className="w-5 h-5 text-primary-fixed" />
             </div>
             <div className="flex flex-col">
@@ -116,14 +131,14 @@ export const BranchReportSummaryModal: React.FC<BranchReportSummaryModalProps> =
             type="button"
             onClick={onClose}
             aria-label="Cerrar ventana"
-            className="p-1.5 text-outline hover:text-on-surface hover:bg-surface-container rounded-xl transition-colors"
+            className="p-1.5 text-outline hover:text-on-surface hover:bg-surface-container rounded-xl transition-colors shrink-0"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Cuerpo formal imprimible */}
-        <div className="p-5 sm:p-6 overflow-y-auto flex flex-col gap-5 print:p-0">
+        {/* Cuerpo formal imprimible con scroll */}
+        <div className="p-4 sm:p-6 overflow-y-auto flex-1 flex flex-col gap-5 print:p-0 overscroll-contain">
           {/* Membrete teocrático */}
           <div className="flex items-center justify-between p-4 rounded-2xl bg-surface-container-low border border-surface-container-high">
             <div className="flex items-center gap-3">
@@ -217,7 +232,7 @@ export const BranchReportSummaryModal: React.FC<BranchReportSummaryModalProps> =
         </div>
 
         {/* Footer con Acciones */}
-        <div className="p-4 bg-surface-container-low border-t border-surface-container-high flex items-center justify-between no-print">
+        <div className="flex-shrink-0 p-4 bg-surface-container-low border-t border-surface-container-high flex items-center justify-between no-print">
           <Button
             size="sm"
             variant="outline"

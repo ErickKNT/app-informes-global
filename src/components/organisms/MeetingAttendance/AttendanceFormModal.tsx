@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { Select } from '@/components/atoms/Select';
@@ -38,6 +38,18 @@ export const AttendanceFormModal: React.FC<AttendanceFormModalProps> = ({
   );
   const [notes, setNotes] = useState(recordToEdit?.notes || '');
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    if (isOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
 
   useEffect(() => {
     if (recordToEdit) {
@@ -83,16 +95,19 @@ export const AttendanceFormModal: React.FC<AttendanceFormModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-in fade-in duration-200"
+      className="fixed inset-0 z-50 overflow-y-auto p-3 sm:p-4 bg-black/50 backdrop-blur-xs flex items-center justify-center animate-in fade-in duration-200"
       role="dialog"
       aria-modal="true"
       aria-labelledby="attendance-modal-title"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
     >
-      <div className="w-full max-w-lg bg-surface-container-lowest rounded-3xl p-6 border border-surface-container-high shadow-2xl flex flex-col gap-5 max-h-[90vh] overflow-y-auto">
+      <div className="w-full max-w-lg bg-surface-container-lowest rounded-3xl border border-surface-container-high shadow-2xl flex flex-col max-h-[calc(100dvh-2rem)] overflow-hidden my-auto">
         {/* Modal Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-surface-container-high/60">
+        <div className="flex-shrink-0 flex items-center justify-between p-5 bg-surface-container-low border-b border-surface-container-high/60">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-primary-container text-on-primary flex items-center justify-center shadow-xs">
+            <div className="w-10 h-10 rounded-xl bg-primary-container text-on-primary flex items-center justify-center shadow-xs shrink-0">
               <CalendarCheck className="w-5 h-5 text-primary-fixed" />
             </div>
             <div className="flex flex-col">
@@ -110,20 +125,21 @@ export const AttendanceFormModal: React.FC<AttendanceFormModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors"
+            className="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors shrink-0"
             aria-label="Cerrar modal"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {error && (
-          <div className="p-3 rounded-xl bg-error-container/40 border border-error-container text-xs text-error font-medium">
-            {error}
-          </div>
-        )}
+        {/* Form Body con scroll */}
+        <form onSubmit={handleSubmit} className="p-5 sm:p-6 overflow-y-auto flex-1 flex flex-col gap-4 overscroll-contain">
+          {error && (
+            <div className="p-3 rounded-xl bg-error-container/40 border border-error-container text-xs text-error font-medium">
+              {error}
+            </div>
+          )}
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           {/* Fecha */}
           <FormField id="attendance-date" label="Fecha de la Reunión" required>
             <Input
@@ -199,7 +215,7 @@ export const AttendanceFormModal: React.FC<AttendanceFormModalProps> = ({
           </FormField>
 
           {/* Modal Actions */}
-          <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-surface-container-high/60 mt-2">
+          <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-surface-container-high/60 mt-auto">
             <Button
               type="button"
               variant="outline"

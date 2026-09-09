@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { cn } from '@/utils/cn';
 import { ReportSubmissionForm } from '@/components/organisms/ReportSubmissionForm';
 import type { MonthlyReportFormData } from '@/schemas/monthlyReportSchema';
@@ -20,6 +20,18 @@ export const AssistedReportModal: React.FC<AssistedReportModalProps> = ({
   onSubmitReport,
   isSubmitting = false,
 }) => {
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    if (isOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen || !publisher) return null;
 
   const handleSubmit = async (data: MonthlyReportFormData) => {
@@ -32,18 +44,21 @@ export const AssistedReportModal: React.FC<AssistedReportModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-on-surface/40 backdrop-blur-sm animate-in fade-in duration-200"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      className="fixed inset-0 z-50 overflow-y-auto p-3 sm:p-4 bg-on-surface/40 backdrop-blur-xs flex items-center justify-center animate-in fade-in duration-200"
     >
       <div
         className={cn(
-          'bg-surface-container-lowest rounded-2xl border border-surface-container-high shadow-xl',
-          'w-full max-w-lg overflow-hidden flex flex-col'
+          'bg-surface-container-lowest rounded-2xl border border-surface-container-high shadow-2xl',
+          'w-full max-w-lg max-h-[calc(100dvh-2rem)] flex flex-col overflow-hidden my-auto'
         )}
       >
         {/* Header del Modal */}
-        <div className="flex items-center justify-between p-5 bg-surface-container-low border-b border-surface-container-high">
+        <div className="flex-shrink-0 flex items-center justify-between p-4 sm:p-5 bg-surface-container-low border-b border-surface-container-high">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-primary-container text-on-primary flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-primary-container text-on-primary flex items-center justify-center shrink-0">
               <UserCheck className="w-5 h-5 text-primary-fixed" />
             </div>
             <div className="flex flex-col">
@@ -60,14 +75,14 @@ export const AssistedReportModal: React.FC<AssistedReportModalProps> = ({
             type="button"
             onClick={onClose}
             aria-label="Cerrar ventana"
-            className="p-1.5 text-outline hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors"
+            className="p-1.5 text-outline hover:text-on-surface hover:bg-surface-container rounded-lg transition-colors shrink-0"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Contenido del Formulario */}
-        <div className="p-6">
+        {/* Contenido del Formulario con scroll vertical */}
+        <div className="p-4 sm:p-6 overflow-y-auto flex-1 overscroll-contain">
           <ReportSubmissionForm
             role={publisher.privilege}
             isSubmitting={isSubmitting}
@@ -81,4 +96,3 @@ export const AssistedReportModal: React.FC<AssistedReportModalProps> = ({
 };
 
 AssistedReportModal.displayName = 'AssistedReportModal';
-

@@ -200,24 +200,27 @@ export const AnnouncementsBoard: React.FC<AnnouncementsBoardProps> = ({
           role="dialog"
           aria-modal="true"
           aria-labelledby="new-announcement-title"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-on-surface/40 backdrop-blur-xs animate-in fade-in duration-200"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsCreateModalOpen(false);
+          }}
+          className="fixed inset-0 z-50 overflow-y-auto p-3 sm:p-4 bg-on-surface/40 backdrop-blur-xs flex items-center justify-center animate-in fade-in duration-200"
         >
-          <div className="bg-surface-container-lowest rounded-2xl border border-surface-container-high shadow-xl w-full max-w-lg p-5 flex flex-col gap-4">
-            <div className="flex items-center justify-between border-b border-surface-container-high pb-3">
+          <div className="bg-surface-container-lowest rounded-2xl border border-surface-container-high shadow-2xl w-full max-w-lg max-h-[calc(100dvh-2rem)] flex flex-col overflow-hidden my-auto">
+            <div className="flex-shrink-0 flex items-center justify-between p-4 sm:p-5 bg-surface-container-low border-b border-surface-container-high">
               <h3 id="new-announcement-title" className="font-headline text-base font-bold text-on-surface">
                 Publicar Nuevo Anuncio
               </h3>
               <button
                 type="button"
                 onClick={() => setIsCreateModalOpen(false)}
-                className="text-outline hover:text-on-surface p-1 rounded-lg"
+                className="text-outline hover:text-on-surface p-1 rounded-lg shrink-0 transition-colors"
                 aria-label="Cerrar modal"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <form onSubmit={handleCreate} className="flex flex-col gap-3.5">
+            <form onSubmit={handleCreate} className="p-4 sm:p-6 overflow-y-auto flex-1 flex flex-col gap-3.5 overscroll-contain">
               <div>
                 <label className="block text-xs font-semibold text-on-surface mb-1">
                   Título del Anuncio *
@@ -246,7 +249,7 @@ export const AnnouncementsBoard: React.FC<AnnouncementsBoardProps> = ({
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-on-surface mb-1">
                     Prioridad
@@ -275,7 +278,7 @@ export const AnnouncementsBoard: React.FC<AnnouncementsBoardProps> = ({
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-on-surface mb-1">
                     Fecha / Horario (Opcional)
@@ -303,7 +306,7 @@ export const AnnouncementsBoard: React.FC<AnnouncementsBoardProps> = ({
                 </div>
               </div>
 
-              <div className="flex items-center justify-end gap-2.5 pt-2 border-t border-surface-container-high mt-1">
+              <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-surface-container-high mt-auto">
                 <Button
                   type="button"
                   variant="ghost"

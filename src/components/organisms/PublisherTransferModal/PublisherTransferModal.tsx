@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/atoms/Button';
 import { Select } from '@/components/atoms/Select';
 import type { Profile, ServiceGroup } from '@/types/database.types';
@@ -24,7 +24,19 @@ export const PublisherTransferModal: React.FC<PublisherTransferModalProps> = ({
   const [selectedGroupId, setSelectedGroupId] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    if (isOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
+  useEffect(() => {
     if (publisher && availableGroups.length > 0) {
       // Por defecto seleccionar el primer grupo diferente al actual
       const otherGroup = availableGroups.find((g) => g.id !== publisher.service_group_id);
@@ -58,13 +70,16 @@ export const PublisherTransferModal: React.FC<PublisherTransferModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby="transfer-modal-title"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-on-surface/40 backdrop-blur-xs animate-in fade-in duration-200"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      className="fixed inset-0 z-50 overflow-y-auto p-3 sm:p-4 bg-on-surface/40 backdrop-blur-xs flex items-center justify-center animate-in fade-in duration-200"
     >
-      <div className="bg-surface-container-lowest rounded-2xl w-full max-w-md border border-surface-container-high shadow-xl flex flex-col overflow-hidden">
+      <div className="bg-surface-container-lowest rounded-2xl w-full max-w-md max-h-[calc(100dvh-2rem)] border border-surface-container-high shadow-2xl flex flex-col overflow-hidden my-auto">
         {/* Header */}
-        <div className="px-6 py-4 bg-surface-container-low border-b border-surface-container-high/60 flex items-center justify-between">
+        <div className="flex-shrink-0 px-6 py-4 bg-surface-container-low border-b border-surface-container-high/60 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-secondary-container text-on-secondary-container flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0">
               <ArrowRightLeft className="w-4 h-4" />
             </div>
             <h2
@@ -78,14 +93,14 @@ export const PublisherTransferModal: React.FC<PublisherTransferModalProps> = ({
             type="button"
             onClick={onClose}
             aria-label="Cerrar modal"
-            className="p-1.5 rounded-lg text-outline hover:bg-surface-container-high transition-colors"
+            className="p-1.5 rounded-lg text-outline hover:bg-surface-container-high transition-colors shrink-0"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Body */}
-        <form onSubmit={handleSubmit} className="p-6 flex flex-col gap-4">
+        {/* Body con Scroll */}
+        <form onSubmit={handleSubmit} className="p-5 sm:p-6 overflow-y-auto flex-1 flex flex-col gap-4 overscroll-contain">
           {error && (
             <div className="p-3 rounded-xl bg-error-container text-on-error-container text-xs font-semibold">
               {error}
@@ -121,7 +136,7 @@ export const PublisherTransferModal: React.FC<PublisherTransferModalProps> = ({
             />
           </div>
 
-          <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-surface-container-high/60 mt-2">
+          <div className="flex items-center justify-end gap-2.5 pt-4 border-t border-surface-container-high/60 mt-auto">
             <Button
               type="button"
               variant="outline"
@@ -150,4 +165,3 @@ export const PublisherTransferModal: React.FC<PublisherTransferModalProps> = ({
 };
 
 PublisherTransferModal.displayName = 'PublisherTransferModal';
-
