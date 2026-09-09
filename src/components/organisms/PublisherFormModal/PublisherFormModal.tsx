@@ -153,7 +153,7 @@ export const PublisherFormModal: React.FC<PublisherFormModalProps> = ({
 
           {/* Row: Role & Privilege */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {/* Rol Eclesiástico */}
+            {/* Nombramiento Teocrático */}
             <div className="flex flex-col gap-1.5">
               <label
                 htmlFor="role-select"

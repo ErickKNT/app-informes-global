@@ -5,7 +5,7 @@ import {
   CalendarCheck,
   Users,
   BarChart3,
-  Church,
+  Building2,
   ShieldCheck,
   User,
   Contact,
@@ -55,7 +55,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
           {/* Logo / Branding */}
           <div className="flex items-center gap-3 px-5 py-6 bg-surface-container-low/70 border-b border-surface-container-high/60">
             <div className="w-10 h-10 rounded-xl bg-primary-container text-on-primary flex items-center justify-center shadow-sm">
-              <Church className="w-5 h-5 text-primary-fixed" />
+              <Building2 className="w-5 h-5 text-primary-fixed" />
             </div>
             <div className="flex flex-col">
               <span className="font-headline text-sm font-bold text-primary tracking-tight leading-tight">
@@ -120,7 +120,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
         <header className="sticky top-0 h-16 bg-surface-container-lowest/90 backdrop-blur-md border-b border-surface-container-high z-30 flex items-center justify-between px-4 md:px-8">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2 bg-surface-container-low px-3 py-1.5 rounded-xl border border-surface-container-high text-xs">
-              <Church className="w-4 h-4 text-primary" />
+              <Building2 className="w-4 h-4 text-primary" />
               <span className="font-semibold text-on-surface">{congregationName}</span>
               <span className="text-outline-variant">·</span>
               <span className="text-on-surface-variant hidden sm:inline">{activeServiceYear}</span>
