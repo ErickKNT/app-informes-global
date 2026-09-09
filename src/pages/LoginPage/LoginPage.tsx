@@ -3,7 +3,7 @@ import { Button } from '@/components/atoms/Button';
 import { Input } from '@/components/atoms/Input';
 import { FormField } from '@/components/molecules/FormField';
 import { useAuth } from '@/contexts/AuthContext';
-import { Building2, Lock, Mail, Eye, EyeOff, ShieldCheck, Sparkles, AlertCircle } from 'lucide-react';
+import { Building2, Lock, Mail, Eye, EyeOff, ShieldCheck, Sparkles, AlertCircle, Users } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
   const { login, loginAsDemo, isLoading, error } = useAuth();
@@ -125,11 +125,32 @@ export const LoginPage: React.FC = () => {
                   David Morales
                 </span>
                 <span className="text-[10px] text-secondary font-semibold">
-                  Secretario / Anciano
+                  Secretario / Anciano (Acceso Total)
                 </span>
               </div>
             </div>
             <Sparkles className="w-3.5 h-3.5 text-outline group-hover:text-primary transition-colors" />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => loginAsDemo('encargado')}
+            className="flex items-center justify-between p-3 rounded-2xl bg-surface-container-low hover:bg-surface-container transition-all border border-surface-container-high/60 text-left group"
+          >
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center">
+                <Users className="w-4 h-4" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-xs font-bold text-on-surface group-hover:text-secondary transition-colors">
+                  Carlos Méndez
+                </span>
+                <span className="text-[10px] text-secondary font-semibold">
+                  Encargado de Grupo 1 (Su Grupo &amp; Informe)
+                </span>
+              </div>
+            </div>
+            <Sparkles className="w-3.5 h-3.5 text-outline group-hover:text-secondary transition-colors" />
           </button>
 
           <button

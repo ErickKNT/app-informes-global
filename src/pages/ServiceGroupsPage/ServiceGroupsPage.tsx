@@ -256,9 +256,40 @@ const INITIAL_GROUPS: GroupData[] = [
   },
 ];
 
-export const ServiceGroupsPage: React.FC = () => {
+export interface ServiceGroupsPageProps {
+  currentUser?: Profile | null;
+}
+
+export const ServiceGroupsPage: React.FC<ServiceGroupsPageProps> = ({ currentUser }) => {
+  const isEncargado = Boolean(currentUser && currentUser.role !== 'secretario');
   const [groups, setGroups] = useState<GroupData[]>(INITIAL_GROUPS);
-  const [selectedGroupId, setSelectedGroupId] = useState<string>(INITIAL_GROUPS[0]?.id || 'group-1');
+
+  const visibleGroups = useMemo(() => {
+    if (!isEncargado || !currentUser) {
+      return groups;
+    }
+    const filtered = groups.filter(
+      (g) =>
+        g.id === currentUser.service_group_id ||
+        g.overseer.name.toLowerCase().includes(currentUser.full_name.toLowerCase()) ||
+        g.assistant.name.toLowerCase().includes(currentUser.full_name.toLowerCase())
+    );
+    const fallback = groups[0] ?? INITIAL_GROUPS[0]!;
+    return filtered.length > 0 ? filtered : [fallback];
+  }, [groups, currentUser, isEncargado]);
+
+  const [selectedGroupId, setSelectedGroupId] = useState<string>(() => {
+    if (isEncargado && currentUser) {
+      const match = INITIAL_GROUPS.find(
+        (g) =>
+          g.id === currentUser.service_group_id ||
+          g.overseer.name.toLowerCase().includes(currentUser.full_name.toLowerCase())
+      );
+      if (match) return match.id;
+    }
+    return INITIAL_GROUPS[0]?.id || 'group-1';
+  });
+
   const [selectedPublisherForModal, setSelectedPublisherForModal] =
     useState<PublisherListItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -275,8 +306,8 @@ export const ServiceGroupsPage: React.FC = () => {
   };
 
   const activeGroup: GroupData = useMemo(() => {
-    return groups.find((g) => g.id === selectedGroupId) ?? groups[0] ?? INITIAL_GROUPS[0]!;
-  }, [groups, selectedGroupId]);
+    return visibleGroups.find((g) => g.id === selectedGroupId) ?? visibleGroups[0] ?? groups[0] ?? INITIAL_GROUPS[0]!;
+  }, [visibleGroups, selectedGroupId, groups]);
 
   const activeMetrics = useMemo(() => {
     const totalPublishers = activeGroup.publishers.length;
@@ -442,15 +473,17 @@ export const ServiceGroupsPage: React.FC = () => {
           </p>
         </div>
 
-        <Button
-          variant="primary"
-          size="sm"
-          onClick={() => setIsCreateGroupOpen(true)}
-          className="text-xs self-start sm:self-auto"
-        >
-          <PlusCircle className="w-4 h-4" />
-          <span>Crear Grupo</span>
-        </Button>
+        {!isEncargado && (
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() => setIsCreateGroupOpen(true)}
+            className="text-xs self-start sm:self-auto"
+          >
+            <PlusCircle className="w-4 h-4" />
+            <span>Crear Grupo</span>
+          </Button>
+        )}
       </div>
 
       {/* Feedback Alert */}
@@ -467,62 +500,75 @@ export const ServiceGroupsPage: React.FC = () => {
 
       {/* Selector Horizontal de Grupos + Acciones del Grupo Activo */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 w-full">
-        <div className="overflow-x-auto pb-1 flex-1">
-          <div className="inline-flex items-center gap-2 p-1.5 bg-surface-container-low border border-surface-container-high rounded-2xl">
-            {groups.map((group) => {
-              const isSelected = group.id === selectedGroupId;
-              return (
-                <button
-                  key={group.id}
-                  type="button"
-                  onClick={() => setSelectedGroupId(group.id)}
-                  className={cn(
-                    'flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all select-none',
-                    isSelected
-                      ? 'bg-surface-container-lowest text-primary shadow-sm border border-surface-container-high'
-                      : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest/50'
-                  )}
-                >
-                  <span
-                    className={cn(
-                      'w-2 h-2 rounded-full',
-                      isSelected ? 'bg-secondary' : 'bg-outline-variant'
-                    )}
-                  />
-                  <span>{group.name}</span>
-                  <span className="px-1.5 py-0.5 rounded-full bg-surface-container text-primary text-[10px]">
-                    {group.publishers.length}
-                  </span>
-                </button>
-              );
-            })}
+        {isEncargado ? (
+          <div className="flex items-center gap-2.5 p-2 bg-surface-container-low border border-surface-container-high rounded-2xl">
+            <span className="w-2.5 h-2.5 rounded-full bg-secondary" />
+            <span className="text-xs font-bold text-primary">{activeGroup.name}</span>
+            <span className="text-[11px] text-on-surface-variant font-medium">· Mi Grupo Asignado</span>
+            <span className="px-2 py-0.5 rounded-full bg-surface-container text-primary text-[10px] font-bold">
+              {activeGroup.publishers.length} publicadores
+            </span>
           </div>
-        </div>
+        ) : (
+          <div className="overflow-x-auto pb-1 flex-1">
+            <div className="inline-flex items-center gap-2 p-1.5 bg-surface-container-low border border-surface-container-high rounded-2xl">
+              {groups.map((group) => {
+                const isSelected = group.id === activeGroup.id;
+                return (
+                  <button
+                    key={group.id}
+                    type="button"
+                    onClick={() => setSelectedGroupId(group.id)}
+                    className={cn(
+                      'flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all select-none',
+                      isSelected
+                        ? 'bg-surface-container-lowest text-primary shadow-sm border border-surface-container-high'
+                        : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest/50'
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        'w-2 h-2 rounded-full',
+                        isSelected ? 'bg-secondary' : 'bg-outline-variant'
+                      )}
+                    />
+                    <span>{group.name}</span>
+                    <span className="px-1.5 py-0.5 rounded-full bg-surface-container text-primary text-[10px]">
+                      {group.publishers.length}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Botones administrativos del grupo activo */}
-        <div className="flex items-center gap-2 self-start lg:self-auto">
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => setIsEditGroupOpen(true)}
-            className="text-xs"
-          >
-            <Edit3 className="w-3.5 h-3.5 text-outline" />
-            <span>Editar Grupo</span>
-          </Button>
-
-          {groups.length > 1 && (
+        {!isEncargado && (
+          <div className="flex items-center gap-2 self-start lg:self-auto">
             <Button
               size="sm"
-              variant="ghost"
-              onClick={() => setIsDeleteGroupOpen(true)}
-              className="text-xs text-error hover:bg-error/10 hover:text-error"
+              variant="outline"
+              onClick={() => setIsEditGroupOpen(true)}
+              className="text-xs"
             >
-              <Trash2 className="w-3.5 h-3.5" />
-              <span>Eliminar Grupo</span>
+              <Edit3 className="w-3.5 h-3.5 text-outline" />
+              <span>Editar Grupo</span>
             </Button>
-          )}
-        </div>
+
+            {groups.length > 1 && (
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => setIsDeleteGroupOpen(true)}
+                className="text-xs text-error hover:bg-error/10 hover:text-error"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Eliminar Grupo</span>
+              </Button>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Panel Superior del Grupo: Supervisión Pastoral + Métricas */}

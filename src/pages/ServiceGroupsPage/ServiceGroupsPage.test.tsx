@@ -65,4 +65,30 @@ describe('ServiceGroupsPage', () => {
     const feedback = await screen.findByText(/grupo "grupo 6 - valle dorado" creado con éxito/i);
     expect(feedback).toBeInTheDocument();
   });
+
+  it('si el usuario es un encargado de grupo, restringe la vista a solo su grupo y oculta botones de crear/eliminar', () => {
+    const encargadoUser = {
+      id: 'usr-encargado-1',
+      service_group_id: 'group-1',
+      full_name: 'Carlos Méndez',
+      phone: '+34 612 889 012',
+      role: 'anciano' as const,
+      privilege: 'precursor_regular' as const,
+      is_active: true,
+      avatar_url: null,
+      created_at: '2024-01-01T00:00:00Z',
+      updated_at: '2024-01-01T00:00:00Z',
+    };
+
+    render(<ServiceGroupsPage currentUser={encargadoUser} />);
+
+    // Solo debe mostrar la insignia de su grupo asignado
+    expect(screen.getByText(/mi grupo asignado/i)).toBeInTheDocument();
+    expect(screen.getAllByText('Grupo 1 - Los Olivos').length).toBeGreaterThanOrEqual(1);
+
+    // NO debe haber botones ni pestañas para otros grupos
+    expect(screen.queryByRole('button', { name: /grupo 2 - betel/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /crear grupo/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /eliminar grupo/i })).not.toBeInTheDocument();
+  });
 });

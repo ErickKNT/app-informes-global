@@ -17,6 +17,7 @@ describe('LoginPage', () => {
     expect(screen.getByLabelText(/contraseña/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /iniciar sesión/i })).toBeInTheDocument();
     expect(screen.getByText('David Morales')).toBeInTheDocument();
+    expect(screen.getByText('Carlos Méndez')).toBeInTheDocument();
     expect(screen.getByText('Mateo González')).toBeInTheDocument();
   });
 

@@ -1,4 +1,4 @@
-﻿import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { AuthProvider, useAuth } from './AuthContext';
 import React from 'react';
@@ -34,5 +34,20 @@ describe('AuthContext and useAuth', () => {
 
     expect(result.current.user?.full_name).toBe('Mateo González');
     expect(result.current.user?.role).toBe('publicador');
+  });
+
+  it('permite cambiar a usuario demo encargado de grupo', () => {
+    const wrapper = ({ children }: { children: React.ReactNode }) => (
+      <AuthProvider>{children}</AuthProvider>
+    );
+
+    const { result } = renderHook(() => useAuth(), { wrapper });
+
+    act(() => {
+      result.current.loginAsDemo('encargado');
+    });
+
+    expect(result.current.user?.full_name).toBe('Carlos Méndez');
+    expect(result.current.user?.service_group_id).toBe('group-1');
   });
 });

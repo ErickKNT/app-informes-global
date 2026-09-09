@@ -11,6 +11,11 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  server: {
+    watch: {
+      ignored: ['**/.git/**', '**/dist/**', '**/node_modules/**'],
+    },
+  },
   test: {
     globals: true,
     environment: 'jsdom',

@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { cn } from '@/utils/cn';
 import {
   LayoutDashboard,
@@ -28,6 +28,7 @@ export type NavigationPath =
 export interface AppLayoutProps {
   currentPath: NavigationPath;
   onNavigate: (path: NavigationPath) => void;
+  allowedPaths?: NavigationPath[];
   congregationName?: string;
   activeServiceYear?: string;
   activeMonthName?: string;
@@ -41,6 +42,7 @@ export interface AppLayoutProps {
 export const AppLayout: React.FC<AppLayoutProps> = ({
   currentPath,
   onNavigate,
+  allowedPaths,
   congregationName = 'Congregación El Olivar',
   activeServiceYear = 'Año de Servicio 2024-2025',
   activeMonthName = 'Octubre 2024',
@@ -52,7 +54,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
 }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const navItems: Array<{ path: NavigationPath; label: string; icon: React.ElementType }> = [
+  const allNavItems: Array<{ path: NavigationPath; label: string; icon: React.ElementType }> = [
     { path: 'panel-general', label: 'Panel General', icon: LayoutDashboard },
     { path: 'mi-informe-mensual', label: 'Mi Informe Mensual', icon: CalendarCheck },
     { path: 'grupos-de-servicio', label: 'Grupos de Servicio', icon: Users },
@@ -60,6 +62,10 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
     { path: 'reportes-consolidados', label: 'Reportes Consolidados', icon: BarChart3 },
     { path: 'tarjetas-publicador', label: 'Tarjetas de Publicador', icon: Contact },
   ];
+
+  const navItems = allowedPaths
+    ? allNavItems.filter((item) => allowedPaths.includes(item.path))
+    : allNavItems;
 
   const handleNavClick = (path: NavigationPath) => {
     onNavigate(path);

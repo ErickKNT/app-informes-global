@@ -1,20 +1,22 @@
-﻿import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import type { Profile } from '@/types/database.types';
 import { supabase } from '@/services/supabaseClient';
+
+export type DemoRole = 'secretario' | 'encargado' | 'publicador';
 
 export interface AuthContextValue {
   user: Profile | null;
   isLoading: boolean;
   error: string | null;
   login: (email: string, password: string) => Promise<boolean>;
-  loginAsDemo: (role: 'secretario' | 'publicador') => void;
+  loginAsDemo: (role: DemoRole) => void;
   logout: () => void;
 }
 
-const DEMO_USERS: Record<'secretario' | 'publicador', Profile> = {
+const DEMO_USERS: Record<DemoRole, Profile> = {
   secretario: {
     id: 'usr-admin-1',
-    service_group_id: 'grp-1',
+    service_group_id: 'group-1',
     full_name: 'David Morales',
     phone: '+52 55 1234 5678',
     role: 'secretario',
@@ -24,9 +26,21 @@ const DEMO_USERS: Record<'secretario' | 'publicador', Profile> = {
     created_at: '2024-01-01T00:00:00Z',
     updated_at: '2024-01-01T00:00:00Z',
   },
+  encargado: {
+    id: 'usr-encargado-1',
+    service_group_id: 'group-1',
+    full_name: 'Carlos Méndez',
+    phone: '+34 612 889 012',
+    role: 'anciano',
+    privilege: 'precursor_regular',
+    is_active: true,
+    avatar_url: null,
+    created_at: '2024-01-01T00:00:00Z',
+    updated_at: '2024-01-01T00:00:00Z',
+  },
   publicador: {
     id: 'usr-pub-2',
-    service_group_id: 'grp-2',
+    service_group_id: 'group-2',
     full_name: 'Mateo González',
     phone: '+52 55 9876 5432',
     role: 'publicador',
@@ -69,6 +83,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Si es una credencial demo conocida
     if (email.toLowerCase().includes('david') || email.toLowerCase().includes('secretario')) {
       setUser(DEMO_USERS.secretario);
+      setIsLoading(false);
+      return true;
+    }
+    if (email.toLowerCase().includes('carlos') || email.toLowerCase().includes('encargado')) {
+      setUser(DEMO_USERS.encargado);
       setIsLoading(false);
       return true;
     }
@@ -129,7 +148,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
-  const loginAsDemo = useCallback((role: 'secretario' | 'publicador') => {
+  const loginAsDemo = useCallback((role: DemoRole) => {
     setError(null);
     setUser(DEMO_USERS[role]);
   }, []);
