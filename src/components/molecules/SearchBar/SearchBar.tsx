@@ -48,3 +48,4 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 };
 
 SearchBar.displayName = 'SearchBar';
+

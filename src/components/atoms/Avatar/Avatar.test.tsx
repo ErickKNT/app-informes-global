@@ -21,3 +21,4 @@ describe('Avatar atom', () => {
     expect(screen.getByText('SA')).toBeInTheDocument();
   });
 });
+

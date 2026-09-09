@@ -85,3 +85,4 @@ export const GroupSupervisorsCard: React.FC<GroupSupervisorsCardProps> = ({
 };
 
 GroupSupervisorsCard.displayName = 'GroupSupervisorsCard';
+

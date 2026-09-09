@@ -20,3 +20,4 @@ describe('GroupMetricsCards organism', () => {
     expect(screen.getByText('3 pendientes')).toBeInTheDocument();
   });
 });
+

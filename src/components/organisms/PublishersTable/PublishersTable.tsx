@@ -302,3 +302,4 @@ export const PublishersTable: React.FC<PublishersTableProps> = ({
 };
 
 PublishersTable.displayName = 'PublishersTable';
+

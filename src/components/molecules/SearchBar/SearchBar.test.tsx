@@ -25,3 +25,4 @@ describe('SearchBar molecule', () => {
     expect(handleChange).toHaveBeenCalledWith('');
   });
 });
+

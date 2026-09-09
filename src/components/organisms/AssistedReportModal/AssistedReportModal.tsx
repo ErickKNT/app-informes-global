@@ -80,3 +80,4 @@ export const AssistedReportModal: React.FC<AssistedReportModalProps> = ({
 };
 
 AssistedReportModal.displayName = 'AssistedReportModal';
+

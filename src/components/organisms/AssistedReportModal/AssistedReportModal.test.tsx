@@ -62,3 +62,4 @@ describe('AssistedReportModal organism', () => {
     expect(handleClose).toHaveBeenCalledTimes(1);
   });
 });
+

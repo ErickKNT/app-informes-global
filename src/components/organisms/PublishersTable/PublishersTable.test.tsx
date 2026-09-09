@@ -76,3 +76,4 @@ describe('PublishersTable organism', () => {
     expect(handleRegister).toHaveBeenCalledWith(mockPublishers[1]);
   });
 });
+

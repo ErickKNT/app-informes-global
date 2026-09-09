@@ -33,3 +33,4 @@ describe('GroupSupervisorsCard organism', () => {
     expect(screen.getByText('Sábados 09:30 AM')).toBeInTheDocument();
   });
 });
+
