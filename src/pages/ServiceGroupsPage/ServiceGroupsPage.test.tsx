@@ -33,8 +33,12 @@ describe('ServiceGroupsPage', () => {
     expect(dialog).toBeInTheDocument();
     expect(within(dialog).getByText(/registrar informe asistido/i)).toBeInTheDocument();
 
-    const hoursInput = within(dialog).getByLabelText(/horas de servicio/i);
-    await userEvent.type(hoursInput, '11');
+    // Como Daniel Castillo es publicador, no debe solicitar horas
+    expect(within(dialog).queryByLabelText(/horas de servicio/i)).not.toBeInTheDocument();
+
+    const studiesInput = within(dialog).getByLabelText(/cursos bíblicos conducidos/i);
+    await userEvent.clear(studiesInput);
+    await userEvent.type(studiesInput, '2');
 
     const submitButton = within(dialog).getByRole('button', { name: /enviar informe/i });
     await userEvent.click(submitButton);

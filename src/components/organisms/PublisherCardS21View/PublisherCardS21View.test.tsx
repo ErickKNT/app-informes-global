@@ -98,5 +98,26 @@ describe('PublisherCardS21View organism', () => {
     await userEvent.click(deactivateButton);
     expect(handleDeactivate).toHaveBeenCalledTimes(1);
   });
+
+  it('renderiza métricas teocráticas de publicador sin cuota de horas y muestra Participó en la tabla', () => {
+    const publicadorCard: PublisherS21Card = {
+      ...MOCK_CARD,
+      publisher: {
+        ...MOCK_CARD.publisher,
+        privilege: 'publicador',
+      },
+      annualGoal: 0,
+      goalProgressPct: 0,
+      totalHours: 0,
+      averageHours: 0,
+    };
+
+    render(<PublisherCardS21View card={publicadorCard} />);
+
+    expect(screen.getByText('Meses Activos')).toBeInTheDocument();
+    expect(screen.getByText('Regularidad')).toBeInTheDocument();
+    expect(screen.getByText('Sin cuota')).toBeInTheDocument();
+    expect(screen.getAllByText('Participó').length).toBeGreaterThanOrEqual(1);
+  });
 });
 

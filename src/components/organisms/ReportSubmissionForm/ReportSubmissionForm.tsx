@@ -8,7 +8,8 @@ import {
   monthlyReportFormSchema,
   type MonthlyReportFormData,
 } from '@/schemas/monthlyReportSchema';
-import { Send, CheckCircle2 } from 'lucide-react';
+import type { ServicePrivilege } from '@/types/database.types';
+import { Send, CheckCircle2, Info } from 'lucide-react';
 
 export interface ReportSubmissionFormProps {
   initialValues?: Partial<MonthlyReportFormData>;
@@ -16,6 +17,7 @@ export interface ReportSubmissionFormProps {
   isSubmitting?: boolean;
   className?: string;
   onHoursChange?: (hours: number) => void;
+  role?: ServicePrivilege;
 }
 
 export const ReportSubmissionForm: React.FC<ReportSubmissionFormProps> = ({
@@ -24,7 +26,9 @@ export const ReportSubmissionForm: React.FC<ReportSubmissionFormProps> = ({
   isSubmitting = false,
   className,
   onHoursChange,
+  role = 'publicador',
 }) => {
+  const isPioneer = role === 'precursor_auxiliar' || role === 'precursor_regular';
   const [participated, setParticipated] = useState<boolean>(
     initialValues?.participated ?? true
   );
@@ -73,7 +77,7 @@ export const ReportSubmissionForm: React.FC<ReportSubmissionFormProps> = ({
 
     const rawData = {
       participated,
-      hours: hours === '' ? 0 : Number(hours),
+      hours: isPioneer ? (hours === '' ? 0 : Number(hours)) : 0,
       bible_studies: bibleStudies === '' ? 0 : Number(bibleStudies),
       notes,
     };
@@ -130,6 +134,33 @@ export const ReportSubmissionForm: React.FC<ReportSubmissionFormProps> = ({
         </div>
       )}
 
+      {/* Pauta Teocrática / Instrucción según Privilegio */}
+      {!isPioneer ? (
+        <div className="flex items-start gap-3 p-4 rounded-xl bg-secondary-container/20 border border-secondary/30 text-xs">
+          <Info className="w-4 h-4 text-secondary shrink-0 mt-0.5" />
+          <div className="flex flex-col gap-0.5">
+            <span className="font-bold text-secondary">
+              Pauta Teocrática (Publicadores de Congregación)
+            </span>
+            <p className="text-on-surface-variant leading-relaxed">
+              Los publicadores no tienen requisito de horas. Únicamente confirma si tuviste participación en el ministerio durante el mes y registra cuántos cursos bíblicos diferentes dirigiste.
+            </p>
+          </div>
+        </div>
+      ) : (
+        <div className="flex items-start gap-3 p-3.5 rounded-xl bg-primary-container/20 border border-primary/30 text-xs">
+          <Info className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+          <div className="flex flex-col gap-0.5">
+            <span className="font-bold text-primary">
+              Servicio de {role === 'precursor_regular' ? 'Precursor Regular (Meta: 50 hrs)' : 'Precursor Auxiliar (Meta: 30 hrs)'}
+            </span>
+            <p className="text-on-surface-variant">
+              Registra el total de horas de ministerio cumplidas durante el mes calendario.
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Participación Activa Checkbox */}
       <div className="p-4 rounded-xl bg-surface-container-low border border-surface-container-high/60">
         <Checkbox
@@ -154,29 +185,31 @@ export const ReportSubmissionForm: React.FC<ReportSubmissionFormProps> = ({
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        {/* Horas */}
-        <FormField
-          id="report-hours"
-          label="Horas de Servicio"
-          required
-          error={errors.hours}
-          hint="Número entero de horas cumplidas"
-        >
-          <Input
+      <div className={cn('grid gap-5', isPioneer ? 'grid-cols-1 md:grid-cols-2' : 'grid-cols-1')}>
+        {/* Horas: Solo para precursores */}
+        {isPioneer && (
+          <FormField
             id="report-hours"
-            type="number"
-            min={0}
-            max={300}
-            step={1}
-            suffix="hrs"
-            placeholder="0"
-            value={hours}
-            hasError={Boolean(errors.hours)}
-            onChange={handleHoursChange}
-            disabled={isSubmitting}
-          />
-        </FormField>
+            label="Horas de Servicio"
+            required
+            error={errors.hours}
+            hint={role === 'precursor_regular' ? 'Meta mensual: 50 horas' : 'Meta mensual: 30 horas'}
+          >
+            <Input
+              id="report-hours"
+              type="number"
+              min={0}
+              max={300}
+              step={1}
+              suffix="hrs"
+              placeholder="0"
+              value={hours}
+              hasError={Boolean(errors.hours)}
+              onChange={handleHoursChange}
+              disabled={isSubmitting}
+            />
+          </FormField>
+        )}
 
         {/* Cursos Bíblicos */}
         <FormField
@@ -184,7 +217,7 @@ export const ReportSubmissionForm: React.FC<ReportSubmissionFormProps> = ({
           label="Cursos Bíblicos Conducidos"
           required
           error={errors.bible_studies}
-          hint="Diferentes estudiantes atendidos"
+          hint="Diferentes estudiantes atendidos durante el mes"
         >
           <Input
             id="report-bible-studies"

@@ -75,5 +75,25 @@ describe('PublishersTable organism', () => {
 
     expect(handleRegister).toHaveBeenCalledWith(mockPublishers[1]);
   });
+
+  it('muestra "Participó" para publicadores que entregaron informe y horas numéricas para precursores', () => {
+    const pubsWithReported: PublisherListItem[] = [
+      ...mockPublishers,
+      {
+        id: '4',
+        name: 'Mateo González',
+        phone: null,
+        role: 'publicador',
+        privilege: 'publicador',
+        hasReported: true,
+        hours: 0,
+        bibleStudies: 1,
+      },
+    ];
+    render(<PublishersTable publishers={pubsWithReported} />);
+
+    expect(screen.getByText('Participó')).toBeInTheDocument();
+    expect(screen.getByText('54 hrs')).toBeInTheDocument();
+  });
 });
 

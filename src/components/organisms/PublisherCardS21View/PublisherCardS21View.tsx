@@ -44,6 +44,10 @@ export const PublisherCardS21View: React.FC<PublisherCardS21ViewProps> = ({
     goalProgressPct,
   } = card;
 
+  const isPioneer = publisher.privilege === 'precursor_auxiliar' || publisher.privilege === 'precursor_regular';
+  const activeMonthsCount = records.filter((r) => r.participated).length;
+  const participationPct = Math.round((activeMonthsCount / 12) * 100);
+
   return (
     <div
       className={cn(
@@ -132,25 +136,51 @@ export const PublisherCardS21View: React.FC<PublisherCardS21ViewProps> = ({
 
       {/* Annual KPI Metrics Ribbon */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div className="p-3.5 rounded-xl bg-surface-container-low border border-surface-container-high/60 flex flex-col justify-between">
-          <span className="text-[11px] uppercase tracking-wider text-outline font-semibold flex items-center gap-1">
-            <Clock className="w-3.5 h-3.5 text-primary" /> Total Horas
-          </span>
-          <span className="font-headline text-2xl font-extrabold text-primary mt-1">
-            {totalHours}
-          </span>
-          <span className="text-[11px] text-on-surface-variant">año de servicio</span>
-        </div>
+        {isPioneer ? (
+          <>
+            <div className="p-3.5 rounded-xl bg-surface-container-low border border-surface-container-high/60 flex flex-col justify-between">
+              <span className="text-[11px] uppercase tracking-wider text-outline font-semibold flex items-center gap-1">
+                <Clock className="w-3.5 h-3.5 text-primary" /> Total Horas
+              </span>
+              <span className="font-headline text-2xl font-extrabold text-primary mt-1">
+                {totalHours}
+              </span>
+              <span className="text-[11px] text-on-surface-variant">año de servicio</span>
+            </div>
 
-        <div className="p-3.5 rounded-xl bg-surface-container-low border border-surface-container-high/60 flex flex-col justify-between">
-          <span className="text-[11px] uppercase tracking-wider text-outline font-semibold flex items-center gap-1">
-            <Clock className="w-3.5 h-3.5 text-secondary" /> Promedio
-          </span>
-          <span className="font-headline text-2xl font-extrabold text-secondary mt-1">
-            {averageHours}
-          </span>
-          <span className="text-[11px] text-on-surface-variant">hrs / mes activo</span>
-        </div>
+            <div className="p-3.5 rounded-xl bg-surface-container-low border border-surface-container-high/60 flex flex-col justify-between">
+              <span className="text-[11px] uppercase tracking-wider text-outline font-semibold flex items-center gap-1">
+                <Clock className="w-3.5 h-3.5 text-secondary" /> Promedio
+              </span>
+              <span className="font-headline text-2xl font-extrabold text-secondary mt-1">
+                {averageHours}
+              </span>
+              <span className="text-[11px] text-on-surface-variant">hrs / mes activo</span>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="p-3.5 rounded-xl bg-surface-container-low border border-surface-container-high/60 flex flex-col justify-between">
+              <span className="text-[11px] uppercase tracking-wider text-outline font-semibold flex items-center gap-1">
+                <CheckCircle2 className="w-3.5 h-3.5 text-secondary" /> Meses Activos
+              </span>
+              <span className="font-headline text-2xl font-extrabold text-secondary mt-1">
+                {activeMonthsCount}
+              </span>
+              <span className="text-[11px] text-on-surface-variant">de 12 meses teocráticos</span>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-surface-container-low border border-surface-container-high/60 flex flex-col justify-between">
+              <span className="text-[11px] uppercase tracking-wider text-outline font-semibold flex items-center gap-1">
+                <Calendar className="w-3.5 h-3.5 text-primary" /> Regularidad
+              </span>
+              <span className="font-headline text-2xl font-extrabold text-primary mt-1">
+                {participationPct}%
+              </span>
+              <span className="text-[11px] text-on-surface-variant">frecuencia de servicio</span>
+            </div>
+          </>
+        )}
 
         <div className="p-3.5 rounded-xl bg-surface-container-low border border-surface-container-high/60 flex flex-col justify-between">
           <span className="text-[11px] uppercase tracking-wider text-outline font-semibold flex items-center gap-1">
@@ -164,13 +194,15 @@ export const PublisherCardS21View: React.FC<PublisherCardS21ViewProps> = ({
 
         <div className="p-3.5 rounded-xl bg-surface-container-low border border-surface-container-high/60 flex flex-col justify-between">
           <span className="text-[11px] uppercase tracking-wider text-outline font-semibold flex items-center gap-1">
-            <Award className="w-3.5 h-3.5 text-primary" /> Meta Anual
+            <Award className="w-3.5 h-3.5 text-primary" /> {isPioneer ? 'Meta Anual' : 'Requisito Horas'}
           </span>
           <span className="font-headline text-2xl font-extrabold text-primary mt-1">
-            {annualGoal > 0 ? `${goalProgressPct}%` : 'Activo'}
+            {isPioneer ? (annualGoal > 0 ? `${goalProgressPct}%` : 'Activo') : 'Sin cuota'}
           </span>
           <span className="text-[11px] text-on-surface-variant">
-            {annualGoal > 0 ? `${totalHours} de ${annualGoal} hrs` : 'Publicador'}
+            {isPioneer
+              ? `${totalHours} de ${annualGoal} hrs`
+              : 'Publicador de congregación'}
           </span>
         </div>
       </div>
@@ -213,7 +245,7 @@ export const PublisherCardS21View: React.FC<PublisherCardS21ViewProps> = ({
                     )}
                   </td>
                   <td className="py-2.5 px-3 text-right font-bold text-primary">
-                    {rec.hours > 0 ? rec.hours : '-'}
+                    {isPioneer ? (rec.hours > 0 ? rec.hours : '-') : (rec.participated ? 'Participó' : '-')}
                   </td>
                   <td className="py-2.5 px-3 text-right font-medium">
                     {rec.bible_studies > 0 ? rec.bible_studies : '-'}

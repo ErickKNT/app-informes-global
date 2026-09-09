@@ -26,6 +26,22 @@ describe('monthlyReportFormSchema validation', () => {
     expect(result.success).toBe(true);
   });
 
+  it('valida exitosamente un informe de publicador donde las horas no se especifican y asigna 0 por defecto', () => {
+    const validDataWithoutHours = {
+      participated: true,
+      bible_studies: 2,
+      notes: 'Solo participación y cursos bíblicos',
+    };
+
+    const result = monthlyReportFormSchema.safeParse(validDataWithoutHours);
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.hours).toBe(0);
+      expect(result.data.participated).toBe(true);
+      expect(result.data.bible_studies).toBe(2);
+    }
+  });
+
   it('falla si las horas son negativas', () => {
     const invalidData = {
       participated: true,

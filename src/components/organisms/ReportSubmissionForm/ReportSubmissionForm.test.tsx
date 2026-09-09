@@ -4,20 +4,41 @@ import userEvent from '@testing-library/user-event';
 import { ReportSubmissionForm } from './ReportSubmissionForm';
 
 describe('ReportSubmissionForm organism', () => {
-  it('renderiza todos los campos del formulario', () => {
-    render(<ReportSubmissionForm onSubmit={vi.fn()} />);
+  it('para publicadores de congregación no muestra el campo de horas y muestra pauta teocrática', () => {
+    render(<ReportSubmissionForm onSubmit={vi.fn()} role="publicador" />);
 
     expect(screen.getByLabelText(/participé en alguna forma/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/horas de servicio/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/cursos bíblicos conducidos/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/comentarios o aclaraciones/i)).toBeInTheDocument();
+    expect(screen.getByText(/pauta teocrática \(publicadores de congregación\)/i)).toBeInTheDocument();
+    expect(screen.queryByLabelText(/horas de servicio/i)).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: /enviar informe/i })).toBeInTheDocument();
   });
 
-  it('valida campos requeridos y muestra errores cuando las horas son inválidas', async () => {
-    render(<ReportSubmissionForm onSubmit={vi.fn()} />);
+  it('permite a un publicador enviar su informe con horas en 0 por defecto', async () => {
+    const handleSubmit = vi.fn();
+    render(<ReportSubmissionForm onSubmit={handleSubmit} role="publicador" />);
+
+    const bibleStudiesInput = screen.getByLabelText(/cursos bíblicos conducidos/i);
+    await userEvent.clear(bibleStudiesInput);
+    await userEvent.type(bibleStudiesInput, '2');
+
+    await userEvent.click(screen.getByRole('button', { name: /enviar informe/i }));
+
+    expect(handleSubmit).toHaveBeenCalledTimes(1);
+    expect(handleSubmit).toHaveBeenCalledWith({
+      participated: true,
+      hours: 0,
+      bible_studies: 2,
+      notes: '',
+    });
+  });
+
+  it('para precursores regulares sí muestra campo de horas y valida horas inválidas', async () => {
+    render(<ReportSubmissionForm onSubmit={vi.fn()} role="precursor_regular" />);
 
     const hoursInput = screen.getByLabelText(/horas de servicio/i);
+    expect(hoursInput).toBeInTheDocument();
+
     await userEvent.clear(hoursInput);
     await userEvent.type(hoursInput, '-10');
 
@@ -26,38 +47,35 @@ describe('ReportSubmissionForm organism', () => {
     expect(screen.getByText(/las horas no pueden ser negativas/i)).toBeInTheDocument();
   });
 
-  it('envía los datos cuando el formulario es válido', async () => {
+  it('para precursores regulares envía las horas ingresadas y notifica a onHoursChange', async () => {
     const handleSubmit = vi.fn();
-    render(<ReportSubmissionForm onSubmit={handleSubmit} />);
+    const handleHoursChange = vi.fn();
+    render(
+      <ReportSubmissionForm
+        onSubmit={handleSubmit}
+        onHoursChange={handleHoursChange}
+        role="precursor_regular"
+      />
+    );
 
     const hoursInput = screen.getByLabelText(/horas de servicio/i);
     await userEvent.clear(hoursInput);
-    await userEvent.type(hoursInput, '35');
+    await userEvent.type(hoursInput, '52');
+
+    expect(handleHoursChange).toHaveBeenCalledWith(52);
 
     const bibleStudiesInput = screen.getByLabelText(/cursos bíblicos conducidos/i);
     await userEvent.clear(bibleStudiesInput);
-    await userEvent.type(bibleStudiesInput, '3');
+    await userEvent.type(bibleStudiesInput, '4');
 
     await userEvent.click(screen.getByRole('button', { name: /enviar informe/i }));
 
-    expect(handleSubmit).toHaveBeenCalledTimes(1);
     expect(handleSubmit).toHaveBeenCalledWith({
       participated: true,
-      hours: 35,
-      bible_studies: 3,
+      hours: 52,
+      bible_studies: 4,
       notes: '',
     });
-  });
-
-  it('notifica cambios en las horas vía onHoursChange para sincronizar el velocímetro', async () => {
-    const handleHoursChange = vi.fn();
-    render(<ReportSubmissionForm onSubmit={vi.fn()} onHoursChange={handleHoursChange} />);
-
-    const hoursInput = screen.getByLabelText(/horas de servicio/i);
-    await userEvent.clear(hoursInput);
-    await userEvent.type(hoursInput, '42');
-
-    expect(handleHoursChange).toHaveBeenCalledWith(42);
   });
 });
 

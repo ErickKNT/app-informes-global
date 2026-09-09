@@ -6,7 +6,7 @@ import {
   ReportSubmissionForm,
 } from '@/components/organisms/ReportSubmissionForm';
 import type { MonthlyReportFormData } from '@/schemas/monthlyReportSchema';
-import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Calendar, ChevronLeft, ChevronRight, CheckCircle2, Award } from 'lucide-react';
 
 export interface MonthlyReportPageProps {
   onSaveReport?: (data: MonthlyReportFormData & { role: ServicePrivilege }) => Promise<void> | void;
@@ -17,20 +17,8 @@ export const MonthlyReportPage: React.FC<MonthlyReportPageProps> = ({ onSaveRepo
   const [currentHours, setCurrentHours] = useState<number>(42);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const getTargetHours = (role: ServicePrivilege): number => {
-    switch (role) {
-      case 'publicador':
-        return 10;
-      case 'precursor_auxiliar':
-        return 30;
-      case 'precursor_regular':
-        return 50;
-      default:
-        return 10;
-    }
-  };
-
-  const targetHours = getTargetHours(selectedRole);
+  const isPioneer = selectedRole === 'precursor_auxiliar' || selectedRole === 'precursor_regular';
+  const targetHours = selectedRole === 'precursor_regular' ? 50 : selectedRole === 'precursor_auxiliar' ? 30 : 0;
 
   const handleFormSubmit = async (formData: MonthlyReportFormData) => {
     setIsSubmitting(true);
@@ -98,21 +86,45 @@ export const MonthlyReportPage: React.FC<MonthlyReportPageProps> = ({ onSaveRepo
 
       {/* Main Grid: Left Radial Gauge, Right Input Matrix */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left Column: Radial Chart & Goal highlights */}
+        {/* Left Column: Radial Chart for pioneers or Publicador Card */}
         <div className="lg:col-span-4 flex flex-col gap-6">
-          <HoursGaugeCard
-            hours={currentHours}
-            targetHours={targetHours}
-            monthName="Octubre"
-          />
+          {isPioneer ? (
+            <HoursGaugeCard
+              hours={currentHours}
+              targetHours={targetHours}
+              monthName="Octubre"
+            />
+          ) : (
+            <div className="bg-surface-container-lowest rounded-2xl p-6 border border-surface-container-high shadow-sm flex flex-col items-center text-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-secondary-container/40 text-secondary flex items-center justify-center">
+                <CheckCircle2 className="w-7 h-7" />
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="text-[11px] uppercase tracking-wider font-bold text-secondary">
+                  Registro Simplificado
+                </span>
+                <h3 className="font-headline text-lg font-bold text-on-surface">
+                  Publicador de Congregación
+                </h3>
+                <p className="text-xs text-on-surface-variant max-w-xs mt-1 leading-relaxed">
+                  De acuerdo a las pautas teocráticas vigentes, los publicadores ya no registran horas de predicación. Tu informe mensual consiste en confirmar tu participación y tus cursos bíblicos conducidos.
+                </p>
+              </div>
+              <div className="w-full mt-2 p-3 rounded-xl bg-surface-container-low border border-surface-container-high/60 flex items-center justify-center gap-2 text-xs">
+                <Award className="w-4 h-4 text-secondary shrink-0" />
+                <span className="text-on-surface font-semibold">Sin cuota mensual de horas</span>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Right Column: Central Input Form */}
         <div className="lg:col-span-8">
           <ReportSubmissionForm
+            role={selectedRole}
             initialValues={{
               participated: true,
-              hours: currentHours,
+              hours: isPioneer ? currentHours : 0,
               bible_studies: 2,
               notes: '',
             }}

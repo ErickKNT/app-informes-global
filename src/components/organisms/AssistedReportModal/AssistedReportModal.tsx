@@ -69,6 +69,7 @@ export const AssistedReportModal: React.FC<AssistedReportModalProps> = ({
         {/* Contenido del Formulario */}
         <div className="p-6">
           <ReportSubmissionForm
+            role={publisher.privilege}
             isSubmitting={isSubmitting}
             onSubmit={handleSubmit}
             className="border-0 p-0 shadow-none"

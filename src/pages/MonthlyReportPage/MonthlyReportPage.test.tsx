@@ -22,14 +22,16 @@ describe('MonthlyReportPage', () => {
     expect(screen.getByText('de 30 Horas')).toBeInTheDocument();
   });
 
-  it('actualiza la meta de horas cuando se cambia el rol a Publicador', async () => {
+  it('muestra la tarjeta de registro simplificado cuando se cambia el rol a Publicador', async () => {
     render(<MonthlyReportPage />);
 
     const pubButton = screen.getByRole('radio', { name: /publicador/i });
     await userEvent.click(pubButton);
 
-    expect(screen.getByText('Meta: 10 hrs')).toBeInTheDocument();
-    expect(screen.getByText('de 10 Horas')).toBeInTheDocument();
+    expect(screen.getByText('Publicador de Congregación')).toBeInTheDocument();
+    expect(screen.getByText('Sin cuota mensual de horas')).toBeInTheDocument();
+    // No debe solicitar horas en el formulario
+    expect(screen.queryByLabelText(/horas de servicio/i)).not.toBeInTheDocument();
   });
 
   it('llama a onSaveReport con datos y rol seleccionado al enviar', async () => {

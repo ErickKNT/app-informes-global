@@ -7,12 +7,13 @@ export const monthlyReportFormSchema = z
     }),
     hours: z
       .number({
-        required_error: 'Las horas son requeridas.',
         invalid_type_error: 'Debe ingresar un número entero válido.',
       })
       .int('Las horas deben ser un número entero.')
       .min(0, 'Las horas no pueden ser negativas.')
-      .max(300, 'Las horas no pueden superar 300 en un solo mes.'),
+      .max(300, 'Las horas no pueden superar 300 en un solo mes.')
+      .optional()
+      .default(0),
     bible_studies: z
       .number({
         required_error: 'El número de cursos bíblicos es requerido.',

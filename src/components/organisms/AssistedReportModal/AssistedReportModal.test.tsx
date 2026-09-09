@@ -61,5 +61,35 @@ describe('AssistedReportModal organism', () => {
 
     expect(handleClose).toHaveBeenCalledTimes(1);
   });
+
+  it('no muestra campo de horas para publicadores y sí lo muestra para precursores', () => {
+    const { rerender } = render(
+      <AssistedReportModal
+        publisher={mockPublisher}
+        isOpen={true}
+        onClose={vi.fn()}
+        onSubmitReport={vi.fn()}
+      />
+    );
+
+    // mockPublisher es publicador
+    expect(screen.queryByLabelText(/horas de servicio/i)).not.toBeInTheDocument();
+    expect(screen.getByLabelText(/cursos bíblicos conducidos/i)).toBeInTheDocument();
+
+    // Rerender con precursor regular
+    rerender(
+      <AssistedReportModal
+        publisher={{
+          ...mockPublisher,
+          privilege: 'precursor_regular',
+        }}
+        isOpen={true}
+        onClose={vi.fn()}
+        onSubmitReport={vi.fn()}
+      />
+    );
+
+    expect(screen.getByLabelText(/horas de servicio/i)).toBeInTheDocument();
+  });
 });
 

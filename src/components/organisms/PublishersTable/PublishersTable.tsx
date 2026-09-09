@@ -230,7 +230,14 @@ export const PublishersTable: React.FC<PublishersTableProps> = ({
                     {/* Horas */}
                     <td className="py-3 px-4 text-right font-semibold">
                       {pub.hasReported ? (
-                        <span className="text-on-surface">{pub.hours} hrs</span>
+                        pub.privilege === 'publicador' ? (
+                          <span className="inline-flex items-center gap-1 text-secondary font-medium text-xs">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-secondary" />
+                            <span>Participó</span>
+                          </span>
+                        ) : (
+                          <span className="text-on-surface">{pub.hours} hrs</span>
+                        )
                       ) : (
                         <span className="text-outline italic">Pendiente</span>
                       )}
