@@ -23,5 +23,11 @@ describe('App root with complete navigation and Atomic Design pages', () => {
     await userEvent.click(groupsNavButton);
 
     expect(screen.getByRole('heading', { name: /grupos de predicación y servicio/i })).toBeInTheDocument();
+
+    const consolidatedNavButton = screen.getByRole('button', { name: /reportes consolidados/i });
+    await userEvent.click(consolidatedNavButton);
+
+    expect(screen.getByRole('heading', { name: /reportes y análisis de servicio/i })).toBeInTheDocument();
+    expect(screen.getByText('Formato S-21-S')).toBeInTheDocument();
   });
 });

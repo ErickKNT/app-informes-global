@@ -3,7 +3,7 @@ import { AppLayout, type NavigationPath } from '@/components/templates/AppLayout
 import { DashboardPage } from '@/pages/DashboardPage';
 import { MonthlyReportPage } from '@/pages/MonthlyReportPage';
 import { ServiceGroupsPage } from '@/pages/ServiceGroupsPage';
-import { BarChart3 } from 'lucide-react';
+import { ConsolidatedReportsPage } from '@/pages/ConsolidatedReportsPage';
 
 export function App() {
   const [currentPath, setCurrentPath] = useState<NavigationPath>('panel-general');
@@ -25,17 +25,7 @@ export function App() {
         return <ServiceGroupsPage />;
 
       case 'reportes-consolidados':
-        return (
-          <div className="bg-surface-container-lowest rounded-2xl p-8 border border-surface-container-high text-center flex flex-col items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-tertiary-fixed text-tertiary-container flex items-center justify-center">
-              <BarChart3 className="w-6 h-6" />
-            </div>
-            <h2 className="font-headline text-xl font-bold text-primary">Reportes Consolidados (S-21)</h2>
-            <p className="text-xs text-on-surface-variant max-w-md">
-              Módulo de archivo canónico S-21 y análisis anual en construcción.
-            </p>
-          </div>
-        );
+        return <ConsolidatedReportsPage />;
 
       default:
         return <DashboardPage />;
