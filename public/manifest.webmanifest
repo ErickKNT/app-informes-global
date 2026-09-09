@@ -1,0 +1,18 @@
+{
+  "name": "Gestión de Informes Teocráticos",
+  "short_name": "App Informes",
+  "description": "Aplicación para el registro ministerial, secretaría y control de informes de predicación congregacional.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F8FAFC",
+  "theme_color": "#1E3A8A",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

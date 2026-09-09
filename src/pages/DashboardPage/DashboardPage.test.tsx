@@ -37,4 +37,10 @@ describe('DashboardPage (Panel General)', () => {
 
     expect(handleExport).toHaveBeenCalledTimes(1);
   });
+
+  it('renderiza el tablón de anuncios en el panel general', () => {
+    render(<DashboardPage />);
+    expect(screen.getByRole('heading', { name: /tablón de anuncios/i })).toBeInTheDocument();
+  });
 });
+

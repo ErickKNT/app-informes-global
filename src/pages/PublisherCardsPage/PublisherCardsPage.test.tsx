@@ -48,4 +48,16 @@ describe('PublisherCardsPage', () => {
     const feedback = await screen.findByText(/publicador "benjamín castro" registrado correctamente/i);
     expect(feedback).toBeInTheDocument();
   });
+
+  it('abre el modal de importación CSV al hacer clic en Importar CSV', async () => {
+    render(<PublisherCardsPage />);
+
+    const importBtn = screen.getByRole('button', { name: /importar csv/i });
+    await userEvent.click(importBtn);
+
+    expect(
+      screen.getByRole('heading', { name: /importación masiva de publicadores/i })
+    ).toBeInTheDocument();
+  });
 });
+

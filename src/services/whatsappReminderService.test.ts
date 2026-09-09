@@ -49,3 +49,4 @@ describe('whatsappReminderService', () => {
     expect(url).toBe('https://wa.me/525512345678?text=Hola%20hermano%20Carlos');
   });
 });
+

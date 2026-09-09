@@ -13,8 +13,10 @@ import {
   WhatsAppReminderModal,
   type GroupReminderData,
 } from '@/components/organisms/WhatsAppReminderModal';
+import { MonthClosingModal } from '@/components/organisms/MonthClosingModal';
+import { AnnouncementsBoard } from '@/components/organisms/AnnouncementsBoard';
 import { Button } from '@/components/atoms/Button';
-import { Calendar, Download } from 'lucide-react';
+import { Calendar, Download, CalendarCheck2 } from 'lucide-react';
 
 export interface DashboardPageProps {
   onNavigateToGroup?: (groupId: string) => void;
@@ -139,6 +141,41 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   onExportS21,
 }) => {
   const [isReminderModalOpen, setIsReminderModalOpen] = useState(false);
+  const [isClosingModalOpen, setIsClosingModalOpen] = useState(false);
+  const [activeMonthIndex, setActiveMonthIndex] = useState(10); // 10 = Octubre
+  const [activeYear, setActiveYear] = useState(2024);
+  const [closeSuccessMessage, setCloseSuccessMessage] = useState<string | null>(null);
+
+  const MONTH_NAMES = [
+    '',
+    'Enero',
+    'Febrero',
+    'Marzo',
+    'Abril',
+    'Mayo',
+    'Junio',
+    'Julio',
+    'Agosto',
+    'Septiembre',
+    'Octubre',
+    'Noviembre',
+    'Diciembre',
+  ];
+
+  const currentMonthName = MONTH_NAMES[activeMonthIndex] || 'Octubre';
+  const nextMonthIndex = activeMonthIndex === 12 ? 1 : activeMonthIndex + 1;
+  const nextMonthName = MONTH_NAMES[nextMonthIndex] || 'Noviembre';
+
+  const handleConfirmCloseMonth = () => {
+    setActiveMonthIndex(nextMonthIndex);
+    if (activeMonthIndex === 12) {
+      setActiveYear((y) => y + 1);
+    }
+    setCloseSuccessMessage(
+      `Ciclo de ${currentMonthName} ${activeYear} cerrado y archivado oficialmente. Ahora el mes activo es ${nextMonthName}.`
+    );
+    setTimeout(() => setCloseSuccessMessage(null), 5000);
+  };
 
   return (
     <div className="flex flex-col gap-6 w-full">
@@ -160,15 +197,28 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2.5">
           {/* Period Indicator */}
           <div className="flex items-center gap-2 bg-surface-container-lowest px-3 py-1.5 rounded-xl border border-surface-container-high shadow-sm text-xs">
             <Calendar className="w-4 h-4 text-primary" />
             <div className="flex flex-col text-left">
               <span className="text-[10px] text-outline font-semibold uppercase">Período</span>
-              <span className="font-bold text-on-surface">Octubre 2024</span>
+              <span className="font-bold text-on-surface">
+                {currentMonthName} {activeYear}
+              </span>
             </div>
           </div>
+
+          {/* Close Month Action */}
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => setIsClosingModalOpen(true)}
+            className="text-xs px-3 py-2 flex items-center gap-1.5 border-secondary/40 text-secondary hover:bg-secondary/10"
+          >
+            <CalendarCheck2 className="w-3.5 h-3.5" />
+            <span>Cerrar Mes</span>
+          </Button>
 
           {/* Export Action */}
           <Button
@@ -208,13 +258,39 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         </div>
       </div>
 
+      {/* Tablón de Anuncios Oficiales */}
+      <AnnouncementsBoard canManage={true} />
+
+      {/* Notificación de Cierre Exitoso */}
+      {closeSuccessMessage && (
+        <div
+          role="status"
+          className="p-3.5 rounded-xl bg-secondary-container/60 text-on-secondary-container text-xs font-semibold flex items-center gap-2 animate-in fade-in"
+        >
+          <CalendarCheck2 className="w-4 h-4 text-secondary shrink-0" />
+          <span>{closeSuccessMessage}</span>
+        </div>
+      )}
+
       {/* Modal de Recordatorios por WhatsApp */}
       <WhatsAppReminderModal
         isOpen={isReminderModalOpen}
         onClose={() => setIsReminderModalOpen(false)}
         groups={DEFAULT_REMINDER_GROUPS}
-        monthName="Octubre 2024"
+        monthName={`${currentMonthName} ${activeYear}`}
         deadlineDay={6}
+      />
+
+      {/* Modal de Cierre Oficial del Ciclo Mensual */}
+      <MonthClosingModal
+        isOpen={isClosingModalOpen}
+        onClose={() => setIsClosingModalOpen(false)}
+        currentMonthName={currentMonthName}
+        nextMonthName={nextMonthName}
+        currentYear={activeYear}
+        reportedCount={84}
+        totalPublishers={98}
+        onConfirmCloseMonth={handleConfirmCloseMonth}
       />
     </div>
   );

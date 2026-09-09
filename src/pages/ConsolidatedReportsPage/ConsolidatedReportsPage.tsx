@@ -5,6 +5,7 @@ import {
   RefreshCw,
   Sparkles,
   CheckCircle2,
+  Building2,
 } from 'lucide-react';
 import { Button } from '@/components/atoms/Button';
 import { Select } from '@/components/atoms/Select';
@@ -12,12 +13,31 @@ import { ConsolidatedMetricsSummary } from '@/components/organisms/ConsolidatedM
 import { HistoricalComparativeChart } from '@/components/organisms/HistoricalComparativeChart';
 import { S21ConsolidatedTable } from '@/components/organisms/S21ConsolidatedTable';
 import { RegularPioneersGoalCard } from '@/components/organisms/RegularPioneersGoalCard';
+import {
+  BranchReportSummaryModal,
+  type BranchReportData,
+} from '@/components/organisms/BranchReportSummaryModal';
 import { exportService } from '@/services/exportService';
 
 export interface ConsolidatedReportsPageProps {
   onExportPdf?: () => void;
   onExportS21?: () => void;
 }
+
+const DEFAULT_BRANCH_DATA: BranchReportData = {
+  congregationName: 'Congregación El Olivar',
+  monthName: 'Octubre',
+  year: 2024,
+  totalPublishers: 98,
+  reportedPublishers: 84,
+  totalBibleStudies: 42,
+  regularPioneersCount: 16,
+  regularPioneersHours: 820,
+  auxiliaryPioneersCount: 12,
+  auxiliaryPioneersHours: 374,
+  midweekMeetingAverage: 88,
+  weekendMeetingAverage: 104,
+};
 
 export const ConsolidatedReportsPage: React.FC<ConsolidatedReportsPageProps> = ({
   onExportPdf,
@@ -26,6 +46,7 @@ export const ConsolidatedReportsPage: React.FC<ConsolidatedReportsPageProps> = (
   const [selectedPeriod, setSelectedPeriod] = useState('2024-2025');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [isExporting, setIsExporting] = useState(false);
+  const [isBranchModalOpen, setIsBranchModalOpen] = useState(false);
   const [exportSuccessMessage, setExportSuccessMessage] = useState<string | null>(null);
 
   const handleExportSummary = async () => {
@@ -117,6 +138,15 @@ export const ConsolidatedReportsPage: React.FC<ConsolidatedReportsPageProps> = (
               <span>Resumen Mensual (PDF/Excel)</span>
             </Button>
             <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsBranchModalOpen(true)}
+              className="text-xs flex items-center gap-1.5 border-emerald-600/40 text-emerald-700 hover:bg-emerald-500/10"
+            >
+              <Building2 className="w-4 h-4 text-emerald-600" />
+              <span>Informe para Sucursal</span>
+            </Button>
+            <Button
               variant="primary"
               size="sm"
               onClick={handleExportS21Action}
@@ -198,6 +228,13 @@ export const ConsolidatedReportsPage: React.FC<ConsolidatedReportsPageProps> = (
 
       {/* Regular Pioneers 600h Annual Goal Analysis */}
       <RegularPioneersGoalCard />
+
+      {/* Modal de Informe para la Sucursal */}
+      <BranchReportSummaryModal
+        isOpen={isBranchModalOpen}
+        onClose={() => setIsBranchModalOpen(false)}
+        data={DEFAULT_BRANCH_DATA}
+      />
     </div>
   );
 };

@@ -7,6 +7,7 @@ import {
   CheckCircle2,
   AlertCircle,
   FileText,
+  UploadCloud,
 } from 'lucide-react';
 import { Button } from '@/components/atoms/Button';
 import { Badge } from '@/components/atoms/Badge';
@@ -18,6 +19,10 @@ import {
   type PublisherFormData,
 } from '@/components/organisms/PublisherFormModal';
 import { PublisherTransferModal } from '@/components/organisms/PublisherTransferModal';
+import {
+  PublisherImportModal,
+} from '@/components/organisms/PublisherImportModal';
+import type { ParsedPublisherRow } from '@/services/csvImportService';
 import {
   usePublisherManagement,
   type UsePublisherManagementOptions,
@@ -90,6 +95,7 @@ export const PublisherCardsPage: React.FC<PublisherCardsPageProps> = ({
 
   // Modal States
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [isImportOpen, setIsImportOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isTransferOpen, setIsTransferOpen] = useState(false);
   const [confirmDeactivateId, setConfirmDeactivateId] = useState<string | null>(null);
@@ -98,6 +104,22 @@ export const PublisherCardsPage: React.FC<PublisherCardsPageProps> = ({
   const showFeedback = (msg: string) => {
     setFeedbackMessage(msg);
     setTimeout(() => setFeedbackMessage(null), 4000);
+  };
+
+  const handleImportPublishers = (imported: ParsedPublisherRow[]) => {
+    let count = 0;
+    imported.forEach((row) => {
+      const matchedGroup = availableGroups.find((g) => g.group_number === row.groupNumber);
+      createPublisher({
+        full_name: row.full_name,
+        phone: row.phone,
+        role: row.role,
+        privilege: row.privilege,
+        service_group_id: matchedGroup ? matchedGroup.id : (availableGroups[0]?.id || null),
+      });
+      count++;
+    });
+    showFeedback(`Se importaron ${count} publicadores exitosamente desde el archivo CSV.`);
   };
 
   const handleSaveNewPublisher = (data: PublisherFormData) => {
@@ -147,15 +169,27 @@ export const PublisherCardsPage: React.FC<PublisherCardsPageProps> = ({
             </p>
           </div>
 
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={() => setIsCreateOpen(true)}
-            className="text-xs self-start sm:self-auto"
-          >
-            <UserPlus className="w-4 h-4" />
-            <span>Nuevo Publicador</span>
-          </Button>
+          <div className="flex items-center gap-2 self-start sm:self-auto">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsImportOpen(true)}
+              className="text-xs flex items-center gap-1.5"
+            >
+              <UploadCloud className="w-4 h-4 text-primary" />
+              <span>Importar CSV</span>
+            </Button>
+
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={() => setIsCreateOpen(true)}
+              className="text-xs"
+            >
+              <UserPlus className="w-4 h-4" />
+              <span>Nuevo Publicador</span>
+            </Button>
+          </div>
         </div>
 
         {/* Filters and Search Bar */}
@@ -332,6 +366,13 @@ export const PublisherCardsPage: React.FC<PublisherCardsPageProps> = ({
         onTransfer={handleTransfer}
         publisher={activePublisher}
         availableGroups={availableGroups}
+      />
+
+      {/* 4. Modal Importación Masiva CSV */}
+      <PublisherImportModal
+        isOpen={isImportOpen}
+        onClose={() => setIsImportOpen(false)}
+        onConfirmImport={handleImportPublishers}
       />
 
       {/* 4. Modal Confirmación de Baja */}
