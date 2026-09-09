@@ -66,6 +66,16 @@ CREATE TABLE IF NOT EXISTS public.profiles (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Si la tabla profiles ya existía previamente vinculada rígidamente a auth.users(id),
+-- eliminamos la restricción de clave foránea externa para permitir registrar publicadores
+-- locales y cargar datos semilla de la congregación sin exigir una cuenta en auth.users:
+ALTER TABLE IF EXISTS public.profiles 
+    DROP CONSTRAINT IF EXISTS profiles_id_fkey;
+
+-- Agregar columna user_id opcional si se desea vincular con auth.users
+ALTER TABLE IF EXISTS public.profiles 
+    ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL;
+
 -- Agregar referencias de supervisores en service_groups hacia profiles
 ALTER TABLE public.service_groups 
     DROP CONSTRAINT IF EXISTS fk_service_groups_overseer,
@@ -151,14 +161,26 @@ ALTER TABLE public.meeting_attendance ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.announcements ENABLE ROW LEVEL SECURITY;
 
 -- Políticas de lectura abierta para miembros autenticados
+DROP POLICY IF EXISTS "Lectura congregación autorizada" ON public.congregation_config;
 CREATE POLICY "Lectura congregación autorizada" ON public.congregation_config FOR SELECT TO authenticated USING (true);
+
+DROP POLICY IF EXISTS "Lectura grupos autorizada" ON public.service_groups;
 CREATE POLICY "Lectura grupos autorizada" ON public.service_groups FOR SELECT TO authenticated USING (true);
+
+DROP POLICY IF EXISTS "Lectura perfiles autorizada" ON public.profiles;
 CREATE POLICY "Lectura perfiles autorizada" ON public.profiles FOR SELECT TO authenticated USING (true);
+
+DROP POLICY IF EXISTS "Lectura asistencia autorizada" ON public.meeting_attendance;
 CREATE POLICY "Lectura asistencia autorizada" ON public.meeting_attendance FOR SELECT TO authenticated USING (true);
+
+DROP POLICY IF EXISTS "Lectura anuncios autorizada" ON public.announcements;
 CREATE POLICY "Lectura anuncios autorizada" ON public.announcements FOR SELECT TO authenticated USING (true);
+
+DROP POLICY IF EXISTS "Lectura reportes autorizada" ON public.monthly_reports;
 CREATE POLICY "Lectura reportes autorizada" ON public.monthly_reports FOR SELECT TO authenticated USING (true);
 
 -- Políticas de inserción y modificación de informes (El propio publicador, el encargado de su grupo o el secretario)
+DROP POLICY IF EXISTS "Publicadores gestionan sus informes" ON public.monthly_reports;
 CREATE POLICY "Publicadores gestionan sus informes" ON public.monthly_reports
     FOR ALL TO authenticated
     USING (auth.uid() = profile_id OR auth.uid() IN (
@@ -166,21 +188,25 @@ CREATE POLICY "Publicadores gestionan sus informes" ON public.monthly_reports
     ));
 
 -- Políticas de gestión total para Secretarios / Ancianos
+DROP POLICY IF EXISTS "Secretario gestiona perfiles" ON public.profiles;
 CREATE POLICY "Secretario gestiona perfiles" ON public.profiles
     FOR ALL TO authenticated
     USING (auth.uid() IN (SELECT id FROM public.profiles WHERE role = 'secretario'))
     WITH CHECK (auth.uid() IN (SELECT id FROM public.profiles WHERE role = 'secretario'));
 
+DROP POLICY IF EXISTS "Secretario gestiona grupos" ON public.service_groups;
 CREATE POLICY "Secretario gestiona grupos" ON public.service_groups
     FOR ALL TO authenticated
     USING (auth.uid() IN (SELECT id FROM public.profiles WHERE role = 'secretario'))
     WITH CHECK (auth.uid() IN (SELECT id FROM public.profiles WHERE role = 'secretario'));
 
+DROP POLICY IF EXISTS "Ancianos gestionan asistencia" ON public.meeting_attendance;
 CREATE POLICY "Ancianos gestionan asistencia" ON public.meeting_attendance
     FOR ALL TO authenticated
     USING (auth.uid() IN (SELECT id FROM public.profiles WHERE role IN ('secretario', 'anciano')))
     WITH CHECK (auth.uid() IN (SELECT id FROM public.profiles WHERE role IN ('secretario', 'anciano')));
 
+DROP POLICY IF EXISTS "Ancianos gestionan anuncios" ON public.announcements;
 CREATE POLICY "Ancianos gestionan anuncios" ON public.announcements
     FOR ALL TO authenticated
     USING (auth.uid() IN (SELECT id FROM public.profiles WHERE role IN ('secretario', 'anciano')))
