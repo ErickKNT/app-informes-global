@@ -18,7 +18,9 @@ ReactDOM.createRoot(rootElement).render(
 // Service Worker Registration for PWA Offline Support
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch((err) => {
+    navigator.serviceWorker.register('/sw.js').then((registration) => {
+      registration.update();
+    }).catch((err) => {
       console.info('SW registration skipped:', err);
     });
   });

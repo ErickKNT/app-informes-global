@@ -1,4 +1,4 @@
-const CACHE_NAME = 'app-informes-cache-v1';
+const CACHE_NAME = 'app-informes-cache-v2';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -31,6 +31,23 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
+  // Network-First para navegación y documentos HTML: asegura obtener siempre el último despliegue
+  if (event.request.mode === 'navigate' || event.request.destination === 'document') {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const responseClone = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
+          }
+          return networkResponse;
+        })
+        .catch(() => caches.match(event.request).then((cached) => cached || caches.match('/index.html')))
+    );
+    return;
+  }
+
+  // Cache con actualización en segundo plano para recursos estáticos
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       const fetchPromise = fetch(event.request)
